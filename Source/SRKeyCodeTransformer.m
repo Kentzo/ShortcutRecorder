@@ -57,7 +57,7 @@ static NSArray              *padKeysArray        = nil;
 		@"F17", SRInt(64),
 		@"F18", SRInt(79),
 		@"F19", SRInt(80),
-		SRLoc(@"Space"), SRInt(49),
+		SRChar(KeyboardSpaceGlyph), SRInt(49),
 		SRChar(KeyboardDeleteLeftGlyph), SRInt(51),
 		SRChar(KeyboardDeleteRightGlyph), SRInt(117),
 		SRChar(KeyboardPadClearGlyph), SRInt(71),

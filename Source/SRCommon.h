@@ -54,6 +54,7 @@ enum {
 	KeyboardEscapeGlyph         = 0x238B,
 	KeyboardHelpGlyph           = 0x003F,
 	KeyboardUpArrowheadGlyph    = 0x2303,
+	KeyboardSpaceGlyph			= 0x23B5,
 };
 
 // Special keys
