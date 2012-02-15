@@ -93,7 +93,7 @@
 
 - (BOOL)isClearCombo
 {
-	return mKeyCode == -1 && mModifiers == -1;
+	return mKeyCode == -1 && mModifiers == 0;
 }
 
 @end

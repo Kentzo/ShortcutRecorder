@@ -305,9 +305,9 @@ static PTHotKeyCenter *_sharedHotKeyCenter = nil;
         return;
 
     mIsPaused = NO;
-    for (NSNumber *hotKeyID in mHotKeys)
+    for (NSNumber *hotKeyIDNumber in mHotKeys)
     {
-        PTHotKey *hotKey = [mHotKeys objectForKey:hotKeyID];
+        PTHotKey *hotKey = [mHotKeys objectForKey:hotKeyIDNumber];
         EventHotKeyRef carbonHotKey = NULL;
         EventHotKeyID hotKeyID;
         hotKeyID.signature = 'PTHk';
