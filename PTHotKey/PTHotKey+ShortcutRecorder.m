@@ -26,4 +26,18 @@
     return newHotKey;
 }
 
++ (PTHotKey *)hotKeyWithIdentifier:(id)anIdentifier
+                          keyCombo:(NSDictionary *)aKeyCombo
+                            target:(id)aTarget
+                            action:(SEL)anAction
+                       keyUpAction:(SEL)aKeyUpAction
+{				
+    PTHotKey *newHotKey = [PTHotKey hotKeyWithIdentifier:anIdentifier
+                                                keyCombo:aKeyCombo
+                                                  target:aTarget
+                                                  action:anAction];
+    [newHotKey setKeyUpAction:aKeyUpAction];
+    return newHotKey;
+}
+
 @end

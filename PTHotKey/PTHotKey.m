@@ -106,6 +106,16 @@
 	return mAction;
 }
 
+- (void)setKeyUpAction: (SEL)action
+{
+	mKeyUpAction = action;
+}
+
+- (SEL)keyUpAction
+{
+    return mKeyUpAction;
+}
+
 - (UInt32)carbonHotKeyID
 {
 	return mCarbonHotKeyID;
@@ -131,6 +141,12 @@
 - (void)invoke
 {
 	[mTarget performSelector: mAction withObject: self];
+}
+
+- (void)uninvoke
+{
+    if ([mTarget respondsToSelector:mKeyUpAction])
+        [mTarget performSelector: mKeyUpAction withObject: self];
 }
 
 @end

@@ -19,6 +19,7 @@
 	PTKeyCombo*		mKeyCombo;
 	id				mTarget;
 	SEL				mAction;
+    SEL             mKeyUpAction;
 
 	UInt32		    mCarbonHotKeyID;
 	EventHotKeyRef	mCarbonEventHotKeyRef;
@@ -40,6 +41,8 @@
 - (id)target;
 - (void)setAction: (SEL)action;
 - (SEL)action;
+- (void)setKeyUpAction: (SEL)action;
+- (SEL)keyUpAction;
 
 - (UInt32)carbonHotKeyID;
 - (void)setCarbonHotKeyID: (UInt32)hotKeyID;
@@ -48,5 +51,6 @@
 - (void)setCarbonEventHotKeyRef:(EventHotKeyRef)hotKeyRef;
 
 - (void)invoke;
+- (void)uninvoke;
 
 @end
