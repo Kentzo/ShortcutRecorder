@@ -13,7 +13,6 @@
 #import "SRKeyCodeTransformer.h"
 #import "SRRecorderControl.h"
 
-
 @implementation SRKeyEquivalentTransformer
 
 #pragma mark NSValueTransformer
@@ -28,26 +27,16 @@
     return [NSString class];
 }
 
-- (NSString *)transformedValue:(NSDictionary *)aValue
+- (NSString *)transformedValue:(SRKeyCombo *)keyCombo
 {
-    if (![aValue isKindOfClass:[NSDictionary class]])
-        return @"";
-
-    NSNumber *keyCode = aValue[SRShortcutKeyCode];
-
-    if (![keyCode isKindOfClass:[NSNumber class]])
-        return @"";
-
-    NSNumber *modifierFlags = aValue[SRShortcutModifierFlagsKey];
-
-    if (![modifierFlags isKindOfClass:[NSNumber class]])
-        modifierFlags = @(0);
-
-    SRKeyCodeTransformer *t = [SRKeyCodeTransformer sharedASCIITransformer];
-
-    return [t transformedValue:keyCode
-     withImplicitModifierFlags:nil
-         explicitModifierFlags:modifierFlags];
+    if (keyCombo) {
+        SRKeyCodeTransformer *t = [SRKeyCodeTransformer sharedASCIITransformer];
+        return [t transformedValue:@([keyCombo keyCode])
+            withImplicitModifierFlags:nil
+            explicitModifierFlags:@([keyCombo modifiers])];
+    } else {
+        return nil;
+    }
 }
 
 @end
