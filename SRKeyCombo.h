@@ -1,6 +1,6 @@
 #import "SRCommon.h"
 
-@interface SRKeyCombo : NSObject <NSCoding>
+@interface SRKeyCombo : NSObject <NSCoding, NSCopying>
 
 /*!
     @brief The virtual key code for the keyboard key.

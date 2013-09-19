@@ -31,6 +31,13 @@
         && ([(SRKeyCombo*) object modifiers] == [self modifiers]);
 }
 
+#pragma mark NSCopying
+
+- (id) copyWithZone: (NSZone*) zone
+{
+    return [[[self class] allocWithZone:zone] initWithKeyCode:_keyCode modifiers:_modifiers];
+}
+
 #pragma mark NSCoding
 
 static NSString *const SRKeyComboKeyCodeKey = @"keyCode";
