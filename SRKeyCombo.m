@@ -4,7 +4,7 @@
 
 #pragma mark Initialization
 
-- (id) initWithKeyCode: (NSUInteger) keyCode modifiers: (NSUInteger) modifiers
+- (instancetype) initWithKeyCode: (NSUInteger) keyCode modifiers: (NSUInteger) modifiers
 {
     self = [super init];
     _keyCode = keyCode;
@@ -12,12 +12,12 @@
     return self;
 }
 
-+ (id) keyComboWithKeyCode: (NSUInteger) keyCode modifiers: (NSUInteger) modifiers
++ (instancetype) keyComboWithKeyCode: (NSUInteger) keyCode modifiers: (NSUInteger) modifiers
 {
     return [[self alloc] initWithKeyCode:keyCode modifiers:modifiers];
 }
 
-+ (id) keyComboWithEvent: (NSEvent*) event
++ (instancetype) keyComboWithEvent: (NSEvent*) event
 {
     return [self keyComboWithKeyCode:[event keyCode] modifiers:[event modifierFlags] & SRCocoaModifierFlagsMask];
 }

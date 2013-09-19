@@ -177,7 +177,7 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
     _allowsEmptyModifierFlags = newAllowsEmptyModifierFlags;
 }
 
-- (void)setRecordedShortcut:(SRKeyCombo *)newShortcut
+- (void)setObjectValue:(SRKeyCombo *)newShortcut
 {
     // Cocoa KVO and KVC frequently uses NSNull as object substituation of nil.
     // SRRecorderControl expects either nil or valid object value, it it's convenient
@@ -185,7 +185,7 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
     if ((NSNull *)newShortcut == [NSNull null])
         newShortcut = nil;
 
-    _recordedShortcut = [newShortcut copy];
+    _objectValue = [newShortcut copy];
 
     if (!self.isRecording)
     {
@@ -225,7 +225,7 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
 
 - (void)endRecording
 {
-    [self endRecordingWithObjectValue:_recordedShortcut];
+    [self endRecordingWithObjectValue:self.objectValue];
 }
 
 - (void)clearAndEndRecording
@@ -259,7 +259,7 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
         // objectValue will be set in -observeValueForKeyPath:ofObject:change:context:
     }
     else
-        self.recordedShortcut = shortcut;
+        self.objectValue = shortcut;
 
     [self updateTrackingAreas];
     [self setToolTip:SRLoc(@"Click to record shortcut")];
@@ -336,7 +336,7 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
 {
     NSRect bounds = self.bounds;
 
-    if (_recordedShortcut)
+    if (self.objectValue)
     {
         NSRect clearButtonRect = NSZeroRect;
         clearButtonRect.origin.x = NSMaxX(bounds) - _SRRecorderControlClearButtonRightOffset - _SRRecorderControlClearButtonSize.width - _SRRecorderControlClearButtonLeftOffset;
@@ -409,10 +409,10 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
 
 - (NSString *)stringValue
 {
-    if (!_recordedShortcut)
+    if (!self.objectValue)
         return nil;
 
-    NSString *f = [[SRModifierFlagsTransformer sharedTransformer] transformedValue:@([_recordedShortcut modifiers])];
+    NSString *f = [[SRModifierFlagsTransformer sharedTransformer] transformedValue:@([self.objectValue modifiers])];
     SRKeyCodeTransformer *transformer = nil;
 
     if (self.drawsASCIIEquivalentOfShortcut)
@@ -420,25 +420,25 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
     else
         transformer = [SRKeyCodeTransformer sharedPlainTransformer];
 
-    NSString *c = [transformer transformedValue:@([_recordedShortcut keyCode])
+    NSString *c = [transformer transformedValue:@([self.objectValue keyCode])
                       withImplicitModifierFlags:nil
-                          explicitModifierFlags:@([_recordedShortcut modifiers])];
+                          explicitModifierFlags:@([self.objectValue modifiers])];
 
     return [NSString stringWithFormat:@"%@%@", f, c];
 }
 
 - (NSString *)accessibilityStringValue
 {
-    if (!_recordedShortcut)
+    if (!self.objectValue)
         return nil;
 
-    NSString *f = [[SRModifierFlagsTransformer sharedPlainTransformer] transformedValue:@([_recordedShortcut modifiers])];
+    NSString *f = [[SRModifierFlagsTransformer sharedPlainTransformer] transformedValue:@([self.objectValue modifiers])];
     NSString *c = nil;
 
     if (self.drawsASCIIEquivalentOfShortcut)
-        c = [[SRKeyCodeTransformer sharedPlainASCIITransformer] transformedValue:@([_recordedShortcut keyCode])];
+        c = [[SRKeyCodeTransformer sharedPlainASCIITransformer] transformedValue:@([self.objectValue keyCode])];
     else
-        c = [[SRKeyCodeTransformer sharedPlainTransformer] transformedValue:@([_recordedShortcut keyCode])];
+        c = [[SRKeyCodeTransformer sharedPlainTransformer] transformedValue:@([self.objectValue keyCode])];
 
     if ([f length] > 0)
         return [NSString stringWithFormat:@"%@-%@", f, c];
@@ -799,7 +799,7 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
             NSObservedKeyPathKey: [aKeyPath copy],
             NSOptionsKey: [NSDictionary dictionaryWithDictionary:anOptions]
         };
-        self.recordedShortcut = [anObservable valueForKeyPath:aKeyPath];
+        self.objectValue = [anObservable valueForKeyPath:aKeyPath];
 
         // This method is typically called when view is not presented to a user.
         // If'd use -setNeedsDisplay:, the user may notice flickering when window with view is shown first time.
@@ -1181,10 +1181,10 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
         }
         else if ([self areModifierFlagsValid:anEvent.modifierFlags forKeyCode:anEvent.keyCode])
         {
-            SRKeyCombo *newCombo = [SRKeyCombo keyComboWithEvent:anEvent];
+            SRKeyCombo *newObjectValue = [SRKeyCombo keyComboWithEvent:anEvent];
             if ([self.delegate respondsToSelector:@selector(shortcutRecorder:canRecordShortcut:)])
             {
-                if (![self.delegate shortcutRecorder:self canRecordShortcut:newCombo])
+                if (![self.delegate shortcutRecorder:self canRecordShortcut:newObjectValue])
                 {
                     // We acutally handled key equivalent, because client likely performs some action
                     // to represent an error (e.g. beep and error dialog).
@@ -1194,7 +1194,7 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
                 }
             }
 
-            [self endRecordingWithObjectValue:newCombo];
+            [self endRecordingWithObjectValue:newObjectValue];
             return YES;
         }
     }
@@ -1241,7 +1241,7 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
         if (valueTransformer)
             newObjectValue = [valueTransformer transformedValue:newObjectValue];
 
-        self.recordedShortcut = newObjectValue;
+        self.objectValue = newObjectValue;
     }
     else
         [super observeValueForKeyPath:aKeyPath ofObject:anObject change:aChange context:aContext];

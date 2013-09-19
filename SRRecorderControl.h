@@ -94,7 +94,7 @@
 /*!
     @brief  The recorded shortcut.
  */
-@property (nonatomic, copy) SRKeyCombo *recordedShortcut;
+@property (nonatomic, copy) SRKeyCombo *objectValue;
 
 /*!
     @brief      Configures recording behavior of the control.
