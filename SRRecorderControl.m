@@ -15,16 +15,7 @@
 #import "SRRecorderControl.h"
 #import "SRKeyCodeTransformer.h"
 #import "SRModifierFlagsTransformer.h"
-
-
-NSString *const SRShortcutKeyCode = @"keyCode";
-
-NSString *const SRShortcutModifierFlagsKey = @"modifierFlags";
-
-NSString *const SRShortcutCharacters = @"characters";
-
-NSString *const SRShortcutCharactersIgnoringModifiers = @"charactersIgnoringModifiers";
-
+#import "SRKeyCombo.h"
 
 // Control Layout Constants
 static const CGFloat _SRRecorderControlShapeXRadius = 11.0;
@@ -186,15 +177,15 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
     _allowsEmptyModifierFlags = newAllowsEmptyModifierFlags;
 }
 
-- (void)setObjectValue:(NSDictionary *)newObjectValue
+- (void)setObjectValue:(SRKeyCombo *)newShortcut
 {
     // Cocoa KVO and KVC frequently uses NSNull as object substituation of nil.
     // SRRecorderControl expects either nil or valid object value, it it's convenient
     // to handle handle NSNull here and convert it into nil.
-    if ((NSNull *)newObjectValue == [NSNull null])
-        newObjectValue = nil;
+    if ((NSNull *)newShortcut == [NSNull null])
+        newShortcut = nil;
 
-    _objectValue = [newObjectValue copy];
+    _objectValue = [newShortcut copy];
 
     if (!self.isRecording)
     {
@@ -242,7 +233,7 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
     [self endRecordingWithObjectValue:nil];
 }
 
-- (void)endRecordingWithObjectValue:(NSDictionary *)anObjectValue
+- (void)endRecordingWithObjectValue:(SRKeyCombo *)shortcut
 {
     if (!self.isRecording)
         return;
@@ -259,16 +250,16 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
 
         if ([[transformer class] allowsReverseTransformation])
         {
-            [valueBindingInfo[NSObservedObjectKey] setValue:[transformer reverseTransformedValue:anObjectValue]
+            [valueBindingInfo[NSObservedObjectKey] setValue:[transformer reverseTransformedValue:shortcut]
                                                  forKeyPath:valueBindingInfo[NSObservedKeyPathKey]];
         }
         else
-            [valueBindingInfo[NSObservedObjectKey] setValue:anObjectValue forKeyPath:valueBindingInfo[NSObservedKeyPathKey]];
+            [valueBindingInfo[NSObservedObjectKey] setValue:shortcut forKeyPath:valueBindingInfo[NSObservedKeyPathKey]];
 
         // objectValue will be set in -observeValueForKeyPath:ofObject:change:context:
     }
     else
-        self.objectValue = anObjectValue;
+        self.objectValue = shortcut;
 
     [self updateTrackingAreas];
     [self setToolTip:SRLoc(@"Click to record shortcut")];
@@ -345,7 +336,7 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
 {
     NSRect bounds = self.bounds;
 
-    if ([self.objectValue count])
+    if (self.objectValue)
     {
         NSRect clearButtonRect = NSZeroRect;
         clearButtonRect.origin.x = NSMaxX(bounds) - _SRRecorderControlClearButtonRightOffset - _SRRecorderControlClearButtonSize.width - _SRRecorderControlClearButtonLeftOffset;
@@ -418,10 +409,10 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
 
 - (NSString *)stringValue
 {
-    if (![self.objectValue count])
+    if (!self.objectValue)
         return nil;
 
-    NSString *f = [[SRModifierFlagsTransformer sharedTransformer] transformedValue:self.objectValue[SRShortcutModifierFlagsKey]];
+    NSString *f = [[SRModifierFlagsTransformer sharedTransformer] transformedValue:@([self.objectValue modifiers])];
     SRKeyCodeTransformer *transformer = nil;
 
     if (self.drawsASCIIEquivalentOfShortcut)
@@ -429,25 +420,25 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
     else
         transformer = [SRKeyCodeTransformer sharedPlainTransformer];
 
-    NSString *c = [transformer transformedValue:self.objectValue[SRShortcutKeyCode]
+    NSString *c = [transformer transformedValue:@([self.objectValue keyCode])
                       withImplicitModifierFlags:nil
-                          explicitModifierFlags:self.objectValue[SRShortcutModifierFlagsKey]];
+                          explicitModifierFlags:@([self.objectValue modifiers])];
 
     return [NSString stringWithFormat:@"%@%@", f, c];
 }
 
 - (NSString *)accessibilityStringValue
 {
-    if (![self.objectValue count])
+    if (!self.objectValue)
         return nil;
 
-    NSString *f = [[SRModifierFlagsTransformer sharedPlainTransformer] transformedValue:self.objectValue[SRShortcutModifierFlagsKey]];
+    NSString *f = [[SRModifierFlagsTransformer sharedPlainTransformer] transformedValue:@([self.objectValue modifiers])];
     NSString *c = nil;
 
     if (self.drawsASCIIEquivalentOfShortcut)
-        c = [[SRKeyCodeTransformer sharedPlainASCIITransformer] transformedValue:self.objectValue[SRShortcutKeyCode]];
+        c = [[SRKeyCodeTransformer sharedPlainASCIITransformer] transformedValue:@([self.objectValue keyCode])];
     else
-        c = [[SRKeyCodeTransformer sharedPlainTransformer] transformedValue:self.objectValue[SRShortcutKeyCode]];
+        c = [[SRKeyCodeTransformer sharedPlainTransformer] transformedValue:@([self.objectValue keyCode])];
 
     if ([f length] > 0)
         return [NSString stringWithFormat:@"%@-%@", f, c];
@@ -1190,13 +1181,7 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
         }
         else if ([self areModifierFlagsValid:anEvent.modifierFlags forKeyCode:anEvent.keyCode])
         {
-            NSDictionary *newObjectValue = @{
-                SRShortcutKeyCode: @(anEvent.keyCode),
-                SRShortcutModifierFlagsKey: @(anEvent.modifierFlags & SRCocoaModifierFlagsMask),
-                SRShortcutCharacters: anEvent.characters,
-                SRShortcutCharactersIgnoringModifiers: anEvent.charactersIgnoringModifiers
-            };
-
+            SRKeyCombo *newObjectValue = [SRKeyCombo keyComboWithEvent:anEvent];
             if ([self.delegate respondsToSelector:@selector(shortcutRecorder:canRecordShortcut:)])
             {
                 if (![self.delegate shortcutRecorder:self canRecordShortcut:newObjectValue])

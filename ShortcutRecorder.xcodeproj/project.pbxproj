@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0DFF09E317E9DCD700FE0931 /* SRKeyCombo.h in Headers */ = {isa = PBXBuildFile; fileRef = 0DFF09E117E9DCD700FE0931 /* SRKeyCombo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0DFF09E417E9DCD700FE0931 /* SRKeyCombo.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DFF09E217E9DCD700FE0931 /* SRKeyCombo.m */; };
 		939837950DA429EC007F53F3 /* SRRecorderControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B8E29C109CDB9360085E9ED /* SRRecorderControl.m */; };
 		939837980DA429EC007F53F3 /* SRKeyCodeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C3670D0A246B4900B69171 /* SRKeyCodeTransformer.m */; };
 		939837990DA429EC007F53F3 /* SRValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C3670F0A246B4900B69171 /* SRValidator.m */; };
@@ -80,6 +82,8 @@
 		0B8E2A0609CDBADE0085E9ED /* PTHotKeyCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTHotKeyCenter.m; sourceTree = "<group>"; };
 		0B8E2A0709CDBADE0085E9ED /* PTKeyCombo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTKeyCombo.h; sourceTree = "<group>"; };
 		0B8E2A0809CDBADE0085E9ED /* PTKeyCombo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTKeyCombo.m; sourceTree = "<group>"; };
+		0DFF09E117E9DCD700FE0931 /* SRKeyCombo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRKeyCombo.h; sourceTree = "<group>"; };
+		0DFF09E217E9DCD700FE0931 /* SRKeyCombo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRKeyCombo.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* ShortcutRecorder_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShortcutRecorder_Prefix.pch; sourceTree = "<group>"; };
 		74C3670C0A246B4900B69171 /* SRKeyCodeTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRKeyCodeTransformer.h; sourceTree = "<group>"; };
 		74C3670D0A246B4900B69171 /* SRKeyCodeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRKeyCodeTransformer.m; sourceTree = "<group>"; };
@@ -202,8 +206,19 @@
 				74C3670F0A246B4900B69171 /* SRValidator.m */,
 				74C367100A246B4900B69171 /* SRCommon.h */,
 				74C367110A246B4900B69171 /* SRCommon.m */,
+				0DFF09E117E9DCD700FE0931 /* SRKeyCombo.h */,
+				0DFF09E217E9DCD700FE0931 /* SRKeyCombo.m */,
 			);
 			name = ShortcutRecorder;
+			sourceTree = "<group>";
+		};
+		0DE6147C17E9A1F900BE7273 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E2741AE01673C90B00A139BD /* Cocoa.framework */,
+				E273124B1349EE6500A84433 /* Carbon.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
@@ -218,10 +233,9 @@
 		29B97314FDCFA39411CA2CEA /* ShortcutRecorder */ = {
 			isa = PBXGroup;
 			children = (
-				E2741AE01673C90B00A139BD /* Cocoa.framework */,
-				E273124B1349EE6500A84433 /* Carbon.framework */,
 				E2741AE71673CC3D00A139BD /* PTHotKey */,
 				080E96DDFE201D6D7F000001 /* ShortcutRecorder */,
+				0DE6147C17E9A1F900BE7273 /* Frameworks */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -318,6 +332,7 @@
 				E2BE925216ABF84200827E8C /* SRKeyEquivalentModifierMaskTransformer.h in Headers */,
 				9398393E0DA4350B007F53F3 /* SRKeyCodeTransformer.h in Headers */,
 				9398393F0DA4350B007F53F3 /* SRValidator.h in Headers */,
+				0DFF09E317E9DCD700FE0931 /* SRKeyCombo.h in Headers */,
 				939839400DA4350B007F53F3 /* SRCommon.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -480,6 +495,7 @@
 				939837990DA429EC007F53F3 /* SRValidator.m in Sources */,
 				9398379A0DA429EC007F53F3 /* SRCommon.m in Sources */,
 				E28113AE167B8A9D001E118E /* SRModifierFlagsTransformer.m in Sources */,
+				0DFF09E417E9DCD700FE0931 /* SRKeyCombo.m in Sources */,
 				E2BE924E16ABEFE400827E8C /* SRKeyEquivalentTransformer.m in Sources */,
 				E2BE925316ABF84200827E8C /* SRKeyEquivalentModifierMaskTransformer.m in Sources */,
 			);
