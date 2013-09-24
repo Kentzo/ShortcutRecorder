@@ -206,6 +206,15 @@
 			name = ShortcutRecorder;
 			sourceTree = "<group>";
 		};
+		0DE6147C17E9A1F900BE7273 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E2741AE01673C90B00A139BD /* Cocoa.framework */,
+				E273124B1349EE6500A84433 /* Carbon.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -218,10 +227,9 @@
 		29B97314FDCFA39411CA2CEA /* ShortcutRecorder */ = {
 			isa = PBXGroup;
 			children = (
-				E2741AE01673C90B00A139BD /* Cocoa.framework */,
-				E273124B1349EE6500A84433 /* Carbon.framework */,
 				E2741AE71673CC3D00A139BD /* PTHotKey */,
 				080E96DDFE201D6D7F000001 /* ShortcutRecorder */,
+				0DE6147C17E9A1F900BE7273 /* Frameworks */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);

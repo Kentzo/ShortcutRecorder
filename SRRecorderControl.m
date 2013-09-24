@@ -67,9 +67,6 @@ static const NSSize _SRRecorderControlSnapBackButtonSize = {.width = _SRRecorder
 static NSImage *_SRImages[16];
 
 
-static NSUInteger _SRValueObservationContext;
-
-
 typedef NS_ENUM(NSUInteger, _SRRecorderControlButtonTag)
 {
     _SRRecorderControlInvalidButtonTag = -1,
@@ -77,30 +74,6 @@ typedef NS_ENUM(NSUInteger, _SRRecorderControlButtonTag)
     _SRRecorderControlClearButtonTag = 1,
     _SRRecorderControlMainButtonTag = 2
 };
-
-
-/*!
-    @brief  Extracts value transformer from binding options.
-
-    @result Returns an instance of NSValueTransformer or nil if there is not transformer.
- */
-static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *aBindingOptions)
-{
-    NSValueTransformer *valueTransformer = aBindingOptions[NSValueTransformerBindingOption];
-
-    if (!valueTransformer || (NSNull *)valueTransformer == [NSNull null])
-    {
-        NSString *valueTransformerName = aBindingOptions[NSValueTransformerNameBindingOption];
-
-        if (valueTransformerName && (NSNull *)valueTransformerName != [NSNull null])
-            valueTransformer = [NSValueTransformer valueTransformerForName:valueTransformerName];
-    }
-
-    if ((NSNull *)valueTransformer != [NSNull null])
-        return valueTransformer;
-    else
-        return nil;
-}
 
 
 @implementation SRRecorderControl
@@ -111,8 +84,6 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
 
     _SRRecorderControlButtonTag _mouseTrackingButtonTag;
     NSToolTipTag _snapBackButtonToolTipTag;
-
-    NSMutableDictionary *_bindingInfo;
 }
 
 - (instancetype)initWithFrame:(NSRect)aFrameRect
@@ -129,7 +100,6 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
         _allowsDeleteToClearShortcutAndEndRecording = YES;
         _mouseTrackingButtonTag = _SRRecorderControlInvalidButtonTag;
         _snapBackButtonToolTipTag = NSIntegerMax;
-        _bindingInfo = [NSMutableDictionary dictionary];
 
         if (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_6)
         {
@@ -156,7 +126,6 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [_bindingInfo unbind:NSValueBinding];
 }
 
 
@@ -195,6 +164,7 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
         newObjectValue = nil;
 
     _objectValue = [newObjectValue copy];
+    [self propagateValue:_objectValue forBinding:NSValueBinding];
 
     if (!self.isRecording)
     {
@@ -251,24 +221,7 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
     _isRecording = NO;
     [self didChangeValueForKey:@"isRecording"];
 
-    NSDictionary *valueBindingInfo = _bindingInfo[NSValueBinding];
-
-    if (valueBindingInfo)
-    {
-        NSValueTransformer *transformer = _SRValueTransformerFromBindingOptions(valueBindingInfo);
-
-        if ([[transformer class] allowsReverseTransformation])
-        {
-            [valueBindingInfo[NSObservedObjectKey] setValue:[transformer reverseTransformedValue:anObjectValue]
-                                                 forKeyPath:valueBindingInfo[NSObservedKeyPathKey]];
-        }
-        else
-            [valueBindingInfo[NSObservedObjectKey] setValue:anObjectValue forKeyPath:valueBindingInfo[NSObservedKeyPathKey]];
-
-        // objectValue will be set in -observeValueForKeyPath:ofObject:change:context:
-    }
-    else
-        self.objectValue = anObjectValue;
+    self.objectValue = anObjectValue;
 
     [self updateTrackingAreas];
     [self setToolTip:SRLoc(@"Click to record shortcut")];
@@ -783,72 +736,77 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
 }
 
 
-#pragma mark NSKeyValueBindingCreation
+#pragma mark Bindings Support
 
-- (Class)valueClassForBinding:(NSString *)aBinding
+/*!
+    @brief A helper method to propagate view-driven changes back to model.
+    @discussion This method makes it easier to propagate changes from a view
+    back to the model without overriding bind:toObject:withKeyPath:options:,
+    see http://tomdalling.com/blog/cocoa/implementing-your-own-cocoa-bindings/
+    for further discussion (this is also where the implementation comes from).
+*/
+- (void) propagateValue:(id)value forBinding:(NSString *)binding
 {
-    if ([aBinding isEqualToString:NSValueBinding])
-        return [NSDictionary class];
-    else
-        return [super valueClassForBinding:aBinding];
+	NSParameterAssert(binding != nil);
+
+	//WARNING: bindingInfo contains NSNull, so it must be accounted for
+	NSDictionary* bindingInfo = [self infoForBinding:binding];
+	if(!bindingInfo)
+		return; //there is no binding
+
+	//apply the value transformer, if one has been set
+	NSDictionary* bindingOptions = [bindingInfo objectForKey:NSOptionsKey];
+	if(bindingOptions){
+		NSValueTransformer* transformer = [bindingOptions valueForKey:NSValueTransformerBindingOption];
+		if(!transformer || (id)transformer == [NSNull null]){
+			NSString* transformerName = [bindingOptions valueForKey:NSValueTransformerNameBindingOption];
+			if(transformerName && (id)transformerName != [NSNull null]){
+				transformer = [NSValueTransformer valueTransformerForName:transformerName];
+			}
+		}
+
+		if(transformer && (id)transformer != [NSNull null]){
+			if([[transformer class] allowsReverseTransformation]){
+				value = [transformer reverseTransformedValue:value];
+			} else {
+				NSLog(@"WARNING: binding \"%@\" has value transformer, but it doesn't allow reverse transformations in %s", binding, __PRETTY_FUNCTION__);
+			}
+		}
+	}
+
+	id boundObject = [bindingInfo objectForKey:NSObservedObjectKey];
+	if(!boundObject || boundObject == [NSNull null]){
+		NSLog(@"ERROR: NSObservedObjectKey was nil for binding \"%@\" in %s", binding, __PRETTY_FUNCTION__);
+		return;
+	}
+
+	NSString* boundKeyPath = [bindingInfo objectForKey:NSObservedKeyPathKey];
+	if(!boundKeyPath || (id)boundKeyPath == [NSNull null]){
+		NSLog(@"ERROR: NSObservedKeyPathKey was nil for binding \"%@\" in %s", binding, __PRETTY_FUNCTION__);
+		return;
+	}
+
+	[boundObject setValue:value forKeyPath:boundKeyPath];
 }
 
-- (void)bind:(NSString *)aBinding toObject:(id)anObservable withKeyPath:(NSString *)aKeyPath options:(NSDictionary *)anOptions
+/*
+    @brief A backwards compatibility support for NSValueBinding.
+    @discussion The SRRecorderControl is documented to provide an NSValueBinding,
+    but the previous versions didn’t have a `value` property to back this binding,
+    the binding was supported through the overriden bind:toObject:withKeyPath:options:
+    method. That override was too complex to keep around, so it was removed. Now we have
+    to introduce a `value` property to keep the NSValueBinding working. The `value`
+    property is just a different name for `objectValue`.
+*/
+- (void) setValue: (id) value
 {
-    if ([aBinding isEqualToString:NSValueBinding])
-    {
-        [self unbind:aBinding];
-
-        [anObservable addObserver:self
-                       forKeyPath:aKeyPath
-                          options:0
-                          context:&_SRValueObservationContext];
-        _bindingInfo[aBinding] = @{
-            NSObservedObjectKey: anObservable,
-            NSObservedKeyPathKey: [aKeyPath copy],
-            NSOptionsKey: [NSDictionary dictionaryWithDictionary:anOptions]
-        };
-        self.objectValue = [anObservable valueForKeyPath:aKeyPath];
-
-        // This method is typically called when view is not presented to a user.
-        // If'd use -setNeedsDisplay:, the user may notice flickering when window with view is shown first time.
-        // Therefore ensure view is shown with correct value drawn by -displayIfNeeded
-        [self displayIfNeeded];
-    }
-    else
-        [super bind:aBinding toObject:anObservable withKeyPath:aKeyPath options:anOptions];
+    [self setObjectValue:value];
 }
 
-- (NSDictionary *)infoForBinding:(NSString *)aBinding
+- (id) value
 {
-    NSDictionary *info = _bindingInfo[aBinding];
-
-    if (!info)
-        info = [super infoForBinding:aBinding];
-
-    return info;
+    return [self objectValue];
 }
-
-- (void)unbind:(NSString *)aBinding
-{
-    if ([aBinding isEqualToString:NSValueBinding])
-    {
-        NSDictionary *valueBindingInfo = _bindingInfo[NSValueBinding];
-
-        if (valueBindingInfo)
-        {
-            if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_6)
-                [valueBindingInfo[NSObservedObjectKey] removeObserver:self forKeyPath:valueBindingInfo[NSObservedKeyPathKey]];
-            else
-                [valueBindingInfo[NSObservedObjectKey] removeObserver:self forKeyPath:valueBindingInfo[NSObservedKeyPathKey] context:&_SRValueObservationContext];
-
-            [_bindingInfo removeObjectForKey:NSValueBinding];
-        }
-    }
-    else
-        [super unbind:aBinding];
-}
-
 
 #pragma mark NSToolTipOwner
 
@@ -1240,26 +1198,6 @@ static NSValueTransformer *_SRValueTransformerFromBindingOptions(NSDictionary *a
 {
     if (self == [SRRecorderControl class])
         [self exposeBinding:NSValueBinding];
-}
-
-- (void)observeValueForKeyPath:(NSString *)aKeyPath ofObject:(id)anObject change:(NSDictionary *)aChange context:(void *)aContext
-{
-    if (aContext == &_SRValueObservationContext)
-    {
-        id newObjectValue = [anObject valueForKeyPath:aKeyPath];
-
-        if (NSIsControllerMarker(newObjectValue))
-            [NSException raise:NSInternalInconsistencyException format:@"SRRecorderControl's NSValueBinding does not support controller value markers."];
-
-        NSValueTransformer *valueTransformer = _SRValueTransformerFromBindingOptions(_bindingInfo[NSValueBinding][NSOptionsKey]);
-
-        if (valueTransformer)
-            newObjectValue = [valueTransformer transformedValue:newObjectValue];
-
-        self.objectValue = newObjectValue;
-    }
-    else
-        [super observeValueForKeyPath:aKeyPath ofObject:anObject change:aChange context:aContext];
 }
 
 @end
