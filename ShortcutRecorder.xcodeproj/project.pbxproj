@@ -7,6 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D39CBD91803EA6C0001F249 /* ShortcutRecorder.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 939837800DA42965007F53F3 /* ShortcutRecorder.framework */; };
+		0D39CBDA1803EA6E0001F249 /* PTHotKey.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E273122E1349EC9000A84433 /* PTHotKey.framework */; };
+		0D6B2469180304DE00CE1142 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2741AE01673C90B00A139BD /* Cocoa.framework */; };
+		0D6B24B4180304FA00CE1142 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 0D6B249B180304FA00CE1142 /* Credits.rtf */; };
+		0D6B24B5180304FA00CE1142 /* IKCodeAutoLayoutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D6B249D180304FA00CE1142 /* IKCodeAutoLayoutWindowController.xib */; };
+		0D6B24B6180304FA00CE1142 /* IKIBAutoLayoutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D6B249F180304FA00CE1142 /* IKIBAutoLayoutWindowController.xib */; };
+		0D6B24B7180304FA00CE1142 /* IKIBAutoresizingMasksWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D6B24A1180304FA00CE1142 /* IKIBAutoresizingMasksWindowController.xib */; };
+		0D6B24B8180304FA00CE1142 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0D6B24A3180304FA00CE1142 /* InfoPlist.strings */; };
+		0D6B24B9180304FA00CE1142 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D6B24A5180304FA00CE1142 /* MainMenu.xib */; };
+		0D6B24BA180304FA00CE1142 /* IKAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D6B24A8180304FA00CE1142 /* IKAppDelegate.m */; };
+		0D6B24BB180304FA00CE1142 /* IKCodeAutoLayoutWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D6B24AA180304FA00CE1142 /* IKCodeAutoLayoutWindowController.m */; };
+		0D6B24BC180304FA00CE1142 /* IKDemoWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D6B24AC180304FA00CE1142 /* IKDemoWindowController.m */; };
+		0D6B24BD180304FA00CE1142 /* IKIBAutoLayoutWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D6B24AE180304FA00CE1142 /* IKIBAutoLayoutWindowController.m */; };
+		0D6B24BE180304FA00CE1142 /* IKIBAutoresizingMasksWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D6B24B0180304FA00CE1142 /* IKIBAutoresizingMasksWindowController.m */; };
+		0D6B24C0180304FA00CE1142 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D6B24B2180304FA00CE1142 /* main.m */; };
+		0D6B24C11803053800CE1142 /* ShortcutRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 939837800DA42965007F53F3 /* ShortcutRecorder.framework */; };
+		0D6B24C31803057100CE1142 /* PTHotKey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E273122E1349EC9000A84433 /* PTHotKey.framework */; };
 		939837950DA429EC007F53F3 /* SRRecorderControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B8E29C109CDB9360085E9ED /* SRRecorderControl.m */; };
 		939837980DA429EC007F53F3 /* SRKeyCodeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C3670D0A246B4900B69171 /* SRKeyCodeTransformer.m */; };
 		939837990DA429EC007F53F3 /* SRValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C3670F0A246B4900B69171 /* SRValidator.m */; };
@@ -77,24 +94,63 @@
 		E2BE927D16AC052600827E8C /* PTHotKey+ShortcutRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = E279508F131A7498008AE1DA /* PTHotKey+ShortcutRecorder.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		0D39CBD81803EA5F0001F249 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0D39CBD91803EA6C0001F249 /* ShortcutRecorder.framework in Copy Frameworks */,
+				0D39CBDA1803EA6E0001F249 /* PTHotKey.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		0B8E29C009CDB9360085E9ED /* SRRecorderControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRRecorderControl.h; sourceTree = "<group>"; };
-		0B8E29C109CDB9360085E9ED /* SRRecorderControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRRecorderControl.m; sourceTree = "<group>"; };
+		0B8E29C009CDB9360085E9ED /* SRRecorderControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRRecorderControl.h; path = Library/SRRecorderControl.h; sourceTree = "<group>"; };
+		0B8E29C109CDB9360085E9ED /* SRRecorderControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRRecorderControl.m; path = Library/SRRecorderControl.m; sourceTree = "<group>"; };
 		0B8E2A0309CDBADE0085E9ED /* PTHotKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTHotKey.h; sourceTree = "<group>"; };
 		0B8E2A0409CDBADE0085E9ED /* PTHotKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTHotKey.m; sourceTree = "<group>"; };
 		0B8E2A0509CDBADE0085E9ED /* PTHotKeyCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTHotKeyCenter.h; sourceTree = "<group>"; };
 		0B8E2A0609CDBADE0085E9ED /* PTHotKeyCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTHotKeyCenter.m; sourceTree = "<group>"; };
 		0B8E2A0709CDBADE0085E9ED /* PTKeyCombo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTKeyCombo.h; sourceTree = "<group>"; };
 		0B8E2A0809CDBADE0085E9ED /* PTKeyCombo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTKeyCombo.m; sourceTree = "<group>"; };
-		32CA4F630368D1EE00C91783 /* ShortcutRecorder_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShortcutRecorder_Prefix.pch; sourceTree = "<group>"; };
-		74C3670C0A246B4900B69171 /* SRKeyCodeTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRKeyCodeTransformer.h; sourceTree = "<group>"; };
-		74C3670D0A246B4900B69171 /* SRKeyCodeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRKeyCodeTransformer.m; sourceTree = "<group>"; };
-		74C3670E0A246B4900B69171 /* SRValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRValidator.h; sourceTree = "<group>"; };
-		74C3670F0A246B4900B69171 /* SRValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRValidator.m; sourceTree = "<group>"; };
-		74C367100A246B4900B69171 /* SRCommon.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SRCommon.h; sourceTree = "<group>"; };
-		74C367110A246B4900B69171 /* SRCommon.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SRCommon.m; sourceTree = "<group>"; };
+		0D6B2468180304DE00CE1142 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D6B246B180304DE00CE1142 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		0D6B246C180304DE00CE1142 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		0D6B246D180304DE00CE1142 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		0D6B2487180304DE00CE1142 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		0D6B249C180304FA00CE1142 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		0D6B249E180304FA00CE1142 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IKCodeAutoLayoutWindowController.xib; sourceTree = "<group>"; };
+		0D6B24A0180304FA00CE1142 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IKIBAutoLayoutWindowController.xib; sourceTree = "<group>"; };
+		0D6B24A2180304FA00CE1142 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IKIBAutoresizingMasksWindowController.xib; sourceTree = "<group>"; };
+		0D6B24A4180304FA00CE1142 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		0D6B24A6180304FA00CE1142 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		0D6B24A7180304FA00CE1142 /* IKAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKAppDelegate.h; sourceTree = "<group>"; };
+		0D6B24A8180304FA00CE1142 /* IKAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKAppDelegate.m; sourceTree = "<group>"; };
+		0D6B24A9180304FA00CE1142 /* IKCodeAutoLayoutWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKCodeAutoLayoutWindowController.h; sourceTree = "<group>"; };
+		0D6B24AA180304FA00CE1142 /* IKCodeAutoLayoutWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKCodeAutoLayoutWindowController.m; sourceTree = "<group>"; };
+		0D6B24AB180304FA00CE1142 /* IKDemoWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKDemoWindowController.h; sourceTree = "<group>"; };
+		0D6B24AC180304FA00CE1142 /* IKDemoWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKDemoWindowController.m; sourceTree = "<group>"; };
+		0D6B24AD180304FA00CE1142 /* IKIBAutoLayoutWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKIBAutoLayoutWindowController.h; sourceTree = "<group>"; };
+		0D6B24AE180304FA00CE1142 /* IKIBAutoLayoutWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKIBAutoLayoutWindowController.m; sourceTree = "<group>"; };
+		0D6B24AF180304FA00CE1142 /* IKIBAutoresizingMasksWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKIBAutoresizingMasksWindowController.h; sourceTree = "<group>"; };
+		0D6B24B0180304FA00CE1142 /* IKIBAutoresizingMasksWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKIBAutoresizingMasksWindowController.m; sourceTree = "<group>"; };
+		0D6B24B1180304FA00CE1142 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0D6B24B2180304FA00CE1142 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		0D6B24B3180304FA00CE1142 /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
+		32CA4F630368D1EE00C91783 /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Prefix.pch; path = Library/Prefix.pch; sourceTree = "<group>"; };
+		74C3670C0A246B4900B69171 /* SRKeyCodeTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRKeyCodeTransformer.h; path = Library/SRKeyCodeTransformer.h; sourceTree = "<group>"; };
+		74C3670D0A246B4900B69171 /* SRKeyCodeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRKeyCodeTransformer.m; path = Library/SRKeyCodeTransformer.m; sourceTree = "<group>"; };
+		74C3670E0A246B4900B69171 /* SRValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRValidator.h; path = Library/SRValidator.h; sourceTree = "<group>"; };
+		74C3670F0A246B4900B69171 /* SRValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRValidator.m; path = Library/SRValidator.m; sourceTree = "<group>"; };
+		74C367100A246B4900B69171 /* SRCommon.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SRCommon.h; path = Library/SRCommon.h; sourceTree = "<group>"; };
+		74C367110A246B4900B69171 /* SRCommon.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = SRCommon.m; path = Library/SRCommon.m; sourceTree = "<group>"; };
 		939837800DA42965007F53F3 /* ShortcutRecorder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ShortcutRecorder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		939837B50DA42DFB007F53F3 /* ShortcutRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShortcutRecorder.h; sourceTree = SOURCE_ROOT; };
+		939837B50DA42DFB007F53F3 /* ShortcutRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShortcutRecorder.h; path = Library/ShortcutRecorder.h; sourceTree = SOURCE_ROOT; };
 		A1125B75104C8AF3005C6F7B /* PTKeyCodeTranslator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTKeyCodeTranslator.h; sourceTree = "<group>"; };
 		A1125B76104C8AF3005C6F7B /* PTKeyCodeTranslator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTKeyCodeTranslator.m; sourceTree = "<group>"; };
 		E20A897317F3322300502E33 /* shortcut-recorder-bezel-disabled-left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shortcut-recorder-bezel-disabled-left.png"; sourceTree = "<group>"; };
@@ -136,7 +192,7 @@
 		E225E4651679E30E00A00529 /* shortcut-recorder-snapback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shortcut-recorder-snapback.png"; sourceTree = "<group>"; };
 		E225E4661679E30E00A00529 /* shortcut-recorder-snapback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shortcut-recorder-snapback@2x.png"; sourceTree = "<group>"; };
 		E273122E1349EC9000A84433 /* PTHotKey.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PTHotKey.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E273122F1349EC9000A84433 /* PTHotKey-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PTHotKey-Info.plist"; sourceTree = SOURCE_ROOT; };
+		E273122F1349EC9000A84433 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = PTHotKey/Info.plist; sourceTree = SOURCE_ROOT; };
 		E273124B1349EE6500A84433 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		E2741AC41673C79F00A139BD /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ShortcutRecorder.strings; sourceTree = "<group>"; };
 		E2741AC61673C7A400A139BD /* de */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ShortcutRecorder.strings; sourceTree = "<group>"; };
@@ -163,18 +219,28 @@
 		E2741ADB1673C7CA00A139BD /* zh-Hant */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/ShortcutRecorder.strings"; sourceTree = "<group>"; };
 		E2741ADE1673C83800A139BD /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		E2741AE01673C90B00A139BD /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		E2741AE81673CCBA00A139BD /* ShortcutRecorder-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ShortcutRecorder-Info.plist"; sourceTree = "<group>"; };
+		E2741AE81673CCBA00A139BD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Library/Info.plist; sourceTree = "<group>"; };
 		E279508E131A7498008AE1DA /* PTHotKey+ShortcutRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PTHotKey+ShortcutRecorder.h"; sourceTree = "<group>"; };
 		E279508F131A7498008AE1DA /* PTHotKey+ShortcutRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PTHotKey+ShortcutRecorder.m"; sourceTree = "<group>"; };
-		E28113AB167B8A9D001E118E /* SRModifierFlagsTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRModifierFlagsTransformer.h; sourceTree = "<group>"; };
-		E28113AC167B8A9D001E118E /* SRModifierFlagsTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRModifierFlagsTransformer.m; sourceTree = "<group>"; };
-		E2BE924B16ABEFE400827E8C /* SRKeyEquivalentTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRKeyEquivalentTransformer.h; sourceTree = "<group>"; };
-		E2BE924C16ABEFE400827E8C /* SRKeyEquivalentTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRKeyEquivalentTransformer.m; sourceTree = "<group>"; };
-		E2BE925016ABF84100827E8C /* SRKeyEquivalentModifierMaskTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRKeyEquivalentModifierMaskTransformer.h; sourceTree = "<group>"; };
-		E2BE925116ABF84200827E8C /* SRKeyEquivalentModifierMaskTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRKeyEquivalentModifierMaskTransformer.m; sourceTree = "<group>"; };
+		E28113AB167B8A9D001E118E /* SRModifierFlagsTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRModifierFlagsTransformer.h; path = Library/SRModifierFlagsTransformer.h; sourceTree = "<group>"; };
+		E28113AC167B8A9D001E118E /* SRModifierFlagsTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRModifierFlagsTransformer.m; path = Library/SRModifierFlagsTransformer.m; sourceTree = "<group>"; };
+		E2BE924B16ABEFE400827E8C /* SRKeyEquivalentTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRKeyEquivalentTransformer.h; path = Library/SRKeyEquivalentTransformer.h; sourceTree = "<group>"; };
+		E2BE924C16ABEFE400827E8C /* SRKeyEquivalentTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRKeyEquivalentTransformer.m; path = Library/SRKeyEquivalentTransformer.m; sourceTree = "<group>"; };
+		E2BE925016ABF84100827E8C /* SRKeyEquivalentModifierMaskTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRKeyEquivalentModifierMaskTransformer.h; path = Library/SRKeyEquivalentModifierMaskTransformer.h; sourceTree = "<group>"; };
+		E2BE925116ABF84200827E8C /* SRKeyEquivalentModifierMaskTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRKeyEquivalentModifierMaskTransformer.m; path = Library/SRKeyEquivalentModifierMaskTransformer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0D6B2465180304DE00CE1142 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0D6B24C31803057100CE1142 /* PTHotKey.framework in Frameworks */,
+				0D6B24C11803053800CE1142 /* ShortcutRecorder.framework in Frameworks */,
+				0D6B2469180304DE00CE1142 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9398377E0DA42965007F53F3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -218,11 +284,75 @@
 			name = ShortcutRecorder;
 			sourceTree = "<group>";
 		};
+		0D6B246A180304DE00CE1142 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0D6B246B180304DE00CE1142 /* AppKit.framework */,
+				0D6B246C180304DE00CE1142 /* CoreData.framework */,
+				0D6B246D180304DE00CE1142 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		0D6B249A180304FA00CE1142 /* Demo */ = {
+			isa = PBXGroup;
+			children = (
+				0D6B24C4180305A300CE1142 /* Resources */,
+				0D6B24C5180305AA00CE1142 /* Supporting Files */,
+				0D6B24A7180304FA00CE1142 /* IKAppDelegate.h */,
+				0D6B24A8180304FA00CE1142 /* IKAppDelegate.m */,
+				0D6B24A9180304FA00CE1142 /* IKCodeAutoLayoutWindowController.h */,
+				0D6B24AA180304FA00CE1142 /* IKCodeAutoLayoutWindowController.m */,
+				0D6B24AB180304FA00CE1142 /* IKDemoWindowController.h */,
+				0D6B24AC180304FA00CE1142 /* IKDemoWindowController.m */,
+				0D6B24AD180304FA00CE1142 /* IKIBAutoLayoutWindowController.h */,
+				0D6B24AE180304FA00CE1142 /* IKIBAutoLayoutWindowController.m */,
+				0D6B24AF180304FA00CE1142 /* IKIBAutoresizingMasksWindowController.h */,
+				0D6B24B0180304FA00CE1142 /* IKIBAutoresizingMasksWindowController.m */,
+			);
+			path = Demo;
+			sourceTree = "<group>";
+		};
+		0D6B24C4180305A300CE1142 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0D6B249B180304FA00CE1142 /* Credits.rtf */,
+				0D6B249D180304FA00CE1142 /* IKCodeAutoLayoutWindowController.xib */,
+				0D6B249F180304FA00CE1142 /* IKIBAutoLayoutWindowController.xib */,
+				0D6B24A1180304FA00CE1142 /* IKIBAutoresizingMasksWindowController.xib */,
+				0D6B24A3180304FA00CE1142 /* InfoPlist.strings */,
+				0D6B24A5180304FA00CE1142 /* MainMenu.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		0D6B24C5180305AA00CE1142 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				0D6B24B1180304FA00CE1142 /* Info.plist */,
+				0D6B24B2180304FA00CE1142 /* main.m */,
+				0D6B24B3180304FA00CE1142 /* Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		0DB3F54B1802EE0B00576055 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E2741AE01673C90B00A139BD /* Cocoa.framework */,
+				E273124B1349EE6500A84433 /* Carbon.framework */,
+				0D6B2487180304DE00CE1142 /* XCTest.framework */,
+				0D6B246A180304DE00CE1142 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				939837800DA42965007F53F3 /* ShortcutRecorder.framework */,
 				E273122E1349EC9000A84433 /* PTHotKey.framework */,
+				0D6B2468180304DE00CE1142 /* Demo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -230,10 +360,10 @@
 		29B97314FDCFA39411CA2CEA /* ShortcutRecorder */ = {
 			isa = PBXGroup;
 			children = (
-				E2741AE01673C90B00A139BD /* Cocoa.framework */,
-				E273124B1349EE6500A84433 /* Carbon.framework */,
 				E2741AE71673CC3D00A139BD /* PTHotKey */,
 				080E96DDFE201D6D7F000001 /* ShortcutRecorder */,
+				0D6B249A180304FA00CE1142 /* Demo */,
+				0DB3F54B1802EE0B00576055 /* Frameworks */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -290,8 +420,8 @@
 		BA10595B1689CEB000A3DDF5 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				32CA4F630368D1EE00C91783 /* ShortcutRecorder_Prefix.pch */,
-				E2741AE81673CCBA00A139BD /* ShortcutRecorder-Info.plist */,
+				32CA4F630368D1EE00C91783 /* Prefix.pch */,
+				E2741AE81673CCBA00A139BD /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -299,7 +429,7 @@
 		BA10595C1689CEBF00A3DDF5 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				E273122F1349EC9000A84433 /* PTHotKey-Info.plist */,
+				E273122F1349EC9000A84433 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -355,6 +485,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		0D6B2467180304DE00CE1142 /* Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0D6B2498180304DF00CE1142 /* Build configuration list for PBXNativeTarget "Demo" */;
+			buildPhases = (
+				0D6B2464180304DE00CE1142 /* Sources */,
+				0D6B2465180304DE00CE1142 /* Frameworks */,
+				0D6B2466180304DE00CE1142 /* Resources */,
+				0D39CBD81803EA5F0001F249 /* Copy Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Demo;
+			productName = Demo;
+			productReference = 0D6B2468180304DE00CE1142 /* Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
 		9398377F0DA42965007F53F3 /* ShortcutRecorder.framework */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 939837840DA42965007F53F3 /* Build configuration list for PBXNativeTarget "ShortcutRecorder.framework" */;
@@ -433,6 +581,7 @@
 				pt,
 				"zh-Hant",
 				infoplist.strings,
+				Base,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* ShortcutRecorder */;
 			projectDirPath = "";
@@ -440,11 +589,25 @@
 			targets = (
 				9398377F0DA42965007F53F3 /* ShortcutRecorder.framework */,
 				E273122D1349EC9000A84433 /* PTHotKey.framework */,
+				0D6B2467180304DE00CE1142 /* Demo */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0D6B2466180304DE00CE1142 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0D6B24B7180304FA00CE1142 /* IKIBAutoresizingMasksWindowController.xib in Resources */,
+				0D6B24B4180304FA00CE1142 /* Credits.rtf in Resources */,
+				0D6B24B6180304FA00CE1142 /* IKIBAutoLayoutWindowController.xib in Resources */,
+				0D6B24B5180304FA00CE1142 /* IKCodeAutoLayoutWindowController.xib in Resources */,
+				0D6B24B8180304FA00CE1142 /* InfoPlist.strings in Resources */,
+				0D6B24B9180304FA00CE1142 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E2BADF0A134F13CD00F65E14 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -495,6 +658,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0D6B2464180304DE00CE1142 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0D6B24BC180304FA00CE1142 /* IKDemoWindowController.m in Sources */,
+				0D6B24BA180304FA00CE1142 /* IKAppDelegate.m in Sources */,
+				0D6B24BE180304FA00CE1142 /* IKIBAutoresizingMasksWindowController.m in Sources */,
+				0D6B24BD180304FA00CE1142 /* IKIBAutoLayoutWindowController.m in Sources */,
+				0D6B24C0180304FA00CE1142 /* main.m in Sources */,
+				0D6B24BB180304FA00CE1142 /* IKCodeAutoLayoutWindowController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9398377D0DA42965007F53F3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -524,6 +700,54 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		0D6B249B180304FA00CE1142 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0D6B249C180304FA00CE1142 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		0D6B249D180304FA00CE1142 /* IKCodeAutoLayoutWindowController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0D6B249E180304FA00CE1142 /* en */,
+			);
+			name = IKCodeAutoLayoutWindowController.xib;
+			sourceTree = "<group>";
+		};
+		0D6B249F180304FA00CE1142 /* IKIBAutoLayoutWindowController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0D6B24A0180304FA00CE1142 /* en */,
+			);
+			name = IKIBAutoLayoutWindowController.xib;
+			sourceTree = "<group>";
+		};
+		0D6B24A1180304FA00CE1142 /* IKIBAutoresizingMasksWindowController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0D6B24A2180304FA00CE1142 /* en */,
+			);
+			name = IKIBAutoresizingMasksWindowController.xib;
+			sourceTree = "<group>";
+		};
+		0D6B24A3180304FA00CE1142 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0D6B24A4180304FA00CE1142 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		0D6B24A5180304FA00CE1142 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0D6B24A6180304FA00CE1142 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
 		E2741AC31673C79F00A139BD /* ShortcutRecorder.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -557,6 +781,77 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0D6B2494180304DF00CE1142 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Demo/Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = Demo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		0D6B2495180304DF00CE1142 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Demo/Prefix.pch;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = Demo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 		939837820DA42965007F53F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -567,8 +862,8 @@
 				FRAMEWORK_VERSION = A;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ShortcutRecorder_Prefix.pch;
-				INFOPLIST_FILE = "ShortcutRecorder-Info.plist";
+				GCC_PREFIX_HEADER = Library/Prefix.pch;
+				INFOPLIST_FILE = Library/Info.plist;
 				INSTALL_PATH = "@rpath";
 				PRODUCT_NAME = ShortcutRecorder;
 			};
@@ -583,8 +878,8 @@
 				DYLIB_CURRENT_VERSION = 2.7;
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ShortcutRecorder_Prefix.pch;
-				INFOPLIST_FILE = "ShortcutRecorder-Info.plist";
+				GCC_PREFIX_HEADER = Library/Prefix.pch;
+				INFOPLIST_FILE = Library/Info.plist;
 				INSTALL_PATH = "@rpath";
 				PRODUCT_NAME = ShortcutRecorder;
 			};
@@ -641,7 +936,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				INFOPLIST_FILE = "PTHotKey-Info.plist";
+				INFOPLIST_FILE = PTHotKey/Info.plist;
 				INSTALL_PATH = "@rpath";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -662,7 +957,7 @@
 				DYLIB_CURRENT_VERSION = 1.1.1;
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				INFOPLIST_FILE = "PTHotKey-Info.plist";
+				INFOPLIST_FILE = PTHotKey/Info.plist;
 				INSTALL_PATH = "@rpath";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -677,6 +972,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0D6B2498180304DF00CE1142 /* Build configuration list for PBXNativeTarget "Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0D6B2494180304DF00CE1142 /* Debug */,
+				0D6B2495180304DF00CE1142 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		939837840DA42965007F53F3 /* Build configuration list for PBXNativeTarget "ShortcutRecorder.framework" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
