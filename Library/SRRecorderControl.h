@@ -13,46 +13,11 @@
 //      Ilya Kulakov
 
 #import <Cocoa/Cocoa.h>
-#import <ShortcutRecorder/SRCommon.h>
+#import <ShortcutRecorder/SRKeyCombo.h>
 
-
-/*!
-    @brief      Key code.
-
-    @discussion NSNumber representation of unsigned short.
-                Required key of SRRecorderControl's objectValue.
- */
-extern NSString *const SRShortcutKeyCode;
-
-/*!
-    @brief      Modifier flags.
-
-    @discussion NSNumber representation of NSUInteger.
-                Optional key of SRRecorderControl's objectValue.
- */
-extern NSString *const SRShortcutModifierFlagsKey;
-
-/*!
-    @brief      Interpretation of key code and modifier flags depending on system locale and input source
-                used when shortcut was taken.
-
-    @discussion NSString.
-                Optional key of SRRecorderControl's objectValue.
- */
-extern NSString *const SRShortcutCharacters;
-
-/*!
-    @brief      Interpretation of key code without modifier flags depending on system locale and input source
-                used when shortcut was taken.
-
-    @discussion NSString.
-                Optional key of SRRecorderControl's objectValue.
- */
-extern NSString *const SRShortcutCharactersIgnoringModifiers;
-
+extern NSString *const SRRecorderControlDictionaryValueBinding;
 
 @protocol SRRecorderControlDelegate;
-
 
 /*!
     @brief      An SRRecorderControl object is a control (but not a subclass of NSControl) that allows you to record shortcuts.
@@ -65,6 +30,8 @@ extern NSString *const SRShortcutCharactersIgnoringModifiers;
                     - NSValueTransformerBindingOption
                     - NSValueTransformerNameBindingOption
                     Note that at that moment, this binding _is not_ multivalue.
+                SRRecorderControlDictionaryValueBinding.
+                    To conveniently store the shortcuts in user defaults.
 
                 Required height: 25 points
                 Recommended min width: 100 points
@@ -140,9 +107,18 @@ extern NSString *const SRShortcutCharactersIgnoringModifiers;
 @property (nonatomic, readonly) BOOL isRecording;
 
 /*!
-    @brief  Returns dictionary representation of receiver's shortcut.
+    @brief  The recorded shortcut.
  */
-@property (nonatomic, copy) NSDictionary *objectValue;
+@property (nonatomic, copy) SRKeyCombo *objectValue;
+
+/*!
+    @brief  The recorded shortcut in a dictionary representation.
+
+    @discussion Changes in this property are reflected in objectValue and vice versa.
+    This property exists as a convenience, so that you can directly bind the recorded
+    shortcut to user defaults.
+*/
+@property (nonatomic, copy) NSDictionary *dictionaryValue;
 
 /*!
     @brief      Configures recording behavior of the control.
@@ -192,7 +168,7 @@ extern NSString *const SRShortcutCharactersIgnoringModifiers;
 
     @discussion You SHOULD not call this method directly.
  */
-- (void)endRecordingWithObjectValue:(NSDictionary *)anObjectValue;
+- (void)endRecordingWithObjectValue:(SRKeyCombo *)anObjectValue;
 
 
 /*!
@@ -397,7 +373,7 @@ extern NSString *const SRShortcutCharactersIgnoringModifiers;
 
     @see        SRValidator
  */
-- (BOOL)shortcutRecorder:(SRRecorderControl *)aRecorder canRecordShortcut:(NSDictionary *)aShortcut;
+- (BOOL)shortcutRecorder:(SRRecorderControl *)aRecorder canRecordShortcut:(SRKeyCombo *)aShortcut;
 
 /*!
     @brief      Tells the delegate that editing stopped for the specified shortcut recorder.
@@ -409,22 +385,3 @@ extern NSString *const SRShortcutCharactersIgnoringModifiers;
 - (void)shortcutRecorderDidEndRecording:(SRRecorderControl *)aRecorder;
 
 @end
-
-
-FOUNDATION_STATIC_INLINE BOOL SRShortcutEqualToShortcut(NSDictionary *a, NSDictionary *b)
-{
-    if (a == b)
-        return YES;
-    else if (a && !b)
-        return NO;
-    else if (!a && b)
-        return NO;
-    else
-        return ([a[SRShortcutKeyCode] isEqual:b[SRShortcutKeyCode]] && [a[SRShortcutModifierFlagsKey] isEqual:b[SRShortcutModifierFlagsKey]]);
-}
-
-
-FOUNDATION_STATIC_INLINE NSDictionary *SRShortcutWithCocoaModifierFlagsAndKeyCode(NSUInteger aModifierFlags, unsigned short aKeyCode)
-{
-    return @{SRShortcutKeyCode: @(aKeyCode), SRShortcutModifierFlagsKey: @(aModifierFlags)};
-}

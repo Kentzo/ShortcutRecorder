@@ -13,8 +13,7 @@
 
 
 /*!
-    @brief      Transform dictionary representation of shortcut into string suitable
-                for -setKeyEquivalentModifierMask: of NSButton and NSMenuItem.
+    @brief Transform shortcut into string suitable for -setKeyEquivalentModifierMask: of NSButton and NSMenuItem.
  */
 @interface SRKeyEquivalentModifierMaskTransformer : NSValueTransformer
 

@@ -13,13 +13,12 @@
 @implementation PTHotKey (ShortcutRecorder)
 
 + (PTHotKey *)hotKeyWithIdentifier:(id)anIdentifier
-                          keyCombo:(NSDictionary *)aKeyCombo
+                          keyCombo:(SRKeyCombo *)aKeyCombo
                             target:(id)aTarget
                             action:(SEL)anAction
 {
-    NSInteger keyCode = [[aKeyCombo objectForKey:@"keyCode"] integerValue];
-    NSUInteger modifiers = SRCocoaToCarbonFlags([[aKeyCombo objectForKey:@"modifierFlags"] unsignedIntegerValue]);
-    PTKeyCombo *newKeyCombo = [[[PTKeyCombo alloc] initWithKeyCode:keyCode modifiers:modifiers] autorelease];
+    NSUInteger carbonModifiers = SRCocoaToCarbonFlags([aKeyCombo modifiers]);
+    PTKeyCombo *newKeyCombo = [[[PTKeyCombo alloc] initWithKeyCode:aKeyCombo.keyCode modifiers:carbonModifiers] autorelease];
     PTHotKey *newHotKey = [[[PTHotKey alloc] initWithIdentifier:anIdentifier keyCombo:newKeyCombo] autorelease];
     [newHotKey setTarget:aTarget];
     [newHotKey setAction:anAction];
@@ -27,7 +26,7 @@
 }
 
 + (PTHotKey *)hotKeyWithIdentifier:(id)anIdentifier
-                          keyCombo:(NSDictionary *)aKeyCombo
+                          keyCombo:(SRKeyCombo *)aKeyCombo
                             target:(id)aTarget
                             action:(SEL)anAction
                        keyUpAction:(SEL)aKeyUpAction

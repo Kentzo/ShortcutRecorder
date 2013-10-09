@@ -8,17 +8,18 @@
 
 #import <Cocoa/Cocoa.h>
 #import "PTHotKey.h"
+#import "SRKeyCombo.h"
 
 
 @interface PTHotKey (ShortcutRecorder)
 
 + (PTHotKey *)hotKeyWithIdentifier:(id)anIdentifier
-                          keyCombo:(NSDictionary *)aKeyCombo
+                          keyCombo:(SRKeyCombo *)aKeyCombo
                             target:(id)aTarget
                             action:(SEL)anAction;
 
 + (PTHotKey *)hotKeyWithIdentifier:(id)anIdentifier
-                          keyCombo:(NSDictionary *)aKeyCombo
+                          keyCombo:(SRKeyCombo *)aKeyCombo
                             target:(id)aTarget
                             action:(SEL)anAction
                         keyUpAction:(SEL)aKeyUpAction;

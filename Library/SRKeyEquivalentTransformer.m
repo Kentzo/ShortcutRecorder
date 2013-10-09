@@ -28,26 +28,20 @@
     return [NSString class];
 }
 
-- (NSString *)transformedValue:(NSDictionary *)aValue
+- (NSString *)transformedValue:(id)keyCombo
 {
-    if (![aValue isKindOfClass:[NSDictionary class]])
+    if ([keyCombo isKindOfClass:[NSDictionary class]]) {
+        keyCombo = [SRKeyCombo keyComboWithDictionaryRepresentation:keyCombo];
+    }
+
+    if (keyCombo) {
+        SRKeyCodeTransformer *t = [SRKeyCodeTransformer sharedASCIITransformer];
+        return [t transformedValue:@([(SRKeyCombo*)keyCombo keyCode])
+         withImplicitModifierFlags:nil
+             explicitModifierFlags:@([(SRKeyCombo*)keyCombo modifiers])];
+    } else {
         return @"";
-
-    NSNumber *keyCode = aValue[SRShortcutKeyCode];
-
-    if (![keyCode isKindOfClass:[NSNumber class]])
-        return @"";
-
-    NSNumber *modifierFlags = aValue[SRShortcutModifierFlagsKey];
-
-    if (![modifierFlags isKindOfClass:[NSNumber class]])
-        modifierFlags = @(0);
-
-    SRKeyCodeTransformer *t = [SRKeyCodeTransformer sharedASCIITransformer];
-
-    return [t transformedValue:keyCode
-     withImplicitModifierFlags:nil
-         explicitModifierFlags:modifierFlags];
+    }
 }
 
 @end

@@ -28,17 +28,13 @@
     return [NSNumber class];
 }
 
-- (NSNumber *)transformedValue:(NSDictionary *)aValue
+- (NSNumber *)transformedValue:(id)keyCombo
 {
-    if (![aValue isKindOfClass:[NSDictionary class]])
-        return @(0);
+    if ([keyCombo isKindOfClass:[NSDictionary class]]) {
+        keyCombo = [SRKeyCombo keyComboWithDictionaryRepresentation:keyCombo];
+    }
 
-    NSNumber *modifierFlags = aValue[SRShortcutModifierFlagsKey];
-
-    if (![modifierFlags isKindOfClass:[NSNumber class]])
-        return @(0);
-
-    return modifierFlags;
+    return @([keyCombo modifiers]);
 }
 
 @end
