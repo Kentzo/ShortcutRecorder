@@ -41,21 +41,21 @@
 
 #pragma mark Methods
 
-- (BOOL)isKeyCode:(unsigned short)aKeyCode andFlagsTaken:(NSUInteger)aFlags error:(NSError **)outError;
+- (BOOL)isKeyComboTaken:(SRKeyCombo *)combo error:(NSError **)outError
 {
-    if ([self isKeyCode:aKeyCode andFlagTakenInDelegate:aFlags error:outError])
+    if ([self isKeyComboTakenInDelegate:combo error:outError])
         return YES;
 
     if ((![self.delegate respondsToSelector:@selector(shortcutValidatorShouldCheckSystemShortcuts:)] ||
          [self.delegate shortcutValidatorShouldCheckSystemShortcuts:self]) &&
-        [self isKeyCode:aKeyCode andFlagsTakenInSystemShortcuts:aFlags error:outError])
+        [self isKeyComboTakenInSystemShortcuts:combo error:outError])
     {
         return YES;
     }
 
     if ((![self.delegate respondsToSelector:@selector(shortcutValidatorShouldCheckMenu:)] ||
          [self.delegate shortcutValidatorShouldCheckMenu:self]) &&
-        [self isKeyCode:aKeyCode andFlags:aFlags takenInMenu:[NSApp mainMenu] error:outError])
+        [self isKeyCombo:combo takenInMenu:[NSApp mainMenu] error:outError])
     {
         return YES;
     }
@@ -63,15 +63,14 @@
     return NO;
 }
 
-- (BOOL)isKeyCode:(unsigned short)aKeyCode andFlagTakenInDelegate:(NSUInteger)aFlags error:(NSError **)outError
+- (BOOL)isKeyComboTakenInDelegate:(SRKeyCombo *)combo error:(NSError **)outError
 {
     if (self.delegate)
     {
         NSString *delegateReason = nil;
-        if ([self.delegate respondsToSelector:@selector(shortcutValidator:isKeyCode:andFlagsTaken:reason:)] &&
+        if ([self.delegate respondsToSelector:@selector(shortcutValidator:isKeyComboTaken:reason:)] &&
             [self.delegate shortcutValidator:self
-                                   isKeyCode:aKeyCode
-                               andFlagsTaken:aFlags
+                             isKeyComboTaken:combo
                                       reason:&delegateReason])
         {
             if (outError)
@@ -81,7 +80,7 @@
                 if ([self.delegate respondsToSelector:@selector(shortcutValidatorShouldUseASCIIStringForKeyCodes:)])
                     isASCIIOnly = [self.delegate shortcutValidatorShouldUseASCIIStringForKeyCodes:self];
 
-                NSString *shortcut = isASCIIOnly ? SRReadableASCIIStringForCocoaModifierFlagsAndKeyCode(aFlags, aKeyCode) : SRReadableStringForCocoaModifierFlagsAndKeyCode(aFlags, aKeyCode);
+                NSString *shortcut = isASCIIOnly ? SRReadableASCIIStringForCocoaModifierFlagsAndKeyCode([combo modifiers], [combo keyCode]) : SRReadableStringForCocoaModifierFlagsAndKeyCode([combo modifiers], [combo keyCode]);
                 NSString *failureReason = [NSString stringWithFormat:
                                            SRLoc(@"The key combination \"%@\" can't be used!"),
                                            shortcut];
@@ -103,7 +102,7 @@
     return NO;
 }
 
-- (BOOL)isKeyCode:(unsigned short)aKeyCode andFlagsTakenInSystemShortcuts:(NSUInteger)aFlags error:(NSError **)outError
+- (BOOL)isKeyComboTakenInSystemShortcuts:(SRKeyCombo *)combo error:(NSError **)outError
 {
     CFArrayRef s = NULL;
     OSStatus err = CopySymbolicHotKeys(&s);
@@ -112,7 +111,7 @@
         return YES;
 
     NSArray *symbolicHotKeys = (NSArray *)CFBridgingRelease(s);
-    aFlags &= SRCocoaModifierFlagsMask;
+    NSUInteger flags = [combo modifiers] & SRCocoaModifierFlagsMask;
 
     for (NSDictionary *symbolicHotKey in symbolicHotKeys)
     {
@@ -121,12 +120,12 @@
 
         unsigned short symbolicHotKeyCode = [symbolicHotKey[(__bridge NSString *)kHISymbolicHotKeyCode] integerValue];
 
-        if (symbolicHotKeyCode == aKeyCode)
+        if (symbolicHotKeyCode == [combo keyCode])
         {
             UInt32 symbolicHotKeyFlags = [symbolicHotKey[(__bridge NSString *)kHISymbolicHotKeyModifiers] unsignedIntValue];
             symbolicHotKeyFlags &= SRCarbonModifierFlagsMask;
 
-            if (SRCarbonToCocoaFlags(symbolicHotKeyFlags) == aFlags)
+            if (SRCarbonToCocoaFlags(symbolicHotKeyFlags) == flags)
             {
                 if (outError)
                 {
@@ -135,7 +134,7 @@
                     if ([self.delegate respondsToSelector:@selector(shortcutValidatorShouldUseASCIIStringForKeyCodes:)])
                         isASCIIOnly = [self.delegate shortcutValidatorShouldUseASCIIStringForKeyCodes:self];
 
-                    NSString *shortcut = isASCIIOnly ? SRReadableASCIIStringForCocoaModifierFlagsAndKeyCode(aFlags, aKeyCode) : SRReadableStringForCocoaModifierFlagsAndKeyCode(aFlags, aKeyCode);
+                    NSString *shortcut = isASCIIOnly ? SRReadableASCIIStringForCocoaModifierFlagsAndKeyCode([combo modifiers], [combo keyCode]) : SRReadableStringForCocoaModifierFlagsAndKeyCode([combo modifiers], [combo keyCode]);
                     NSString *failureReason = [NSString stringWithFormat:
                                                SRLoc(@"The key combination \"%@\" can't be used!"),
                                                shortcut];
@@ -157,13 +156,13 @@
     return NO;
 }
 
-- (BOOL)isKeyCode:(unsigned short)aKeyCode andFlags:(NSUInteger)aFlags takenInMenu:(NSMenu *)aMenu error:(NSError **)outError
+- (BOOL)isKeyCombo:(SRKeyCombo *)combo takenInMenu:(NSMenu *)aMenu error:(NSError **)outError
 {
-    aFlags &= SRCocoaModifierFlagsMask;
+    NSUInteger flags = [combo modifiers] & SRCocoaModifierFlagsMask;
 
     for (NSMenuItem *menuItem in [aMenu itemArray])
     {
-        if (menuItem.hasSubmenu && [self isKeyCode:aKeyCode andFlags:aFlags takenInMenu:menuItem.submenu error:outError])
+        if (menuItem.hasSubmenu && [self isKeyCombo:combo takenInMenu:menuItem.submenu error:outError])
             return YES;
 
         NSString *keyEquivalent = menuItem.keyEquivalent;
@@ -173,7 +172,7 @@
 
         NSUInteger keyEquivalentModifierMask = menuItem.keyEquivalentModifierMask;
 
-        if (SRKeyCodeWithFlagsEqualToKeyEquivalentWithFlags(aKeyCode, aFlags, keyEquivalent, keyEquivalentModifierMask))
+        if (SRKeyCodeWithFlagsEqualToKeyEquivalentWithFlags([combo keyCode], flags, keyEquivalent, keyEquivalentModifierMask))
         {
             if (outError)
             {
@@ -182,7 +181,7 @@
                 if ([self.delegate respondsToSelector:@selector(shortcutValidatorShouldUseASCIIStringForKeyCodes:)])
                     isASCIIOnly = [self.delegate shortcutValidatorShouldUseASCIIStringForKeyCodes:self];
 
-                NSString *shortcut = isASCIIOnly ? SRReadableASCIIStringForCocoaModifierFlagsAndKeyCode(aFlags, aKeyCode) : SRReadableStringForCocoaModifierFlagsAndKeyCode(aFlags, aKeyCode);
+                NSString *shortcut = isASCIIOnly ? SRReadableASCIIStringForCocoaModifierFlagsAndKeyCode([combo modifiers], [combo keyCode]) : SRReadableStringForCocoaModifierFlagsAndKeyCode([combo modifiers], [combo keyCode]);
                 NSString *failureReason = [NSString stringWithFormat:SRLoc(@"The key combination \"%@\" can't be used!"), shortcut];
                 NSString *description = [NSString stringWithFormat:SRLoc(@"The key combination \"%@\" can't be used because it's already used by the menu item \"%@\"."), shortcut, menuItem.SR_path];
                 NSDictionary *userInfo = @{
