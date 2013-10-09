@@ -14,7 +14,6 @@
 		0D6B24B5180304FA00CE1142 /* IKCodeAutoLayoutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D6B249D180304FA00CE1142 /* IKCodeAutoLayoutWindowController.xib */; };
 		0D6B24B6180304FA00CE1142 /* IKIBAutoLayoutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D6B249F180304FA00CE1142 /* IKIBAutoLayoutWindowController.xib */; };
 		0D6B24B7180304FA00CE1142 /* IKIBAutoresizingMasksWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D6B24A1180304FA00CE1142 /* IKIBAutoresizingMasksWindowController.xib */; };
-		0D6B24B8180304FA00CE1142 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0D6B24A3180304FA00CE1142 /* InfoPlist.strings */; };
 		0D6B24B9180304FA00CE1142 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D6B24A5180304FA00CE1142 /* MainMenu.xib */; };
 		0D6B24BA180304FA00CE1142 /* IKAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D6B24A8180304FA00CE1142 /* IKAppDelegate.m */; };
 		0D6B24BB180304FA00CE1142 /* IKCodeAutoLayoutWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D6B24AA180304FA00CE1142 /* IKCodeAutoLayoutWindowController.m */; };
@@ -142,7 +141,6 @@
 		0D6B249E180304FA00CE1142 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IKCodeAutoLayoutWindowController.xib; sourceTree = "<group>"; };
 		0D6B24A0180304FA00CE1142 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IKIBAutoLayoutWindowController.xib; sourceTree = "<group>"; };
 		0D6B24A2180304FA00CE1142 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IKIBAutoresizingMasksWindowController.xib; sourceTree = "<group>"; };
-		0D6B24A4180304FA00CE1142 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0D6B24A6180304FA00CE1142 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		0D6B24A7180304FA00CE1142 /* IKAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKAppDelegate.h; sourceTree = "<group>"; };
 		0D6B24A8180304FA00CE1142 /* IKAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKAppDelegate.m; sourceTree = "<group>"; };
@@ -345,7 +343,6 @@
 				0D6B249D180304FA00CE1142 /* IKCodeAutoLayoutWindowController.xib */,
 				0D6B249F180304FA00CE1142 /* IKIBAutoLayoutWindowController.xib */,
 				0D6B24A1180304FA00CE1142 /* IKIBAutoresizingMasksWindowController.xib */,
-				0D6B24A3180304FA00CE1142 /* InfoPlist.strings */,
 				0D6B24A5180304FA00CE1142 /* MainMenu.xib */,
 			);
 			name = Resources;
@@ -681,7 +678,6 @@
 				0D6B24B4180304FA00CE1142 /* Credits.rtf in Resources */,
 				0D6B24B6180304FA00CE1142 /* IKIBAutoLayoutWindowController.xib in Resources */,
 				0D6B24B5180304FA00CE1142 /* IKCodeAutoLayoutWindowController.xib in Resources */,
-				0D6B24B8180304FA00CE1142 /* InfoPlist.strings in Resources */,
 				0D6B24B9180304FA00CE1142 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -832,14 +828,6 @@
 				0D6B24A2180304FA00CE1142 /* en */,
 			);
 			name = IKIBAutoresizingMasksWindowController.xib;
-			sourceTree = "<group>";
-		};
-		0D6B24A3180304FA00CE1142 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0D6B24A4180304FA00CE1142 /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 		0D6B24A5180304FA00CE1142 /* MainMenu.xib */ = {
