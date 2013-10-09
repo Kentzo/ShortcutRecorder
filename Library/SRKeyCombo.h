@@ -15,6 +15,18 @@
 @property(assign, readonly) NSUInteger modifiers;
 
 /*!
+    @brief A string representation of the shortcut with modifier flags replaced
+    with their localized readable equivalents (e.g. ⌥ -> Option).
+*/
+@property(copy, readonly) NSString *readableString;
+
+/*!
+    @brief A string representation of the shortcut with modifier flags replaced with their
+    localized readable equivalents (e.g. ⌥ -> Option) and ASCII character for key code.
+ */
+@property(copy, readonly) NSString *readableASCIIString;
+
+/*!
     @brief Returns a dictionary representation of the shortcut.
     @discussion Useful for storing the shortcuts in user defaults.
 */

@@ -1,4 +1,5 @@
 #import "SRKeyCombo.h"
+#import "SRKeyCodeTransformer.h"
 
 static NSString *const SRKeyComboKeyCodeKey = @"keyCode";
 static NSString *const SRKeyComboModifierFlagsKey = @"modifierFlags";
@@ -25,6 +26,30 @@ static NSString *const SRKeyComboModifierFlagsKey = @"modifierFlags";
     return [self keyComboWithKeyCode:[event keyCode] modifiers:[event modifierFlags] & SRCocoaModifierFlagsMask];
 }
 
+#pragma mark Rendering
+
+- (NSString*) renderedModifiers
+{
+    return [NSString stringWithFormat:@"%@%@%@%@",
+        (_modifiers & NSCommandKeyMask ? SRLoc(@"Command-") : @""),
+        (_modifiers & NSAlternateKeyMask ? SRLoc(@"Option-") : @""),
+        (_modifiers & NSControlKeyMask ? SRLoc(@"Control-") : @""),
+        (_modifiers & NSShiftKeyMask ? SRLoc(@"Shift-") : @"")];
+}
+
+- (NSString*) readableString
+{
+    SRKeyCodeTransformer *t = [SRKeyCodeTransformer sharedPlainTransformer];
+    return [NSString stringWithFormat:@"%@%@", [self renderedModifiers], [t transformedValue:@(_keyCode)]];
+}
+
+
+- (NSString*) readableASCIIString
+{
+    SRKeyCodeTransformer *t = [SRKeyCodeTransformer sharedPlainASCIITransformer];
+    return [NSString stringWithFormat:@"%@%@", [self renderedModifiers], [t transformedValue:@(_keyCode)]];
+}
+
 #pragma mark NSObject
 
 - (BOOL) isEqual: (id) object
@@ -36,8 +61,7 @@ static NSString *const SRKeyComboModifierFlagsKey = @"modifierFlags";
 
 - (NSString*) description
 {
-    NSString *readableString = SRReadableASCIIStringForCocoaModifierFlagsAndKeyCode(_modifiers, _keyCode);
-    return [NSString stringWithFormat:@"<%@ %p: %@>", [self class], self, readableString];
+    return [NSString stringWithFormat:@"<%@ %p: %@>", [self class], self, [self readableASCIIString]];
 }
 
 #pragma mark Dictionary Representation
