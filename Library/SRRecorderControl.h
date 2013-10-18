@@ -13,7 +13,7 @@
 //      Ilya Kulakov
 
 #import <Cocoa/Cocoa.h>
-#import <ShortcutRecorder/SRKeyCombo.h>
+#import <ShortcutRecorder/SRShortcut.h>
 
 extern NSString *const SRRecorderControlDictionaryValueBinding;
 
@@ -109,7 +109,7 @@ extern NSString *const SRRecorderControlDictionaryValueBinding;
 /*!
     @brief  The recorded shortcut.
  */
-@property (nonatomic, copy) SRKeyCombo *objectValue;
+@property (nonatomic, copy) SRShortcut *objectValue;
 
 /*!
     @brief  The recorded shortcut in a dictionary representation.
@@ -168,7 +168,7 @@ extern NSString *const SRRecorderControlDictionaryValueBinding;
 
     @discussion You SHOULD not call this method directly.
  */
-- (void)endRecordingWithObjectValue:(SRKeyCombo *)anObjectValue;
+- (void)endRecordingWithObjectValue:(SRShortcut *)anObjectValue;
 
 
 /*!
@@ -373,7 +373,7 @@ extern NSString *const SRRecorderControlDictionaryValueBinding;
 
     @see        SRValidator
  */
-- (BOOL)shortcutRecorder:(SRRecorderControl *)aRecorder canRecordShortcut:(SRKeyCombo *)aShortcut;
+- (BOOL)shortcutRecorder:(SRRecorderControl *)aRecorder canRecordShortcut:(SRShortcut *)aShortcut;
 
 /*!
     @brief      Tells the delegate that editing stopped for the specified shortcut recorder.

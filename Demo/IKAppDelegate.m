@@ -113,11 +113,11 @@
         [hotKeyCenter unregisterHotKey:oldHotKey];
 
         NSDictionary *frozenShortcut = [anObject valueForKeyPath:aKeyPath];
-        SRKeyCombo *newShortcut = [SRKeyCombo keyComboWithDictionaryRepresentation:frozenShortcut];
+        SRShortcut *newShortcut = [SRShortcut shortcutWithDictionaryRepresentation:frozenShortcut];
         if (newShortcut)
         {
             PTHotKey *newHotKey = [PTHotKey hotKeyWithIdentifier:aKeyPath
-                                                        keyCombo:newShortcut
+                                                        shortcut:newShortcut
                                                           target:self
                                                           action:@selector(ping:)];
             [hotKeyCenter registerHotKey:newHotKey];

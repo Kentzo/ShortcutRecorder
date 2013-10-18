@@ -161,7 +161,7 @@ typedef NS_ENUM(NSUInteger, _SRRecorderControlButtonTag)
         [self noteFocusRingMaskChanged];
 }
 
-- (void)setObjectValue:(SRKeyCombo *)newObjectValue
+- (void)setObjectValue:(SRShortcut *)newObjectValue
 {
     // Cocoa KVO and KVC frequently uses NSNull as object substituation of nil.
     // SRRecorderControl expects either nil or valid object value, it's convenient
@@ -187,7 +187,7 @@ typedef NS_ENUM(NSUInteger, _SRRecorderControlButtonTag)
 
 - (void)setDictionaryValue:(NSDictionary *)dictionaryValue
 {
-    [self setObjectValue:[SRKeyCombo keyComboWithDictionaryRepresentation:dictionaryValue]];
+    [self setObjectValue:[SRShortcut shortcutWithDictionaryRepresentation:dictionaryValue]];
 }
 
 #pragma mark Methods
@@ -231,7 +231,7 @@ typedef NS_ENUM(NSUInteger, _SRRecorderControlButtonTag)
     [self endRecordingWithObjectValue:nil];
 }
 
-- (void)endRecordingWithObjectValue:(SRKeyCombo *)anObjectValue
+- (void)endRecordingWithObjectValue:(SRShortcut *)anObjectValue
 {
     if (!self.isRecording)
         return;
@@ -1230,7 +1230,7 @@ typedef NS_ENUM(NSUInteger, _SRRecorderControlButtonTag)
         }
         else if ([self areModifierFlagsValid:anEvent.modifierFlags forKeyCode:anEvent.keyCode])
         {
-            SRKeyCombo *newObjectValue = [SRKeyCombo keyComboWithEvent:anEvent];
+            SRShortcut *newObjectValue = [SRShortcut shortcutWithEvent:anEvent];
             if ([self.delegate respondsToSelector:@selector(shortcutRecorder:canRecordShortcut:)])
             {
                 if (![self.delegate shortcutRecorder:self canRecordShortcut:newObjectValue])

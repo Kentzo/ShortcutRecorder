@@ -15,7 +15,7 @@
 //      Ilya Kulakov
 
 #import <Cocoa/Cocoa.h>
-#import "SRKeyCombo.h"
+#import "SRShortcut.h"
 
 
 @protocol SRValidatorDelegate;
@@ -33,34 +33,34 @@
     @brief      Determines whether shortcut is taken.
 
     @discussion Key is checked in the following order:
-                1. If delegate implements shortcutValidator:isKeyComboTaken:reason:
+                1. If delegate implements shortcutValidator:isShortcutTaken:reason:
                 2. If delegate allows system-wide shortcuts are checked
                 3. If delegate allows application menu it checked
 
     @see        SRValidatorDelegate
  */
-- (BOOL)isKeyComboTaken:(SRKeyCombo *)combo error:(NSError **)outError;
+- (BOOL)isShortcutTaken:(SRShortcut *)shortcut error:(NSError **)outError;
 
 /*!
     @brief      Determines whether shortcut is taken in delegate.
 
     @discussion If delegate does not implement appropriate method, returns immediately.
  */
-- (BOOL)isKeyComboTakenInDelegate:(SRKeyCombo *)combo error:(NSError **)outError;
+- (BOOL)isShortcutTakenInDelegate:(SRShortcut *)shortcut error:(NSError **)outError;
 
 /*!
     @brief      Determines whether shortcut is taken by system-wide shortcuts.
 
     @discussion Does not check whether delegate allows or disallows checking in system shortcuts.
  */
-- (BOOL)isKeyComboTakenInSystemShortcuts:(SRKeyCombo *)combo error:(NSError **)outError;
+- (BOOL)isShortcutTakenInSystemShortcuts:(SRShortcut *)shortcut error:(NSError **)outError;
 
 /*!
     @brief      Determines whether shortcut is taken by application menu item.
 
     @discussion Does not check whether delegate allows or disallows checking in application menu.
  */
-- (BOOL)isKeyCombo:(SRKeyCombo *)combo takenInMenu:(NSMenu *)aMenu error:(NSError **)outError;
+- (BOOL)isShortcut:(SRShortcut *)shortcut takenInMenu:(NSMenu *)aMenu error:(NSError **)outError;
 
 @end
 
@@ -70,11 +70,11 @@
 @optional
 
 /*!
-    @brief      Asks the delegate if key combo is valid.
+    @brief      Asks the delegate if shortcut is valid.
 
     @param      aValidator The validator that validates key code and flags.
 
-    @param      aKeyCombo Key combo to validate.
+    @param      shortcut Shortcut to validate.
 
     @param      outReason If delegate decides that shortcut is invalid, it may pass here an error message.
 
@@ -82,7 +82,7 @@
 
     @discussion Implementation of this method by the delegate is optional. If it is not present, checking proceeds as if this method had returned YES.
  */
-- (BOOL)shortcutValidator:(SRValidator *)aValidator isKeyComboTaken:(SRKeyCombo *)aKeyCombo reason:(NSString **)outReason;
+- (BOOL)shortcutValidator:(SRValidator *)aValidator isShortcutTaken:(SRShortcut *)shortcut reason:(NSString **)outReason;
 
 /*!
     @brief      Asks the delegate whether validator should check key equivalents of app's menu items.

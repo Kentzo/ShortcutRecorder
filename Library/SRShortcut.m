@@ -1,10 +1,10 @@
-#import "SRKeyCombo.h"
+#import "SRShortcut.h"
 #import "SRKeyCodeTransformer.h"
 
-static NSString *const SRKeyComboKeyCodeKey = @"keyCode";
-static NSString *const SRKeyComboModifierFlagsKey = @"modifierFlags";
+static NSString *const SRShortcutKeyCodeKey = @"keyCode";
+static NSString *const SRShortcutModifierFlagsKey = @"modifierFlags";
 
-@implementation SRKeyCombo
+@implementation SRShortcut
 
 #pragma mark Initialization
 
@@ -16,14 +16,14 @@ static NSString *const SRKeyComboModifierFlagsKey = @"modifierFlags";
     return self;
 }
 
-+ (instancetype) keyComboWithKeyCode: (NSUInteger) keyCode modifiers: (NSUInteger) modifiers
++ (instancetype) shortcutWithKeyCode: (NSUInteger) keyCode modifiers: (NSUInteger) modifiers
 {
     return [[self alloc] initWithKeyCode:keyCode modifiers:modifiers];
 }
 
-+ (instancetype) keyComboWithEvent: (NSEvent*) event
++ (instancetype) shortcutWithEvent: (NSEvent*) event
 {
-    return [self keyComboWithKeyCode:[event keyCode] modifiers:[event modifierFlags] & SRCocoaModifierFlagsMask];
+    return [self shortcutWithKeyCode:[event keyCode] modifiers:[event modifierFlags] & SRCocoaModifierFlagsMask];
 }
 
 #pragma mark Rendering
@@ -55,8 +55,8 @@ static NSString *const SRKeyComboModifierFlagsKey = @"modifierFlags";
 - (BOOL) isEqual: (id) object
 {
     return ([object class] == [self class])
-        && ([(SRKeyCombo*) object keyCode] == [self keyCode])
-        && ([(SRKeyCombo*) object modifiers] == [self modifiers]);
+        && ([(SRShortcut*) object keyCode] == [self keyCode])
+        && ([(SRShortcut*) object modifiers] == [self modifiers]);
 }
 
 - (NSString*) description
@@ -69,21 +69,21 @@ static NSString *const SRKeyComboModifierFlagsKey = @"modifierFlags";
 - (NSDictionary*) dictionaryRepresentation
 {
     return @{
-        SRKeyComboKeyCodeKey : @(_keyCode),
-        SRKeyComboModifierFlagsKey : @(_modifiers)
+        SRShortcutKeyCodeKey : @(_keyCode),
+        SRShortcutModifierFlagsKey : @(_modifiers)
     };
 }
 
 // We’re intentionally paranoid here because the dictionary is expected to come from user defaults.
-+ (instancetype) keyComboWithDictionaryRepresentation: (NSDictionary*) dictionary
++ (instancetype) shortcutWithDictionaryRepresentation: (NSDictionary*) dictionary
 {
     // The dictionary itself might be of other type than NSDictionary.
     if (![dictionary respondsToSelector:@selector(objectForKey:)]) {
         return nil;
     }
 
-    id wrappedKeyCode = dictionary[SRKeyComboKeyCodeKey];
-    id wrappedModifiers = dictionary[SRKeyComboModifierFlagsKey];
+    id wrappedKeyCode = dictionary[SRShortcutKeyCodeKey];
+    id wrappedModifiers = dictionary[SRShortcutModifierFlagsKey];
 
     // Bail out early if any of the required components are missing.
     if (!dictionary || !wrappedKeyCode || !wrappedModifiers) {
@@ -100,7 +100,7 @@ static NSString *const SRKeyComboModifierFlagsKey = @"modifierFlags";
         return nil;
     }
 
-    return [self keyComboWithKeyCode:[wrappedKeyCode unsignedIntegerValue] modifiers:[wrappedModifiers unsignedIntegerValue]];
+    return [self shortcutWithKeyCode:[wrappedKeyCode unsignedIntegerValue] modifiers:[wrappedModifiers unsignedIntegerValue]];
 }
 
 #pragma mark NSCopying
@@ -114,15 +114,15 @@ static NSString *const SRKeyComboModifierFlagsKey = @"modifierFlags";
 
 - (void) encodeWithCoder: (NSCoder*) encoder
 {
-    [encoder encodeInteger:_keyCode forKey:SRKeyComboKeyCodeKey];
-    [encoder encodeInteger:_modifiers forKey:SRKeyComboModifierFlagsKey];
+    [encoder encodeInteger:_keyCode forKey:SRShortcutKeyCodeKey];
+    [encoder encodeInteger:_modifiers forKey:SRShortcutModifierFlagsKey];
 }
 
 - (id) initWithCoder: (NSCoder*) decoder
 {
     self = [super init];
-    _keyCode = [decoder decodeIntegerForKey:SRKeyComboKeyCodeKey];
-    _modifiers = [decoder decodeIntegerForKey:SRKeyComboModifierFlagsKey];
+    _keyCode = [decoder decodeIntegerForKey:SRShortcutKeyCodeKey];
+    _modifiers = [decoder decodeIntegerForKey:SRShortcutModifierFlagsKey];
     return self;
 }
 

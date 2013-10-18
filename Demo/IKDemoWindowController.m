@@ -17,10 +17,10 @@
 
 #pragma mark SRRecorderControlDelegate
 
-- (BOOL)shortcutRecorder:(SRRecorderControl *)aRecorder canRecordShortcut:(SRKeyCombo *)aShortcut
+- (BOOL)shortcutRecorder:(SRRecorderControl *)aRecorder canRecordShortcut:(SRShortcut *)aShortcut
 {
     __autoreleasing NSError *error = nil;
-    BOOL isTaken = [_validator isKeyComboTaken:aShortcut error:&error];
+    BOOL isTaken = [_validator isShortcutTaken:aShortcut error:&error];
 
     if (isTaken)
     {
@@ -87,9 +87,9 @@
 
 #pragma mark SRValidatorDelegate
 
-- (BOOL)shortcutValidator:(SRValidator *)aValidator isKeyComboTaken:(SRKeyCombo *)aKeyCombo reason:(NSString *__autoreleasing *)outReason
+- (BOOL)shortcutValidator:(SRValidator *)aValidator isShortcut:(SRShortcut *)shortcut reason:(NSString *__autoreleasing *)outReason
 {
-#define IS_TAKEN(aRecorder) (recorder != (aRecorder) && [aKeyCombo isEqual:[(aRecorder) objectValue]])
+#define IS_TAKEN(aRecorder) (recorder != (aRecorder) && [shortcut isEqual:[(aRecorder) objectValue]])
     SRRecorderControl *recorder = (SRRecorderControl *)self.window.firstResponder;
 
     if (![recorder isKindOfClass:[SRRecorderControl class]])

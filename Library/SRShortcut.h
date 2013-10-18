@@ -1,6 +1,6 @@
 #import "SRCommon.h"
 
-@interface SRKeyCombo : NSObject <NSCoding, NSCopying>
+@interface SRShortcut : NSObject <NSCoding, NSCopying>
 
 /*!
     @brief The virtual key code for the keyboard key.
@@ -33,14 +33,14 @@
 @property(copy, readonly) NSDictionary *dictionaryRepresentation;
 
 - (instancetype) initWithKeyCode: (NSUInteger) keyCode modifiers: (NSUInteger) modifiers;
-+ (instancetype) keyComboWithKeyCode: (NSUInteger) keyCode modifiers: (NSUInteger) modifiers;
-+ (instancetype) keyComboWithDictionaryRepresentation: (NSDictionary*) dictionary;
++ (instancetype) shortcutWithKeyCode: (NSUInteger) keyCode modifiers: (NSUInteger) modifiers;
++ (instancetype) shortcutWithDictionaryRepresentation: (NSDictionary*) dictionary;
 
 /*!
-    @brief Creates a new key combo from an NSEvent object.
+    @brief Creates a new shortcut from an NSEvent object.
     @discussion This is just a convenience initializer that reads the key code
     and modifiers from an NSEvent.
 */
-+ (instancetype) keyComboWithEvent: (NSEvent*) event;
++ (instancetype) shortcutWithEvent: (NSEvent*) event;
 
 @end

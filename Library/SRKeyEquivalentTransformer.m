@@ -28,17 +28,17 @@
     return [NSString class];
 }
 
-- (NSString *)transformedValue:(id)keyCombo
+- (NSString *)transformedValue:(id)shortcut
 {
-    if ([keyCombo isKindOfClass:[NSDictionary class]]) {
-        keyCombo = [SRKeyCombo keyComboWithDictionaryRepresentation:keyCombo];
+    if ([shortcut isKindOfClass:[NSDictionary class]]) {
+        shortcut = [SRShortcut shortcutWithDictionaryRepresentation:shortcut];
     }
 
-    if (keyCombo) {
+    if (shortcut) {
         SRKeyCodeTransformer *t = [SRKeyCodeTransformer sharedASCIITransformer];
-        return [t transformedValue:@([(SRKeyCombo*)keyCombo keyCode])
+        return [t transformedValue:@([(SRShortcut*)shortcut keyCode])
          withImplicitModifierFlags:nil
-             explicitModifierFlags:@([(SRKeyCombo*)keyCombo modifiers])];
+             explicitModifierFlags:@([(SRShortcut*)shortcut modifiers])];
     } else {
         return @"";
     }

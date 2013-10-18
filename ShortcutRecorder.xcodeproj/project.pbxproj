@@ -24,9 +24,9 @@
 		0D6B24C11803053800CE1142 /* ShortcutRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 939837800DA42965007F53F3 /* ShortcutRecorder.framework */; };
 		0D6B24C31803057100CE1142 /* PTHotKey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E273122E1349EC9000A84433 /* PTHotKey.framework */; };
 		0DAA808F18052E0000FFD745 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D6B2487180304DE00CE1142 /* XCTest.framework */; };
-		0DAA80A018052F4B00FFD745 /* SRKeyCombo.h in Headers */ = {isa = PBXBuildFile; fileRef = 0DAA809E18052F4B00FFD745 /* SRKeyCombo.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0DAA80A118052F4B00FFD745 /* SRKeyCombo.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DAA809F18052F4B00FFD745 /* SRKeyCombo.m */; };
-		0DAA80A318052F9C00FFD745 /* SRKeyComboTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DAA80A218052F9C00FFD745 /* SRKeyComboTests.m */; };
+		0DAA80A018052F4B00FFD745 /* SRShortcut.h in Headers */ = {isa = PBXBuildFile; fileRef = 0DAA809E18052F4B00FFD745 /* SRShortcut.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0DAA80A118052F4B00FFD745 /* SRShortcut.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DAA809F18052F4B00FFD745 /* SRShortcut.m */; };
+		0DAA80A318052F9C00FFD745 /* SRShortcutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DAA80A218052F9C00FFD745 /* SRShortcutTests.m */; };
 		0DAA80A4180530FE00FFD745 /* ShortcutRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 939837800DA42965007F53F3 /* ShortcutRecorder.framework */; };
 		939837950DA429EC007F53F3 /* SRRecorderControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B8E29C109CDB9360085E9ED /* SRRecorderControl.m */; };
 		939837980DA429EC007F53F3 /* SRKeyCodeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C3670D0A246B4900B69171 /* SRKeyCodeTransformer.m */; };
@@ -158,9 +158,9 @@
 		0DAA808E18052E0000FFD745 /* Unit Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DAA809218052E0000FFD745 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0DAA809818052E0000FFD745 /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
-		0DAA809E18052F4B00FFD745 /* SRKeyCombo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRKeyCombo.h; path = Library/SRKeyCombo.h; sourceTree = "<group>"; };
-		0DAA809F18052F4B00FFD745 /* SRKeyCombo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRKeyCombo.m; path = Library/SRKeyCombo.m; sourceTree = "<group>"; };
-		0DAA80A218052F9C00FFD745 /* SRKeyComboTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRKeyComboTests.m; path = Library/SRKeyComboTests.m; sourceTree = "<group>"; };
+		0DAA809E18052F4B00FFD745 /* SRShortcut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRShortcut.h; path = Library/SRShortcut.h; sourceTree = "<group>"; };
+		0DAA809F18052F4B00FFD745 /* SRShortcut.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRShortcut.m; path = Library/SRShortcut.m; sourceTree = "<group>"; };
+		0DAA80A218052F9C00FFD745 /* SRShortcutTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRShortcutTests.m; path = Library/SRShortcutTests.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Prefix.pch; path = Library/Prefix.pch; sourceTree = "<group>"; };
 		74C3670C0A246B4900B69171 /* SRKeyCodeTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRKeyCodeTransformer.h; path = Library/SRKeyCodeTransformer.h; sourceTree = "<group>"; };
 		74C3670D0A246B4900B69171 /* SRKeyCodeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRKeyCodeTransformer.m; path = Library/SRKeyCodeTransformer.m; sourceTree = "<group>"; };
@@ -300,9 +300,9 @@
 				74C3670F0A246B4900B69171 /* SRValidator.m */,
 				74C367100A246B4900B69171 /* SRCommon.h */,
 				74C367110A246B4900B69171 /* SRCommon.m */,
-				0DAA809E18052F4B00FFD745 /* SRKeyCombo.h */,
-				0DAA809F18052F4B00FFD745 /* SRKeyCombo.m */,
-				0DAA80A218052F9C00FFD745 /* SRKeyComboTests.m */,
+				0DAA809E18052F4B00FFD745 /* SRShortcut.h */,
+				0DAA809F18052F4B00FFD745 /* SRShortcut.m */,
+				0DAA80A218052F9C00FFD745 /* SRShortcutTests.m */,
 			);
 			name = ShortcutRecorder;
 			sourceTree = "<group>";
@@ -516,7 +516,7 @@
 				E2BE925216ABF84200827E8C /* SRKeyEquivalentModifierMaskTransformer.h in Headers */,
 				9398393E0DA4350B007F53F3 /* SRKeyCodeTransformer.h in Headers */,
 				9398393F0DA4350B007F53F3 /* SRValidator.h in Headers */,
-				0DAA80A018052F4B00FFD745 /* SRKeyCombo.h in Headers */,
+				0DAA80A018052F4B00FFD745 /* SRShortcut.h in Headers */,
 				939839400DA4350B007F53F3 /* SRCommon.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -756,7 +756,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0DAA80A318052F9C00FFD745 /* SRKeyComboTests.m in Sources */,
+				0DAA80A318052F9C00FFD745 /* SRShortcutTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -769,7 +769,7 @@
 				939837990DA429EC007F53F3 /* SRValidator.m in Sources */,
 				9398379A0DA429EC007F53F3 /* SRCommon.m in Sources */,
 				E28113AE167B8A9D001E118E /* SRModifierFlagsTransformer.m in Sources */,
-				0DAA80A118052F4B00FFD745 /* SRKeyCombo.m in Sources */,
+				0DAA80A118052F4B00FFD745 /* SRShortcut.m in Sources */,
 				E2BE924E16ABEFE400827E8C /* SRKeyEquivalentTransformer.m in Sources */,
 				E2BE925316ABF84200827E8C /* SRKeyEquivalentModifierMaskTransformer.m in Sources */,
 			);

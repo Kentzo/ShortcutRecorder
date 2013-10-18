@@ -13,12 +13,12 @@
 @implementation PTHotKey (ShortcutRecorder)
 
 + (PTHotKey *)hotKeyWithIdentifier:(id)anIdentifier
-                          keyCombo:(SRKeyCombo *)aKeyCombo
+                          shortcut:(SRShortcut *)shortcut
                             target:(id)aTarget
                             action:(SEL)anAction
 {
-    NSUInteger carbonModifiers = SRCocoaToCarbonFlags([aKeyCombo modifiers]);
-    PTKeyCombo *newKeyCombo = [[[PTKeyCombo alloc] initWithKeyCode:aKeyCombo.keyCode modifiers:carbonModifiers] autorelease];
+    NSUInteger carbonModifiers = SRCocoaToCarbonFlags([shortcut modifiers]);
+    PTKeyCombo *newKeyCombo = [[[PTKeyCombo alloc] initWithKeyCode:shortcut.keyCode modifiers:carbonModifiers] autorelease];
     PTHotKey *newHotKey = [[[PTHotKey alloc] initWithIdentifier:anIdentifier keyCombo:newKeyCombo] autorelease];
     [newHotKey setTarget:aTarget];
     [newHotKey setAction:anAction];
@@ -26,13 +26,13 @@
 }
 
 + (PTHotKey *)hotKeyWithIdentifier:(id)anIdentifier
-                          keyCombo:(SRKeyCombo *)aKeyCombo
+                          shortcut:(SRShortcut *)shortcut
                             target:(id)aTarget
                             action:(SEL)anAction
                        keyUpAction:(SEL)aKeyUpAction
 {				
     PTHotKey *newHotKey = [PTHotKey hotKeyWithIdentifier:anIdentifier
-                                                keyCombo:aKeyCombo
+                                                shortcut:shortcut
                                                   target:aTarget
                                                   action:anAction];
     [newHotKey setKeyUpAction:aKeyUpAction];

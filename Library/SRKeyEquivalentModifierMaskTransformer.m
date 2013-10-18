@@ -28,13 +28,13 @@
     return [NSNumber class];
 }
 
-- (NSNumber *)transformedValue:(id)keyCombo
+- (NSNumber *)transformedValue:(id)shortcut
 {
-    if ([keyCombo isKindOfClass:[NSDictionary class]]) {
-        keyCombo = [SRKeyCombo keyComboWithDictionaryRepresentation:keyCombo];
+    if ([shortcut isKindOfClass:[NSDictionary class]]) {
+        shortcut = [SRShortcut shortcutWithDictionaryRepresentation:shortcut];
     }
 
-    return @([keyCombo modifiers]);
+    return @([shortcut modifiers]);
 }
 
 @end
