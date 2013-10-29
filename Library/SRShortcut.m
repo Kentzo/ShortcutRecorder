@@ -11,8 +11,10 @@ static NSString *const SRShortcutModifierFlagsKey = @"modifierFlags";
 - (instancetype) initWithKeyCode: (NSUInteger) keyCode modifiers: (NSUInteger) modifiers
 {
     self = [super init];
-    _keyCode = keyCode;
-    _modifiers = modifiers & SRCocoaModifierFlagsMask;
+    if (self) {
+        _keyCode = keyCode;
+        _modifiers = modifiers & SRCocoaModifierFlagsMask;
+    }
     return self;
 }
 
