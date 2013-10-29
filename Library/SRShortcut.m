@@ -12,7 +12,7 @@ static NSString *const SRShortcutModifierFlagsKey = @"modifierFlags";
 {
     self = [super init];
     _keyCode = keyCode;
-    _modifiers = modifiers;
+    _modifiers = modifiers & SRCocoaModifierFlagsMask;
     return self;
 }
 

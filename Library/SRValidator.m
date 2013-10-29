@@ -111,7 +111,6 @@
         return YES;
 
     NSArray *symbolicHotKeys = (NSArray *)CFBridgingRelease(s);
-    NSUInteger flags = [shortcut modifiers] & SRCocoaModifierFlagsMask;
 
     for (NSDictionary *symbolicHotKey in symbolicHotKeys)
     {
@@ -125,7 +124,7 @@
             UInt32 symbolicHotKeyFlags = [symbolicHotKey[(__bridge NSString *)kHISymbolicHotKeyModifiers] unsignedIntValue];
             symbolicHotKeyFlags &= SRCarbonModifierFlagsMask;
 
-            if (SRCarbonToCocoaFlags(symbolicHotKeyFlags) == flags)
+            if (SRCarbonToCocoaFlags(symbolicHotKeyFlags) == [shortcut modifiers])
             {
                 if (outError)
                 {
@@ -158,8 +157,6 @@
 
 - (BOOL)isShortcut:(SRShortcut *)shortcut takenInMenu:(NSMenu *)aMenu error:(NSError **)outError
 {
-    NSUInteger flags = [shortcut modifiers] & SRCocoaModifierFlagsMask;
-
     for (NSMenuItem *menuItem in [aMenu itemArray])
     {
         if (menuItem.hasSubmenu && [self isShortcut:shortcut takenInMenu:menuItem.submenu error:outError])
@@ -172,7 +169,7 @@
 
         NSUInteger keyEquivalentModifierMask = menuItem.keyEquivalentModifierMask;
 
-        if (SRKeyCodeWithFlagsEqualToKeyEquivalentWithFlags([shortcut keyCode], flags, keyEquivalent, keyEquivalentModifierMask))
+        if (SRKeyCodeWithFlagsEqualToKeyEquivalentWithFlags([shortcut keyCode], [shortcut modifiers], keyEquivalent, keyEquivalentModifierMask))
         {
             if (outError)
             {
