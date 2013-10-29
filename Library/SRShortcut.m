@@ -64,6 +64,11 @@ static NSString *const SRShortcutModifierFlagsKey = @"modifierFlags";
     return [NSString stringWithFormat:@"<%@ %p: %@>", [self class], self, [self readableASCIIString]];
 }
 
+- (NSUInteger) hash
+{
+    return _keyCode + _modifiers;
+}
+
 #pragma mark Dictionary Representation
 
 - (NSDictionary*) dictionaryRepresentation
