@@ -51,17 +51,17 @@
 
     // Test invalid value decoding. Since the dictionary may come from user
     // defaults, we have to take care to handle invalid input gracefully.
-    XCTAssertNil([SRKeyshortcut keyshortcutWithDictionaryRepresentation:nil],
+    XCTAssertNil([SRShortcut shortcutWithDictionaryRepresentation:nil],
         @"Decoding a shortcut from a nil dictionary returns nil.");
-    XCTAssertNil([SRKeyshortcut keyshortcutWithDictionaryRepresentation:(id)@"foo"],
+    XCTAssertNil([SRShortcut shortcutWithDictionaryRepresentation:(id)@"foo"],
         @"Decoding a shortcut from a invalid-type dictionary returns nil.");
-    XCTAssertNil([SRKeyshortcut keyshortcutWithDictionaryRepresentation:@{}],
+    XCTAssertNil([SRShortcut shortcutWithDictionaryRepresentation:@{}],
         @"Decoding a shortcut from an empty dictionary returns nil.");
-    XCTAssertNil([SRKeyshortcut keyshortcutWithDictionaryRepresentation:@{@"keyCode":@"foo"}],
+    XCTAssertNil([SRShortcut shortcutWithDictionaryRepresentation:@{@"keyCode":@"foo"}],
         @"Decoding a shortcut from a wrong-typed dictionary returns nil.");
-    XCTAssertNil([SRKeyshortcut keyshortcutWithDictionaryRepresentation:@{@"keyCode":@1}],
+    XCTAssertNil([SRShortcut shortcutWithDictionaryRepresentation:@{@"keyCode":@1}],
         @"Decoding a shortcut from an incomplete dictionary returns nil.");
-    XCTAssertNil([SRKeyshortcut keyshortcutWithDictionaryRepresentation:@{@"modifierFlags":@1}],
+    XCTAssertNil([SRShortcut shortcutWithDictionaryRepresentation:@{@"modifierFlags":@1}],
         @"Decoding a shortcut from an incomplete dictionary returns nil.");
 }
 
