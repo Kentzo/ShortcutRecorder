@@ -56,9 +56,16 @@ static NSString *const SRShortcutModifierFlagsKey = @"modifierFlags";
 
 - (BOOL) isEqual: (id) object
 {
-    return ([object class] == [self class])
-        && ([(SRShortcut*) object keyCode] == [self keyCode])
-        && ([(SRShortcut*) object modifiers] == [self modifiers]);
+    if ([super isEqual:object]) {
+        return YES;
+    }
+
+    if (![object isKindOfClass:[self class]]) {
+        return NO;
+    }
+
+    SRShortcut *other = object;
+    return ([other keyCode] == [self keyCode]) && ([other modifiers] == [self modifiers]);
 }
 
 - (NSString*) description
