@@ -30,7 +30,7 @@ static NSString *const SRShortcutModifierFlagsKey = @"modifierFlags";
 
 #pragma mark Rendering
 
-- (NSString*) renderedModifiers
+- (NSString*) readableModifiers
 {
     return [NSString stringWithFormat:@"%@%@%@%@",
         (_modifiers & NSCommandKeyMask ? SRLoc(@"Command-") : @""),
@@ -42,14 +42,14 @@ static NSString *const SRShortcutModifierFlagsKey = @"modifierFlags";
 - (NSString*) readableString
 {
     SRKeyCodeTransformer *t = [SRKeyCodeTransformer sharedPlainTransformer];
-    return [NSString stringWithFormat:@"%@%@", [self renderedModifiers], [t transformedValue:@(_keyCode)]];
+    return [NSString stringWithFormat:@"%@%@", [self readableModifiers], [t transformedValue:@(_keyCode)]];
 }
 
 
 - (NSString*) readableASCIIString
 {
     SRKeyCodeTransformer *t = [SRKeyCodeTransformer sharedPlainASCIITransformer];
-    return [NSString stringWithFormat:@"%@%@", [self renderedModifiers], [t transformedValue:@(_keyCode)]];
+    return [NSString stringWithFormat:@"%@%@", [self readableModifiers], [t transformedValue:@(_keyCode)]];
 }
 
 #pragma mark NSObject
