@@ -69,7 +69,7 @@ static NSString *const SRShortcutModifierFlagsKey = @"modifierFlags";
 
 - (NSString*) description
 {
-    return [NSString stringWithFormat:@"<%@ %p: %@>", [self class], self, [self readableASCIIString]];
+    return [NSString stringWithFormat:@"%@: %@", [super description], [self readableASCIIString]];
 }
 
 - (NSUInteger) hash
