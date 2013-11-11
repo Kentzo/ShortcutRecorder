@@ -44,4 +44,19 @@
 */
 + (instancetype) shortcutWithEvent: (NSEvent*) event;
 
+/*!
+    @brief Returns YES if the shortcut matches a given key equivalent with modifiers.
+    @discussion This method is useful for comparing shortcuts to key equivalents
+    returned by NSButton, NSMenu, and similar controls. (“Is this button assigned
+    this shortcut?”)
+
+    An interesting catch is that some key equivalent modifier flags can be set implicitly
+    using special Unicode characters, for example the Option-a shortcut should match a key
+    equivalent “å” with zero modifiers. However all modifier flags explictly set for the key
+    equivalent must be also set in key code flags: a key equivalent “å” with a Control
+    modifier matches a Control-Option-a shortcut, but a key equivalent “å” with a Command
+    modifier does not match a Control-Option-a shortcut.
+*/
+- (BOOL) matchesKeyEquivalent: (NSString*) keyEquivalent withModifiers: (NSUInteger) modifiers;
+
 @end

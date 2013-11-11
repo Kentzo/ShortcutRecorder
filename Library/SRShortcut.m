@@ -123,6 +123,57 @@ static NSString *const SRShortcutModifierFlagsKey = @"modifierFlags";
     return [[[self class] allocWithZone:zone] initWithKeyCode:_keyCode modifiers:_modifiers];
 }
 
+#pragma mark Key Equivalents
+
+- (BOOL) matchesKeyEquivalent: (NSString*) keyEquivalent withModifiers: (NSUInteger) keyEquivalentModifiers transformer: (SRKeyCodeTransformer*) transformer
+{
+    if (!keyEquivalent) {
+        return NO;
+    }
+
+    keyEquivalentModifiers &= SRCocoaModifierFlagsMask;
+
+    // Simple case: the modifiers match, we just have to compare the key equivalent.
+    if (keyEquivalentModifiers == _modifiers) {
+        NSString *keyCodeRepresentation = [transformer transformedValue:@(_keyCode)
+            withImplicitModifierFlags:nil explicitModifierFlags:@(_modifiers)];
+        return [keyCodeRepresentation isEqual:keyEquivalent];
+    }
+
+    // Harder case: the key equivalent modifiers are zero or a superset of our modifiers.
+    else if (!keyEquivalentModifiers || (_modifiers & keyEquivalentModifiers) == keyEquivalentModifiers)
+    {
+        NSString *keyCodeRepresentation = [transformer transformedValue:@(_keyCode)
+            withImplicitModifierFlags:nil explicitModifierFlags:@(_modifiers)];
+        if ([keyCodeRepresentation isEqual:keyEquivalent]) {
+            // If the key representation matches, there can be no implicit modifiers.
+            // And since the explicit modifiers don’t match and there are no implicit ones,
+            // the shortcut doesn’t match the given key equivalent because of modifiers.
+            return NO;
+        } else {
+            // The key representation doesn’t match, so it’s possible that there are
+            // some implicit modifiers hidden in the key equivalent (like the Option
+            // modifier in “å”). We’ll extract the possible implicit modifiers, add
+            // them to our explicit modifiers and compare the key equivalents again
+            // (like Option-“a” instead of “å”).
+            NSUInteger possibleImplicitFlags = _modifiers & ~keyEquivalentModifiers;
+            keyCodeRepresentation = [transformer transformedValue:@(_keyCode)
+                withImplicitModifierFlags:@(possibleImplicitFlags)
+                explicitModifierFlags:@(keyEquivalentModifiers)];
+            return [keyCodeRepresentation isEqual:keyEquivalent];
+        }
+    }
+
+    // Modifiers don’t match at all.
+    return NO;
+}
+
+- (BOOL) matchesKeyEquivalent: (NSString*) keyEquivalent withModifiers: (NSUInteger) keyEquivalentModifiers
+{
+    return [self matchesKeyEquivalent:keyEquivalent withModifiers:keyEquivalentModifiers transformer:[SRKeyCodeTransformer sharedASCIITransformer]]
+        || [self matchesKeyEquivalent:keyEquivalent withModifiers:keyEquivalentModifiers transformer:[SRKeyCodeTransformer sharedTransformer]];
+}
+
 #pragma mark NSCoding
 
 - (void) encodeWithCoder: (NSCoder*) encoder

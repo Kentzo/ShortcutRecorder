@@ -65,4 +65,17 @@
         @"Decoding a shortcut from an incomplete dictionary returns nil.");
 }
 
+- (void) testKeyEquivalentMatching
+{
+    SRShortcut *shortcut = [SRShortcut shortcutWithKeyCode:0 modifiers:NSAlternateKeyMask];
+    XCTAssertFalse([shortcut matchesKeyEquivalent:nil withModifiers:0],
+        @"No shortcut matches a nil key equivalent.");
+    XCTAssertTrue([shortcut matchesKeyEquivalent:@"a" withModifiers:NSAlternateKeyMask],
+        @"Shortcut matches a key equivalent with matching modifiers.");
+    XCTAssertTrue([shortcut matchesKeyEquivalent:@"å" withModifiers:0],
+        @"Shortcut matches a Unicode key equivalent with matching implicit modifiers.");
+    XCTAssertFalse([shortcut matchesKeyEquivalent:@"å" withModifiers:NSCommandKeyMask],
+        @"Shortcut does not match a Unicode key equivalent with matching implicit modifiers, but different explicit modifier.");
+}
+
 @end

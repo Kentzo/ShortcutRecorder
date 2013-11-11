@@ -169,7 +169,7 @@
 
         NSUInteger keyEquivalentModifierMask = menuItem.keyEquivalentModifierMask;
 
-        if (SRKeyCodeWithFlagsEqualToKeyEquivalentWithFlags([shortcut keyCode], [shortcut modifiers], keyEquivalent, keyEquivalentModifierMask))
+        if ([shortcut matchesKeyEquivalent:keyEquivalent withModifiers:keyEquivalentModifierMask])
         {
             if (outError)
             {
