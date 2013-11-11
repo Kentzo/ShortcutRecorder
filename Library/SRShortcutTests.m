@@ -70,6 +70,8 @@
     SRShortcut *shortcut = [SRShortcut shortcutWithKeyCode:kVK_ANSI_A modifiers:NSAlternateKeyMask];
     XCTAssertFalse([shortcut matchesKeyEquivalent:nil withModifiers:0],
         @"No shortcut matches a nil key equivalent.");
+    XCTAssertFalse([shortcut matchesKeyEquivalent:@"" withModifiers:0],
+        @"No shortcut matches an empty key equivalent.");
     XCTAssertTrue([shortcut matchesKeyEquivalent:@"a" withModifiers:NSAlternateKeyMask],
         @"Shortcut matches a key equivalent with matching modifiers.");
     XCTAssertTrue([shortcut matchesKeyEquivalent:@"å" withModifiers:0],

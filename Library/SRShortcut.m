@@ -127,7 +127,7 @@ static NSString *const SRShortcutModifierFlagsKey = @"modifierFlags";
 
 - (BOOL) matchesKeyEquivalent: (NSString*) keyEquivalent withModifiers: (NSUInteger) keyEquivalentModifiers transformer: (SRKeyCodeTransformer*) transformer
 {
-    if (!keyEquivalent) {
+    if (![keyEquivalent length]) {
         return NO;
     }
 
