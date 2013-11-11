@@ -5,7 +5,7 @@
 /*!
     @brief The virtual key code for the keyboard key.
     @discussion Hardware independent, same as in NSEvent.
-    @see http://boredzo.org/blog/archives/2007-05-22/virtual-key-codes
+    @see Events.h in the HIToolbox framework for a complete list.
 */
 @property(assign, readonly) NSUInteger keyCode;
 

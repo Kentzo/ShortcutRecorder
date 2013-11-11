@@ -67,7 +67,7 @@
 
 - (void) testKeyEquivalentMatching
 {
-    SRShortcut *shortcut = [SRShortcut shortcutWithKeyCode:0 modifiers:NSAlternateKeyMask];
+    SRShortcut *shortcut = [SRShortcut shortcutWithKeyCode:kVK_ANSI_A modifiers:NSAlternateKeyMask];
     XCTAssertFalse([shortcut matchesKeyEquivalent:nil withModifiers:0],
         @"No shortcut matches a nil key equivalent.");
     XCTAssertTrue([shortcut matchesKeyEquivalent:@"a" withModifiers:NSAlternateKeyMask],
