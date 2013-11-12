@@ -74,6 +74,13 @@
         @"No shortcut matches an empty key equivalent.");
     XCTAssertTrue([shortcut matchesKeyEquivalent:@"a" withModifiers:NSAlternateKeyMask],
         @"Shortcut matches a key equivalent with matching modifiers.");
+}
+
+// The implicit modifier matching breaks under some keyboard layouts,
+// see https://github.com/Kentzo/ShortcutRecorder/issues/30
+- (void) testKeyEquivalentMatchingWithImplicitModifiers
+{
+    SRShortcut *shortcut = [SRShortcut shortcutWithKeyCode:kVK_ANSI_A modifiers:NSAlternateKeyMask];
     XCTAssertTrue([shortcut matchesKeyEquivalent:@"å" withModifiers:0],
         @"Shortcut matches a Unicode key equivalent with matching implicit modifiers.");
     XCTAssertFalse([shortcut matchesKeyEquivalent:@"å" withModifiers:NSCommandKeyMask],

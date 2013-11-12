@@ -56,6 +56,9 @@
     equivalent must be also set in key code flags: a key equivalent “å” with a Control
     modifier matches a Control-Option-a shortcut, but a key equivalent “å” with a Command
     modifier does not match a Control-Option-a shortcut.
+
+    The matching algorithm currently depends on the active system keyboard layout, which
+    means it can (and does) yield different results with different keyboard layouts active.
 */
 - (BOOL) matchesKeyEquivalent: (NSString*) keyEquivalent withModifiers: (NSUInteger) modifiers;
 
