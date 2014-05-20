@@ -25,11 +25,11 @@
 - (void)shortcutRecorderDidEndRecording:(SRRecorderControl *)aRecorder
 {
     if (aRecorder == self.pingShortcutRecorder)
-        [[NSUserDefaults standardUserDefaults] setValue:aRecorder.objectValue forKey:@"ping"];
+        [[NSUserDefaults standardUserDefaults] setValue:aRecorder.dictionaryValue forKey:@"ping"];
     else if (aRecorder == self.globalPingShortcutRecorder)
-        [[NSUserDefaults standardUserDefaults] setValue:aRecorder.objectValue forKey:@"globalPing"];
+        [[NSUserDefaults standardUserDefaults] setValue:aRecorder.dictionaryValue forKey:@"globalPing"];
     else if (aRecorder == self.pingItemShortcutRecorder)
-        [[NSUserDefaults standardUserDefaults] setValue:aRecorder.objectValue forKey:@"pingItem"];
+        [[NSUserDefaults standardUserDefaults] setValue:aRecorder.dictionaryValue forKey:@"pingItem"];
 }
 
 
@@ -53,11 +53,11 @@
 - (void)observeValueForKeyPath:(NSString *)aKeyPath ofObject:(id)anObject change:(NSDictionary *)aChange context:(void *)aContext
 {
     if ([aKeyPath isEqualToString:@"ping"])
-        self.pingShortcutRecorder.objectValue = aChange[NSKeyValueChangeNewKey];
+        self.pingShortcutRecorder.dictionaryValue = aChange[NSKeyValueChangeNewKey];
     else if ([aKeyPath isEqualToString:@"globalPing"])
-        self.globalPingShortcutRecorder.objectValue = aChange[NSKeyValueChangeNewKey];
+        self.globalPingShortcutRecorder.dictionaryValue = aChange[NSKeyValueChangeNewKey];
     else if ([aKeyPath isEqualToString:@"pingItem"])
-        self.pingItemShortcutRecorder.objectValue = aChange[NSKeyValueChangeNewKey];
+        self.pingItemShortcutRecorder.dictionaryValue = aChange[NSKeyValueChangeNewKey];
     else if ([aKeyPath isEqualToString:@"isPingItemEnabled"])
         self.pingShortcutRecorder.enabled = ((id)aChange[NSKeyValueChangeNewKey] != [NSNull null]) && [aChange[NSKeyValueChangeNewKey] boolValue];
     else

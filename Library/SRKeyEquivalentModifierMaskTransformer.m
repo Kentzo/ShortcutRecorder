@@ -28,17 +28,13 @@
     return [NSNumber class];
 }
 
-- (NSNumber *)transformedValue:(NSDictionary *)aValue
+- (NSNumber *)transformedValue:(id)shortcut
 {
-    if (![aValue isKindOfClass:[NSDictionary class]])
-        return @(0);
+    if ([shortcut isKindOfClass:[NSDictionary class]]) {
+        shortcut = [SRShortcut shortcutWithDictionaryRepresentation:shortcut];
+    }
 
-    NSNumber *modifierFlags = aValue[SRShortcutModifierFlagsKey];
-
-    if (![modifierFlags isKindOfClass:[NSNumber class]])
-        return @(0);
-
-    return modifierFlags;
+    return @([shortcut modifiers]);
 }
 
 @end

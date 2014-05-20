@@ -91,7 +91,7 @@
     
     NSUserDefaultsController *defaults = [NSUserDefaultsController sharedUserDefaultsController];
     self.pingShortcutRecorder = pingShortcutRecorder;
-    [self.pingShortcutRecorder bind:NSValueBinding
+    [self.pingShortcutRecorder bind:SRRecorderControlDictionaryValueBinding
                            toObject:defaults
                         withKeyPath:@"values.ping"
                             options:nil];
@@ -100,12 +100,12 @@
                         withKeyPath:@"values.isPingItemEnabled"
                             options:nil];
     self.globalPingShortcutRecorder = globalPingShortcutRecorder;
-    [self.globalPingShortcutRecorder bind:NSValueBinding
+    [self.globalPingShortcutRecorder bind:SRRecorderControlDictionaryValueBinding
                                  toObject:defaults
                               withKeyPath:@"values.globalPing"
                                   options:nil];
     self.pingItemShortcutRecorder = pingItemShortcutRecorder;
-    [self.pingItemShortcutRecorder bind:NSValueBinding
+    [self.pingItemShortcutRecorder bind:SRRecorderControlDictionaryValueBinding
                                toObject:defaults
                             withKeyPath:@"values.pingItem"
                                 options:nil];

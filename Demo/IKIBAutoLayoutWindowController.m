@@ -19,22 +19,22 @@
     
     NSUserDefaultsController *defaults = [NSUserDefaultsController sharedUserDefaultsController];
     
-    [self.pingShortcutRecorder bind:NSValueBinding
+    [self.pingShortcutRecorder bind:SRRecorderControlDictionaryValueBinding
                            toObject:defaults
                         withKeyPath:@"values.ping"
                             options:nil];
-    [self.pingShortcutRecorder bind:NSEnabledBinding
+    [self.pingShortcutRecorder bind:SRRecorderControlDictionaryValueBinding
                            toObject:defaults
                         withKeyPath:@"values.isPingItemEnabled"
                             options:nil];
     [self.pingShortcutRecorder setAllowedModifierFlags:NSShiftKeyMask | NSAlternateKeyMask | NSCommandKeyMask
                                  requiredModifierFlags:0
                               allowsEmptyModifierFlags:NO];
-    [self.globalPingShortcutRecorder bind:NSValueBinding
+    [self.globalPingShortcutRecorder bind:SRRecorderControlDictionaryValueBinding
                                  toObject:defaults
                               withKeyPath:@"values.globalPing"
                                   options:nil];
-    [self.pingItemShortcutRecorder bind:NSValueBinding
+    [self.pingItemShortcutRecorder bind:SRRecorderControlDictionaryValueBinding
                                toObject:defaults
                             withKeyPath:@"values.pingItem"
                                 options:nil];

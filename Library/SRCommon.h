@@ -97,26 +97,3 @@ FOUNDATION_STATIC_INLINE NSImage *SRImage(NSString *anImageName)
         return [b imageForResource:anImageName];
 }
 
-
-/*!
-    @brief  Returns string representation of shortcut with modifier flags replaced with their localized
-            readable equivalents (e.g. ? -> Option).
- */
-NSString *SRReadableStringForCocoaModifierFlagsAndKeyCode(NSUInteger aModifierFlags, unsigned short aKeyCode);
-
-/*!
-    @brief  Returns string representation of shortcut with modifier flags replaced with their localized
-            readable equivalents (e.g. ? -> Option) and ASCII character for key code.
- */
-NSString *SRReadableASCIIStringForCocoaModifierFlagsAndKeyCode(NSUInteger aModifierFlags, unsigned short aKeyCode);
-
-/*!
-    @brief      Determines if given key code with flags is equal to key equivalent and flags
-                (usually taken from NSButton or NSMenu).
-
-    @discussion On Mac OS X some key combinations can have "alternates". E.g. option-A can be represented both as option-A and as Œ.
-*/
-BOOL SRKeyCodeWithFlagsEqualToKeyEquivalentWithFlags(unsigned short aKeyCode,
-                                                     NSUInteger aKeyCodeFlags,
-                                                     NSString *aKeyEquivalent,
-                                                     NSUInteger aKeyEquivalentModifierFlags);

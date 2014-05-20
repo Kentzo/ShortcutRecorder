@@ -41,21 +41,21 @@
 
 #pragma mark Methods
 
-- (BOOL)isKeyCode:(unsigned short)aKeyCode andFlagsTaken:(NSUInteger)aFlags error:(NSError **)outError;
+- (BOOL)isShortcutTaken:(SRShortcut *)shortcut error:(NSError **)outError
 {
-    if ([self isKeyCode:aKeyCode andFlagTakenInDelegate:aFlags error:outError])
+    if ([self isShortcutTakenInDelegate:shortcut error:outError])
         return YES;
 
     if ((![self.delegate respondsToSelector:@selector(shortcutValidatorShouldCheckSystemShortcuts:)] ||
          [self.delegate shortcutValidatorShouldCheckSystemShortcuts:self]) &&
-        [self isKeyCode:aKeyCode andFlagsTakenInSystemShortcuts:aFlags error:outError])
+        [self isShortcutTakenInSystemShortcuts:shortcut error:outError])
     {
         return YES;
     }
 
     if ((![self.delegate respondsToSelector:@selector(shortcutValidatorShouldCheckMenu:)] ||
          [self.delegate shortcutValidatorShouldCheckMenu:self]) &&
-        [self isKeyCode:aKeyCode andFlags:aFlags takenInMenu:[NSApp mainMenu] error:outError])
+        [self isShortcut:shortcut takenInMenu:[NSApp mainMenu] error:outError])
     {
         return YES;
     }
@@ -63,15 +63,14 @@
     return NO;
 }
 
-- (BOOL)isKeyCode:(unsigned short)aKeyCode andFlagTakenInDelegate:(NSUInteger)aFlags error:(NSError **)outError
+- (BOOL)isShortcutTakenInDelegate:(SRShortcut *)shortcut error:(NSError **)outError
 {
     if (self.delegate)
     {
         NSString *delegateReason = nil;
-        if ([self.delegate respondsToSelector:@selector(shortcutValidator:isKeyCode:andFlagsTaken:reason:)] &&
+        if ([self.delegate respondsToSelector:@selector(shortcutValidator:isShortcutTaken:reason:)] &&
             [self.delegate shortcutValidator:self
-                                   isKeyCode:aKeyCode
-                               andFlagsTaken:aFlags
+                             isShortcutTaken:shortcut
                                       reason:&delegateReason])
         {
             if (outError)
@@ -81,13 +80,13 @@
                 if ([self.delegate respondsToSelector:@selector(shortcutValidatorShouldUseASCIIStringForKeyCodes:)])
                     isASCIIOnly = [self.delegate shortcutValidatorShouldUseASCIIStringForKeyCodes:self];
 
-                NSString *shortcut = isASCIIOnly ? SRReadableASCIIStringForCocoaModifierFlagsAndKeyCode(aFlags, aKeyCode) : SRReadableStringForCocoaModifierFlagsAndKeyCode(aFlags, aKeyCode);
+                NSString *label = isASCIIOnly ? [shortcut readableASCIIString] : [shortcut readableString];
                 NSString *failureReason = [NSString stringWithFormat:
                                            SRLoc(@"The key combination \"%@\" can't be used!"),
-                                           shortcut];
+                                           label];
                 NSString *description = [NSString stringWithFormat:
                                          SRLoc(@"The key combination \"%@\" can't be used because %@."),
-                                         shortcut,
+                                         label,
                                          [delegateReason length] ? delegateReason : @"it's already used"];
                 NSDictionary *userInfo = @{
                     NSLocalizedFailureReasonErrorKey : failureReason,
@@ -103,7 +102,7 @@
     return NO;
 }
 
-- (BOOL)isKeyCode:(unsigned short)aKeyCode andFlagsTakenInSystemShortcuts:(NSUInteger)aFlags error:(NSError **)outError
+- (BOOL)isShortcutTakenInSystemShortcuts:(SRShortcut *)shortcut error:(NSError **)outError
 {
     CFArrayRef s = NULL;
     OSStatus err = CopySymbolicHotKeys(&s);
@@ -112,7 +111,6 @@
         return YES;
 
     NSArray *symbolicHotKeys = (NSArray *)CFBridgingRelease(s);
-    aFlags &= SRCocoaModifierFlagsMask;
 
     for (NSDictionary *symbolicHotKey in symbolicHotKeys)
     {
@@ -121,12 +119,12 @@
 
         unsigned short symbolicHotKeyCode = [symbolicHotKey[(__bridge NSString *)kHISymbolicHotKeyCode] integerValue];
 
-        if (symbolicHotKeyCode == aKeyCode)
+        if (symbolicHotKeyCode == [shortcut keyCode])
         {
             UInt32 symbolicHotKeyFlags = [symbolicHotKey[(__bridge NSString *)kHISymbolicHotKeyModifiers] unsignedIntValue];
             symbolicHotKeyFlags &= SRCarbonModifierFlagsMask;
 
-            if (SRCarbonToCocoaFlags(symbolicHotKeyFlags) == aFlags)
+            if (SRCarbonToCocoaFlags(symbolicHotKeyFlags) == [shortcut modifiers])
             {
                 if (outError)
                 {
@@ -135,13 +133,13 @@
                     if ([self.delegate respondsToSelector:@selector(shortcutValidatorShouldUseASCIIStringForKeyCodes:)])
                         isASCIIOnly = [self.delegate shortcutValidatorShouldUseASCIIStringForKeyCodes:self];
 
-                    NSString *shortcut = isASCIIOnly ? SRReadableASCIIStringForCocoaModifierFlagsAndKeyCode(aFlags, aKeyCode) : SRReadableStringForCocoaModifierFlagsAndKeyCode(aFlags, aKeyCode);
+                    NSString *label = isASCIIOnly ? [shortcut readableASCIIString] : [shortcut readableString];
                     NSString *failureReason = [NSString stringWithFormat:
                                                SRLoc(@"The key combination \"%@\" can't be used!"),
-                                               shortcut];
+                                               label];
                     NSString *description = [NSString stringWithFormat:
                                              SRLoc(@"The key combination \"%@\" can't be used because it's already used by a system-wide keyboard shortcut. If you really want to use this key combination, most shortcuts can be changed in the Keyboard panel in System Preferences."),
-                                             shortcut];
+                                             label];
                     NSDictionary *userInfo = @{
                         NSLocalizedFailureReasonErrorKey: failureReason,
                         NSLocalizedDescriptionKey: description
@@ -157,13 +155,11 @@
     return NO;
 }
 
-- (BOOL)isKeyCode:(unsigned short)aKeyCode andFlags:(NSUInteger)aFlags takenInMenu:(NSMenu *)aMenu error:(NSError **)outError
+- (BOOL)isShortcut:(SRShortcut *)shortcut takenInMenu:(NSMenu *)aMenu error:(NSError **)outError
 {
-    aFlags &= SRCocoaModifierFlagsMask;
-
     for (NSMenuItem *menuItem in [aMenu itemArray])
     {
-        if (menuItem.hasSubmenu && [self isKeyCode:aKeyCode andFlags:aFlags takenInMenu:menuItem.submenu error:outError])
+        if (menuItem.hasSubmenu && [self isShortcut:shortcut takenInMenu:menuItem.submenu error:outError])
             return YES;
 
         NSString *keyEquivalent = menuItem.keyEquivalent;
@@ -173,7 +169,7 @@
 
         NSUInteger keyEquivalentModifierMask = menuItem.keyEquivalentModifierMask;
 
-        if (SRKeyCodeWithFlagsEqualToKeyEquivalentWithFlags(aKeyCode, aFlags, keyEquivalent, keyEquivalentModifierMask))
+        if ([shortcut matchesKeyEquivalent:keyEquivalent withModifiers:keyEquivalentModifierMask])
         {
             if (outError)
             {
@@ -182,9 +178,9 @@
                 if ([self.delegate respondsToSelector:@selector(shortcutValidatorShouldUseASCIIStringForKeyCodes:)])
                     isASCIIOnly = [self.delegate shortcutValidatorShouldUseASCIIStringForKeyCodes:self];
 
-                NSString *shortcut = isASCIIOnly ? SRReadableASCIIStringForCocoaModifierFlagsAndKeyCode(aFlags, aKeyCode) : SRReadableStringForCocoaModifierFlagsAndKeyCode(aFlags, aKeyCode);
-                NSString *failureReason = [NSString stringWithFormat:SRLoc(@"The key combination \"%@\" can't be used!"), shortcut];
-                NSString *description = [NSString stringWithFormat:SRLoc(@"The key combination \"%@\" can't be used because it's already used by the menu item \"%@\"."), shortcut, menuItem.SR_path];
+                NSString *label = isASCIIOnly ? [shortcut readableASCIIString] : [shortcut readableString];
+                NSString *failureReason = [NSString stringWithFormat:SRLoc(@"The key combination \"%@\" can't be used!"), label];
+                NSString *description = [NSString stringWithFormat:SRLoc(@"The key combination \"%@\" can't be used because it's already used by the menu item \"%@\"."), label, menuItem.SR_path];
                 NSDictionary *userInfo = @{
                     NSLocalizedFailureReasonErrorKey: failureReason,
                     NSLocalizedDescriptionKey: description

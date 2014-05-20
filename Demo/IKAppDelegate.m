@@ -111,13 +111,13 @@
         PTHotKeyCenter *hotKeyCenter = [PTHotKeyCenter sharedCenter];
         PTHotKey *oldHotKey = [hotKeyCenter hotKeyWithIdentifier:aKeyPath];
         [hotKeyCenter unregisterHotKey:oldHotKey];
-        
-        NSDictionary *newShortcut = [anObject valueForKeyPath:aKeyPath];
-        
-        if (newShortcut && (NSNull *)newShortcut != [NSNull null])
+
+        NSDictionary *frozenShortcut = [anObject valueForKeyPath:aKeyPath];
+        SRShortcut *newShortcut = [SRShortcut shortcutWithDictionaryRepresentation:frozenShortcut];
+        if (newShortcut)
         {
             PTHotKey *newHotKey = [PTHotKey hotKeyWithIdentifier:aKeyPath
-                                                        keyCombo:newShortcut
+                                                        shortcut:newShortcut
                                                           target:self
                                                           action:@selector(ping:)];
             [hotKeyCenter registerHotKey:newHotKey];

@@ -16,15 +16,7 @@
 #import "SRKeyCodeTransformer.h"
 #import "SRModifierFlagsTransformer.h"
 
-
-NSString *const SRShortcutKeyCode = @"keyCode";
-
-NSString *const SRShortcutModifierFlagsKey = @"modifierFlags";
-
-NSString *const SRShortcutCharacters = @"characters";
-
-NSString *const SRShortcutCharactersIgnoringModifiers = @"charactersIgnoringModifiers";
-
+NSString *const SRRecorderControlDictionaryValueBinding = @"dictionaryValue";
 
 // Control Layout Constants
 static const CGFloat _SRRecorderControlShapeXRadius = 11.0;
@@ -169,7 +161,7 @@ typedef NS_ENUM(NSUInteger, _SRRecorderControlButtonTag)
         [self noteFocusRingMaskChanged];
 }
 
-- (void)setObjectValue:(NSDictionary *)newObjectValue
+- (void)setObjectValue:(SRShortcut *)newObjectValue
 {
     // Cocoa KVO and KVC frequently uses NSNull as object substituation of nil.
     // SRRecorderControl expects either nil or valid object value, it's convenient
@@ -179,6 +171,7 @@ typedef NS_ENUM(NSUInteger, _SRRecorderControlButtonTag)
 
     _objectValue = [newObjectValue copy];
     [self propagateValue:_objectValue forBinding:NSValueBinding];
+    [self propagateValue:[self dictionaryValue] forBinding:SRRecorderControlDictionaryValueBinding];
 
     if (!self.isRecording)
     {
@@ -187,6 +180,15 @@ typedef NS_ENUM(NSUInteger, _SRRecorderControlButtonTag)
     }
 }
 
+- (NSDictionary *)dictionaryValue
+{
+    return [[self objectValue] dictionaryRepresentation];
+}
+
+- (void)setDictionaryValue:(NSDictionary *)dictionaryValue
+{
+    [self setObjectValue:[SRShortcut shortcutWithDictionaryRepresentation:dictionaryValue]];
+}
 
 #pragma mark Methods
 
@@ -229,7 +231,7 @@ typedef NS_ENUM(NSUInteger, _SRRecorderControlButtonTag)
     [self endRecordingWithObjectValue:nil];
 }
 
-- (void)endRecordingWithObjectValue:(NSDictionary *)anObjectValue
+- (void)endRecordingWithObjectValue:(SRShortcut *)anObjectValue
 {
     if (!self.isRecording)
         return;
@@ -315,7 +317,7 @@ typedef NS_ENUM(NSUInteger, _SRRecorderControlButtonTag)
 {
     NSRect bounds = self.bounds;
 
-    if ([self.objectValue count])
+    if (self.objectValue)
     {
         NSRect clearButtonRect = NSZeroRect;
         clearButtonRect.origin.x = NSMaxX(bounds) - _SRRecorderControlClearButtonRightOffset - _SRRecorderControlClearButtonSize.width - _SRRecorderControlClearButtonLeftOffset;
@@ -388,10 +390,10 @@ typedef NS_ENUM(NSUInteger, _SRRecorderControlButtonTag)
 
 - (NSString *)stringValue
 {
-    if (![self.objectValue count])
+    if (!self.objectValue)
         return nil;
 
-    NSString *f = [[SRModifierFlagsTransformer sharedTransformer] transformedValue:self.objectValue[SRShortcutModifierFlagsKey]];
+    NSString *f = [[SRModifierFlagsTransformer sharedTransformer] transformedValue:@(self.objectValue.modifiers)];
     SRKeyCodeTransformer *transformer = nil;
 
     if (self.drawsASCIIEquivalentOfShortcut)
@@ -399,25 +401,25 @@ typedef NS_ENUM(NSUInteger, _SRRecorderControlButtonTag)
     else
         transformer = [SRKeyCodeTransformer sharedPlainTransformer];
 
-    NSString *c = [transformer transformedValue:self.objectValue[SRShortcutKeyCode]
+    NSString *c = [transformer transformedValue:@(self.objectValue.keyCode)
                       withImplicitModifierFlags:nil
-                          explicitModifierFlags:self.objectValue[SRShortcutModifierFlagsKey]];
+                          explicitModifierFlags:@(self.objectValue.modifiers)];
 
     return [NSString stringWithFormat:@"%@%@", f, c];
 }
 
 - (NSString *)accessibilityStringValue
 {
-    if (![self.objectValue count])
+    if (!self.objectValue)
         return nil;
 
-    NSString *f = [[SRModifierFlagsTransformer sharedPlainTransformer] transformedValue:self.objectValue[SRShortcutModifierFlagsKey]];
+    NSString *f = [[SRModifierFlagsTransformer sharedPlainTransformer] transformedValue:@(self.objectValue.modifiers)];
     NSString *c = nil;
 
     if (self.drawsASCIIEquivalentOfShortcut)
-        c = [[SRKeyCodeTransformer sharedPlainASCIITransformer] transformedValue:self.objectValue[SRShortcutKeyCode]];
+        c = [[SRKeyCodeTransformer sharedPlainASCIITransformer] transformedValue:@(self.objectValue.keyCode)];
     else
-        c = [[SRKeyCodeTransformer sharedPlainTransformer] transformedValue:self.objectValue[SRShortcutKeyCode]];
+        c = [[SRKeyCodeTransformer sharedPlainTransformer] transformedValue:@(self.objectValue.keyCode)];
 
     if ([f length] > 0)
         return [NSString stringWithFormat:@"%@-%@", f, c];
@@ -1261,13 +1263,7 @@ typedef NS_ENUM(NSUInteger, _SRRecorderControlButtonTag)
         }
         else if ([self areModifierFlagsValid:anEvent.modifierFlags forKeyCode:anEvent.keyCode])
         {
-            NSDictionary *newObjectValue = @{
-                SRShortcutKeyCode: @(anEvent.keyCode),
-                SRShortcutModifierFlagsKey: @(anEvent.modifierFlags & SRCocoaModifierFlagsMask),
-                SRShortcutCharacters: anEvent.characters,
-                SRShortcutCharactersIgnoringModifiers: anEvent.charactersIgnoringModifiers
-            };
-
+            SRShortcut *newObjectValue = [SRShortcut shortcutWithEvent:anEvent];
             if ([self.delegate respondsToSelector:@selector(shortcutRecorder:canRecordShortcut:)])
             {
                 if (![self.delegate shortcutRecorder:self canRecordShortcut:newObjectValue])

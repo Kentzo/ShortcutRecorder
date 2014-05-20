@@ -9,7 +9,7 @@
 //      Jesper
 //      Ilya Kulakov
 
-#import <ShortcutRecorder/SRCommon.h>
+#import <ShortcutRecorder/SRShortcut.h>
 #import <ShortcutRecorder/SRKeyCodeTransformer.h>
 #import <ShortcutRecorder/SRModifierFlagsTransformer.h>
 #import <ShortcutRecorder/SRKeyEquivalentTransformer.h>
