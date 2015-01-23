@@ -40,7 +40,7 @@ static const CGFloat _SRRecorderControlHeight = 25.0;
 
 static const CGFloat _SRRecorderControlBottomShadowHeightInPixels = 1.0;
 
-static const CGFloat _SRRecorderControlBaselineOffset = 5.0;
+__attribute__((unused)) static const CGFloat _SRRecorderControlBaselineOffset = 5.0;
 
 
 // Clear Button Layout Constants
