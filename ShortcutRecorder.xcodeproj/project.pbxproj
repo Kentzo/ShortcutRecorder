@@ -182,7 +182,6 @@
 		E2741AD41673C7BD00A139BD /* th */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/ShortcutRecorder.strings; sourceTree = "<group>"; };
 		E2741AD51673C7BF00A139BD /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ShortcutRecorder.strings"; sourceTree = "<group>"; };
 		E2741AD61673C7C000A139BD /* es */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/ShortcutRecorder.strings; sourceTree = "<group>"; };
-		E2741AD71673C7C200A139BD /* es-MX */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/ShortcutRecorder.strings"; sourceTree = "<group>"; };
 		E2741AD81673C7C300A139BD /* ca */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/ShortcutRecorder.strings; sourceTree = "<group>"; };
 		E2741AD91673C7C600A139BD /* cs */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/ShortcutRecorder.strings; sourceTree = "<group>"; };
 		E2741ADA1673C7C800A139BD /* pt */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/ShortcutRecorder.strings; sourceTree = "<group>"; };
@@ -532,7 +531,6 @@
 				th,
 				"zh-Hans",
 				es,
-				"es-MX",
 				ca,
 				cs,
 				pt,
@@ -694,7 +692,6 @@
 				E2741AD41673C7BD00A139BD /* th */,
 				E2741AD51673C7BF00A139BD /* zh-Hans */,
 				E2741AD61673C7C000A139BD /* es */,
-				E2741AD71673C7C200A139BD /* es-MX */,
 				E2741AD81673C7C300A139BD /* ca */,
 				E2741AD91673C7C600A139BD /* cs */,
 				E2741ADA1673C7C800A139BD /* pt */,
