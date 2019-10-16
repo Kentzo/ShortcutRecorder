@@ -293,7 +293,7 @@ IB_DESIGNABLE
 /*!
  Returns label to be displayed by the receiver.
  */
-@property (readonly) NSString *drawingLabel;
+@property (readonly) NSString *drawingLabel __attribute__((annotate("returns_localized_nsstring")));
 
 /*!
  Attirbutes for the drawingLabel.

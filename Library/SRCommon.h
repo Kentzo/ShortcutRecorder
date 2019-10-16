@@ -194,7 +194,7 @@ NSBundle * SRBundle(void);
  Convenience method to get localized string from the framework bundle.
  */
 NS_SWIFT_NAME(shortcutRecorderLocalizedString(forKey:))
-NSString * SRLoc(NSString * _Nullable aKey);
+NSString * SRLoc(NSString * _Nullable aKey) __attribute__((annotate("returns_localized_nsstring")));
 
 
 /*!
