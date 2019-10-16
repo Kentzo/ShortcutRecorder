@@ -16,7 +16,7 @@ The best control to record shortcuts on macOS
 
 - Objective-C framework developed with Swift in mind
 - Easily stylable
-- Translated into 23 languages
+- Translated into 22 languages
 - Supports macOS Accessibility
 - Thoroughly documented and tested
 - Global and Local shortcuts for both key up and key down actions

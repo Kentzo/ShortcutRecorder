@@ -1247,12 +1247,12 @@ NSUserInterfaceLayoutDirection SRRecorderControlStyleComponentsLayoutDirectionTo
 
 - (NSString *)noValueNormalLabel
 {
-    return SRLoc(@"Click to record shortcut");
+    return SRLoc(@"Record Shortcut");
 }
 
 - (NSString *)noValueDisableLabel
 {
-    return SRLoc(@"Click to record shortcut");
+    return SRLoc(@"Record Shortcut");
 }
 
 - (NSString *)noValueRecordingLabel

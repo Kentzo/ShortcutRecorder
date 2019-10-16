@@ -99,13 +99,13 @@
                     isASCIIOnly = [self.delegate shortcutValidatorShouldUseASCIIStringForKeyCodes:self];
 
                 NSString *shortcut = [aShortcut readableStringRepresentation:isASCIIOnly];
-                NSString *failureReason = [NSString stringWithFormat:SRLoc(@"The key combination \"%@\" can't be used!"), shortcut];
+                NSString *failureReason = [NSString stringWithFormat:SRLoc(@"The \"%@\" shortcut can't be used!"), shortcut];
                 NSString *description = nil;
 
                 if (delegateReason.length)
-                    description = [NSString stringWithFormat:SRLoc(@"The key combination \"%@\" can't be used because %@."), shortcut, delegateReason];
+                    description = [NSString stringWithFormat:SRLoc(@"The \"%@\" shortcut can't be used because %@."), shortcut, delegateReason];
                 else
-                    description = [NSString stringWithFormat:SRLoc(@"The key combination \"%@\" is already in use."), shortcut];
+                    description = [NSString stringWithFormat:SRLoc(@"The \"%@\" shortcut is already in use."), shortcut];
 
                 NSDictionary *userInfo = @{
                     NSLocalizedFailureReasonErrorKey : failureReason,
@@ -161,10 +161,10 @@
 
                         NSString *shortcut = [aShortcut readableStringRepresentation:isASCIIOnly];
                         NSString *failureReason = [NSString stringWithFormat:
-                                                   SRLoc(@"The key combination \"%@\" can't be used!"),
+                                                   SRLoc(@"The \"%@\" shortcut can't be used!"),
                                                    shortcut];
                         NSString *description = [NSString stringWithFormat:
-                                                 SRLoc(@"The key combination \"%@\" can't be used because it's already used by a system-wide keyboard shortcut. If you really want to use this key combination, most shortcuts can be changed in the Keyboard panel in System Preferences."),
+                                                 SRLoc(@"The \"%@\" shortcut can't be used because it's already used by a system-wide keyboard shortcut. If you really want to use this shortcut, most shortcuts can be changed in the Keyboard panel in System Preferences."),
                                                  shortcut];
                         NSDictionary *userInfo = @{
                             NSLocalizedFailureReasonErrorKey: failureReason,
@@ -215,8 +215,8 @@
                         isASCIIOnly = [self.delegate shortcutValidatorShouldUseASCIIStringForKeyCodes:self];
 
                     NSString *shortcut = [aShortcut readableStringRepresentation:isASCIIOnly];
-                    NSString *failureReason = [NSString stringWithFormat:SRLoc(@"The key combination \"%@\" can't be used!"), shortcut];
-                    NSString *description = [NSString stringWithFormat:SRLoc(@"The key combination \"%@\" can't be used because it's already used by the menu item \"%@\"."), shortcut, menuItem.SR_path];
+                    NSString *failureReason = [NSString stringWithFormat:SRLoc(@"The \"%@\" shortcut can't be used!"), shortcut];
+                    NSString *description = [NSString stringWithFormat:SRLoc(@"The \"%@\" shortcut can't be used because it's already used by the \"%@\" menu item."), shortcut, menuItem.SR_path];
                     NSDictionary *userInfo = @{
                         NSLocalizedFailureReasonErrorKey: failureReason,
                         NSLocalizedDescriptionKey: description

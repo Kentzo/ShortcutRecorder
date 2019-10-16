@@ -407,7 +407,7 @@ static NSInteger _SRStyleAppearanceObservingContext;
         label = self.stringValue;
 
         if (!label.length)
-            label = _SRIfRespondsGet(self.style, noValueNormalLabel, SRLoc(@"Click to record shortcut"));
+            label = _SRIfRespondsGet(self.style, noValueNormalLabel, SRLoc(@"Record Shortcut"));
     }
 
     return label;
@@ -1022,7 +1022,7 @@ static NSInteger _SRStyleAppearanceObservingContext;
     if (aTag == _cancelButtonToolTipTag)
         return _SRIfRespondsGet(self.style, cancelButtonTooltip, SRLoc(@"Use old shortcut"));
     else if (aTag == _clearButtonToolTipTag)
-        return _SRIfRespondsGet(self.style, clearButtonTooltip, @"");
+        return _SRIfRespondsGet(self.style, clearButtonTooltip, SRLoc("Delete current shortcut"));
     else
         return [super view:aView stringForToolTip:aTag point:aPoint userData:aData];
 }
