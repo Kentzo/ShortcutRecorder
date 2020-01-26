@@ -330,7 +330,7 @@ NS_SWIFT_NAME(GlobalShortcutMonitor)
 
  @seealso DISPATCH_BLOCK_NO_QOS_CLASS
  */
-@property dispatch_queue_t dispatchQueue;
+@property (strong, nonnull) dispatch_queue_t dispatchQueue;
 
 /*!
  Enable system-wide shortcut monitoring.
