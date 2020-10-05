@@ -1803,6 +1803,8 @@ static void *_SRStyleGuideObservingContext = &_SRStyleGuideObservingContext;
                 nextModifierFlags ^= NSEventModifierFlagShift;
             else if ((modifierFlags & NSEventModifierFlagControl) && (keyCode == kVK_Control || keyCode == kVK_RightControl))
                 nextModifierFlags ^= NSEventModifierFlagControl;
+            else if ((modifierFlags & NSEventModifierFlagFunction) && (keyCode == kVK_Function))
+                nextModifierFlags ^= NSEventModifierFlagFunction;
             else if (modifierFlags == 0 && _lastSeenModifierFlags != 0)
             {
                 SRShortcut *newObjectValue = [SRShortcut shortcutWithCode:SRKeyCodeNone

@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
  Mask representing subset of Cocoa modifier flags suitable for shortcuts.
  */
 NS_SWIFT_NAME(CocoaModifierFlagsMask)
-static const NSEventModifierFlags SRCocoaModifierFlagsMask = NSEventModifierFlagCommand | NSEventModifierFlagOption | NSEventModifierFlagShift | NSEventModifierFlagControl;
+static const NSEventModifierFlags SRCocoaModifierFlagsMask = NSEventModifierFlagCommand | NSEventModifierFlagOption | NSEventModifierFlagShift | NSEventModifierFlagControl | NSEventModifierFlagFunction;
 
 
 /*!
@@ -25,7 +25,7 @@ static const UInt32 SRCarbonModifierFlagsMask = cmdKey | optionKey | shiftKey | 
 
 
 NS_SWIFT_NAME(CoreGraphicsModifierFlagsMask)
-static const CGEventFlags SRCoreGraphicsModifierFlagsMask = kCGEventFlagMaskCommand | kCGEventFlagMaskAlternate | kCGEventFlagMaskShift | kCGEventFlagMaskControl;
+static const CGEventFlags SRCoreGraphicsModifierFlagsMask = kCGEventFlagMaskCommand | kCGEventFlagMaskAlternate | kCGEventFlagMaskShift | kCGEventFlagMaskControl | kCGEventFlagMaskSecondaryFn;
 
 /*!
  Dawable unicode characters for key codes that do not have appropriate constants in Carbon and Cocoa.
@@ -246,6 +246,7 @@ extern SRModifierFlagString const SRModifierFlagStringCommand;
 extern SRModifierFlagString const SRModifierFlagStringOption;
 extern SRModifierFlagString const SRModifierFlagStringShift;
 extern SRModifierFlagString const SRModifierFlagStringControl;
+extern SRModifierFlagString const SRModifierFlagStringFunction;
 
 
 /*!
@@ -300,6 +301,9 @@ NS_INLINE UInt32 SRCocoaToCarbonFlags(NSEventModifierFlags aCocoaFlags)
 
     if (aCocoaFlags & NSEventModifierFlagShift)
         carbonFlags |= shiftKey;
+    
+    if (aCocoaFlags & NSEventModifierFlagFunction)
+        NSLog(@"WELL WE TRIED TO CONVERT");
 
     return carbonFlags;
 }
@@ -320,6 +324,9 @@ NS_INLINE NSEventModifierFlags SRCoreGraphicsToCocoaFlags(CGEventFlags aCoreGrap
 
     if (aCoreGraphicsFlags & kCGEventFlagMaskShift)
         cocoaFlags |= NSEventModifierFlagShift;
+    
+    if (aCoreGraphicsFlags & kCGEventFlagMaskSecondaryFn)
+        cocoaFlags |= NSEventModifierFlagFunction;
 
     return cocoaFlags;
 }

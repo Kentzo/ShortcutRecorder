@@ -73,6 +73,9 @@
 
     if ([modifierFlagsString containsString:@"@"])
         modifierFlags |= NSEventModifierFlagCommand;
+    
+    if ([modifierFlagsString containsString:@"_"])
+        modifierFlags |= NSEventModifierFlagFunction;
 
     keyCodeString = keyCodeString.lowercaseString;
     NSNumber *keyCode = [SRASCIISymbolicKeyCodeTransformer.sharedTransformer reverseTransformedValue:keyCodeString];
@@ -214,6 +217,9 @@
 
     if (modifierFlagsValue & NSEventModifierFlagCommand)
         [keyBinding appendString:@"@"];
+    
+    if (modifierFlagsValue & NSEventModifierFlagFunction)
+        [keyBinding appendString:@"_"];
 
     if (isNumPad)
         [keyBinding appendString:@"#"];

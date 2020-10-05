@@ -373,6 +373,9 @@ static void *_SRShortcutActionContext = &_SRShortcutActionContext;
                                       keyCode:(unsigned short)aKeyCode
                                 modifierFlags:(NSEventModifierFlags)aModifierFlags
 {
+    // picking the event type here, need to have key-up go right.
+    // if the ctrl key is down, we interpret other flag-ups as an up.
+    // if the ctrl key is up, we don't get shit.
     SRKeyEventType eventType = SRKeyEventTypeDown;
 
     switch (anEventType)
@@ -391,11 +394,22 @@ static void *_SRShortcutActionContext = &_SRShortcutActionContext;
             if (keyCode == kVK_Command || keyCode == kVK_RightCommand)
                 eventType = modifierFlags & NSEventModifierFlagCommand ? SRKeyEventTypeDown : SRKeyEventTypeUp;
             else if (keyCode == kVK_Option || keyCode == kVK_RightOption)
-                eventType = modifierFlags & NSEventModifierFlagOption ? SRKeyEventTypeDown : SRKeyEventTypeUp;
+                {
+                    NSLog(@"KEY CO OPTION");
+                    eventType = modifierFlags & NSEventModifierFlagOption ? SRKeyEventTypeDown : SRKeyEventTypeUp;
+                }
             else if (keyCode == kVK_Shift || keyCode == kVK_RightShift)
                 eventType = modifierFlags & NSEventModifierFlagShift ? SRKeyEventTypeDown : SRKeyEventTypeUp;
             else if (keyCode == kVK_Control || keyCode == kVK_RightControl)
-                eventType = modifierFlags & NSEventModifierFlagControl ? SRKeyEventTypeDown : SRKeyEventTypeUp;
+                {
+                    NSLog(@"EKYCOD CONTROLLL %lu", (unsigned long)modifierFlags);
+                    eventType = modifierFlags & NSEventModifierFlagControl ? SRKeyEventTypeDown : SRKeyEventTypeUp;
+                }
+            else if (keyCode == kVK_Function)
+                {
+                    NSLog(@"ECONTLR FUNCTIONOIN %lu", (unsigned long)modifierFlags);
+                    eventType = modifierFlags & NSEventModifierFlagFunction ? SRKeyEventTypeDown : SRKeyEventTypeUp;
+                }
             else
                 os_trace("#Error Unexpected key code %hu for the FlagsChanged event", keyCode);
             break;
@@ -1049,6 +1063,7 @@ static OSStatus _SRCarbonEventHandler(EventHandlerCallRef aHandler, EventRef anE
 
 - (OSStatus)handleEvent:(EventRef)anEvent
 {
+    NSLog(@"HANDLING ENEV");
     __block OSStatus error = eventNotHandledErr;
 
     os_activity_initiate("-[SRGlobalShortcutMonitor handleEvent:]", OS_ACTIVITY_FLAG_DETACHED, ^{
@@ -1187,6 +1202,7 @@ static OSStatus _SRCarbonEventHandler(EventHandlerCallRef aHandler, EventRef anE
 
     if (aShortcut.keyCode == SRKeyCodeNone)
     {
+        NSLog(@"Acutally aaborting//");
         os_trace_error("#Error Shortcut without a key code cannot be registered as Carbon hot key");
         return;
     }
@@ -1347,6 +1363,7 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
 
 - (CGEventRef)handleEvent:(CGEventRef)anEvent
 {
+    NSLog(@"AX HANDLING EVENT");
     __block __auto_type result = anEvent;
 
     os_activity_initiate("-[SRAXGlobalShortcutMonitor handleEvent:]", OS_ACTIVITY_FLAG_DETACHED, ^{
@@ -1354,34 +1371,100 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
         __auto_type eventType = CGEventGetType(anEvent);
         __auto_type cocoaModifierFlags = SRCoreGraphicsToCocoaFlags(CGEventGetFlags(anEvent));
         NSEventType cocoaEventType;
+        
+        __auto_type isRepeat = CGEventGetIntegerValueField(anEvent, kCGKeyboardEventAutorepeat);
+        
+        if (isRepeat) {
+            NSLog(@"IS REPEAT!!");
+            return;
+        } else {
+            NSLog(@"is not repeat");
+        }
+        
+        
         switch (eventType)
         {
             case kCGEventKeyDown:
+                NSLog(@"DOWN");
                 cocoaEventType = NSEventTypeKeyDown;
                 break;
             case kCGEventKeyUp:
+                NSLog(@"UPP");
                 cocoaEventType = NSEventTypeKeyUp;
                 break;
             case kCGEventFlagsChanged:
+                NSLog(@"FLARGS");
                 cocoaEventType = NSEventTypeFlagsChanged;
                 break;
             default:
                 cocoaEventType = 0;
                 break;
         }
+        
+        NSString *keycode = @"";
+        switch(eventKeyCode) {
+            case kVK_Function:
+                keycode = @"Function";
+                break;
+            case kVK_Control:
+                keycode = @"Control";
+                break;
+            case kVK_Option:
+                keycode = @"Option";
+                break;
+            case kVK_Command:
+                keycode = @"Command";
+                break;
+            case kVK_ANSI_K:
+                keycode = @"K";
+                break;
+            default:
+                keycode = @"UKNOWN";
+                break;
+        }
+        NSLog(@"Keycode: %@", keycode);
 
+        // Find the event type
+        __auto_type keyEventType = [NSEvent SR_keyEventTypeForEventType:cocoaEventType
+                                                                keyCode:(unsigned short)eventKeyCode
+                                                          modifierFlags:cocoaModifierFlags];
+        NSString *evType;
+        switch (keyEventType) {
+        case SRKeyEventTypeDown:
+            evType = @"DOWN";
+            break;
+        case SRKeyEventTypeUp:
+            evType = @"UP";
+            break;
+        }
+        NSLog(@"KEY EVENT: %@", evType);
+        
+        // here's my fix for this problem. if it's an up, and modifiers, or the modifier back into the flags
+        if (eventType == kCGEventFlagsChanged && keyEventType == SRKeyEventTypeUp) {
+            if (eventKeyCode == kVK_Command || eventKeyCode == kVK_RightCommand)
+                cocoaModifierFlags |= NSEventModifierFlagCommand;
+            else if (eventKeyCode == kVK_Option || eventKeyCode == kVK_RightOption)
+                cocoaModifierFlags |= NSEventModifierFlagOption;
+            else if (eventKeyCode == kVK_Shift || eventKeyCode == kVK_RightShift)
+                cocoaModifierFlags |= NSEventModifierFlagShift;
+            else if (eventKeyCode == kVK_Control || eventKeyCode == kVK_RightControl)
+                cocoaModifierFlags |= NSEventModifierFlagControl;
+            else if (eventKeyCode == kVK_Function)
+                cocoaModifierFlags |= NSEventModifierFlagFunction;
+        }
+        
         __auto_type shortcut = [SRShortcut shortcutWithCode:eventType != kCGEventFlagsChanged ? (SRKeyCode)eventKeyCode : SRKeyCodeNone
                                               modifierFlags:cocoaModifierFlags
                                                  characters:nil
                                 charactersIgnoringModifiers:nil];
-        __auto_type keyEventType = [NSEvent SR_keyEventTypeForEventType:cocoaEventType
-                                                                keyCode:(unsigned short)eventKeyCode
-                                                          modifierFlags:cocoaModifierFlags];
+        
         __auto_type actions = [self enabledActionsForShortcut:shortcut keyEvent:keyEventType];
+        NSLog(@"FOUND ACTIONS %lu", (unsigned long)[actions count]);
         __block BOOL isHandled = NO;
         [actions enumerateObjectsWithOptions:NSEnumerationReverse
                                   usingBlock:^(SRShortcutAction *obj, NSUInteger idx, BOOL *stop)
         {
+            NSLog(@"CHECKING SOMETHING>>");
             *stop = isHandled = [obj performActionOnTarget:nil];
         }];
 
@@ -1398,6 +1481,7 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
 
 - (void)didAddShortcut:(SRShortcut *)aShortcut
 {
+    NSLog(@"ADDING A SHORTUCT FO RAX");
     if (_shortcuts.count)
         CGEventTapEnable(_eventTap, true);
 }

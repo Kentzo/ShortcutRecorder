@@ -64,6 +64,8 @@ NSString *const SRShortcutCharactersIgnoringModifiers = SRShortcutKeyCharactersI
             modifierFlags |= NSEventModifierFlagShift;
         else if (keyCode == kVK_Control || keyCode == kVK_RightControl)
             modifierFlags |= NSEventModifierFlagControl;
+        else if (keyCode == kVK_Function)
+            modifierFlags |= NSEventModifierFlagFunction;
 
         keyCode = SRKeyCodeNone;
     }
@@ -321,16 +323,30 @@ NSString *const SRShortcutCharactersIgnoringModifiers = SRShortcutKeyCharactersI
         NSEventModifierFlagCommand,
         NSEventModifierFlagShift,
         NSEventModifierFlagOption,
+        NSEventModifierFlagFunction,
         NSEventModifierFlagControl | NSEventModifierFlagCommand,
         NSEventModifierFlagControl | NSEventModifierFlagShift,
         NSEventModifierFlagControl | NSEventModifierFlagOption,
+        NSEventModifierFlagControl | NSEventModifierFlagFunction,
         NSEventModifierFlagCommand | NSEventModifierFlagShift,
         NSEventModifierFlagCommand | NSEventModifierFlagOption,
+        NSEventModifierFlagCommand | NSEventModifierFlagFunction,
         NSEventModifierFlagShift | NSEventModifierFlagOption,
+        NSEventModifierFlagShift | NSEventModifierFlagFunction,
+        NSEventModifierFlagOption | NSEventModifierFlagFunction,
         NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagShift,
         NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagOption,
+        NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagFunction,
         NSEventModifierFlagCommand | NSEventModifierFlagShift | NSEventModifierFlagOption,
-        NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagShift | NSEventModifierFlagOption
+        NSEventModifierFlagCommand | NSEventModifierFlagShift | NSEventModifierFlagFunction,
+        NSEventModifierFlagShift | NSEventModifierFlagOption | NSEventModifierFlagFunction,
+        NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagShift | NSEventModifierFlagOption,
+        NSEventModifierFlagFunction | NSEventModifierFlagCommand | NSEventModifierFlagShift | NSEventModifierFlagOption,
+        NSEventModifierFlagControl | NSEventModifierFlagFunction | NSEventModifierFlagShift | NSEventModifierFlagOption,
+        NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagFunction | NSEventModifierFlagOption,
+        NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagShift | NSEventModifierFlagFunction,
+        NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagShift | NSEventModifierFlagOption, NSEventModifierFlagFunction
+        
     };
     static const size_t PossibleFlagsSize = sizeof(PossibleFlags) / sizeof(NSEventModifierFlags);
 
@@ -514,6 +530,7 @@ NSString *SRReadableStringForCocoaModifierFlagsAndKeyCode(NSEventModifierFlags a
                                       (aModifierFlags & NSEventModifierFlagOption ? SRLoc(@"Option-") : @""),
                                       (aModifierFlags & NSEventModifierFlagControl ? SRLoc(@"Control-") : @""),
                                       (aModifierFlags & NSEventModifierFlagShift ? SRLoc(@"Shift-") : @""),
+                                      (aModifierFlags & NSEventModifierFlagFunction ? SRLoc(@"Fn-") : @""),
                                       c];
 }
 
@@ -531,6 +548,7 @@ NSString *SRReadableASCIIStringForCocoaModifierFlagsAndKeyCode(NSEventModifierFl
             (aModifierFlags & NSEventModifierFlagOption ? SRLoc(@"Option-") : @""),
             (aModifierFlags & NSEventModifierFlagControl ? SRLoc(@"Control-") : @""),
             (aModifierFlags & NSEventModifierFlagShift ? SRLoc(@"Shift-") : @""),
+            (aModifierFlags & NSEventModifierFlagFunction ? SRLoc(@"Fn-") : @""),
             c];
 }
 
