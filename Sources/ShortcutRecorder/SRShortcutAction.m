@@ -1289,6 +1289,18 @@ static OSStatus _SRCarbonEventHandler(EventHandlerCallRef aHandler, EventRef anE
 @implementation SRAXGlobalShortcutMonitor
 {
     BOOL _canActivelyFilterEvents;
+    NSInteger _disableCounter;
+    SRShortcut *_downShortcut;
+}
+
++ (SRAXGlobalShortcutMonitor *)sharedMonitor
+{
+    static SRAXGlobalShortcutMonitor *Shared = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Shared = [SRAXGlobalShortcutMonitor new];
+    });
+    return Shared;
 }
 
 CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType aType, CGEventRef anEvent, void * _Nullable aUserInfo)
@@ -1361,6 +1373,40 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
 
 #pragma mark Methods
 
+- (void)resume
+{
+    @synchronized (_actions)
+    {
+        os_trace_debug("Global Shortcut Monitor counter: %ld -> %ld", _disableCounter, _disableCounter - 1);
+        _disableCounter -= 1;
+
+//        if (_disableCounter == 0)
+//        {
+//            for (SRShortcut *shortcut in _shortcuts)
+//                [self _registerHotKeyForShortcutIfNeeded:shortcut];
+//        }
+//
+//        [self _installEventHandlerIfNeeded];
+    }
+}
+
+- (void)pause
+{
+    @synchronized (_actions)
+    {
+        os_trace_debug("Global Shortcut Monitor counter: %ld -> %ld", _disableCounter, _disableCounter + 1);
+        _disableCounter += 1;
+
+//        if (_disableCounter == 1)
+//        {
+//            for (SRShortcut *shortcut in _shortcuts)
+//                [self _unregisterHotKeyForShortcutIfNeeded:shortcut];
+//        }
+//
+//        [self _removeEventHandlerIfNeeded];
+    }
+}
+
 - (CGEventRef)handleEvent:(CGEventRef)anEvent
 {
     NSLog(@"AX HANDLING EVENT");
@@ -1371,6 +1417,11 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
         __auto_type eventType = CGEventGetType(anEvent);
         __auto_type cocoaModifierFlags = SRCoreGraphicsToCocoaFlags(CGEventGetFlags(anEvent));
         NSEventType cocoaEventType;
+        
+        if (_disableCounter != 0) {
+            NSLog(@"Pausedddd.");
+            return;
+        }
         
         __auto_type isRepeat = CGEventGetIntegerValueField(anEvent, kCGKeyboardEventAutorepeat);
         
@@ -1439,24 +1490,68 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
         }
         NSLog(@"KEY EVENT: %@", evType);
         
+        // This is a normalization problem. The only way a keycode is a flag is if we have flags changed.
         // here's my fix for this problem. if it's an up, and modifiers, or the modifier back into the flags
         if (eventType == kCGEventFlagsChanged && keyEventType == SRKeyEventTypeUp) {
-            if (eventKeyCode == kVK_Command || eventKeyCode == kVK_RightCommand)
-                cocoaModifierFlags |= NSEventModifierFlagCommand;
-            else if (eventKeyCode == kVK_Option || eventKeyCode == kVK_RightOption)
-                cocoaModifierFlags |= NSEventModifierFlagOption;
-            else if (eventKeyCode == kVK_Shift || eventKeyCode == kVK_RightShift)
-                cocoaModifierFlags |= NSEventModifierFlagShift;
-            else if (eventKeyCode == kVK_Control || eventKeyCode == kVK_RightControl)
-                cocoaModifierFlags |= NSEventModifierFlagControl;
-            else if (eventKeyCode == kVK_Function)
-                cocoaModifierFlags |= NSEventModifierFlagFunction;
+            NSEventModifierFlags keyFlag = SRKeyCodeToCocoaFlag(eventKeyCode);
+            cocoaModifierFlags |= keyFlag;
         }
         
         __auto_type shortcut = [SRShortcut shortcutWithCode:eventType != kCGEventFlagsChanged ? (SRKeyCode)eventKeyCode : SRKeyCodeNone
                                               modifierFlags:cocoaModifierFlags
                                                  characters:nil
                                 charactersIgnoringModifiers:nil];
+        
+        
+        // SO this is a down for this shortcut?
+        // is it ok if we limit it to one shortcut at a time?
+        // we can't get stuck .
+        
+        // "hold ctl, hold opt, hold k, release opt, release k"
+        // "hold ctrl, hold fn, release ctrl, release fn"
+        // do we up on any up after we've downed?
+        // for modifiers, up is if any of the modifiers is upped., extra modifiers ignored for up.
+        // might be the same for down, actually.
+        
+        // i think we should change the comparison strategy. instead of looking for it in a dict, we shoulf have a fn.
+        
+        
+        // IF shortcutCode != SRKEyCodeName
+        // IF Down SET IS DOWN (for key?)
+        // IF UP// check if down is set, then go.
+        
+        // So maybe there isn't a way to tell if a key is related to other keys?
+        // IF ShortcutCode == CODENONE
+        // IF DOwn ( // check the flargs. If any of them are the key? -- hard to get there. rn we can only ask for them by name.
+        // IF UP // check if down is set, then compare, if everything is still down, do nothing, if any have come up, then done.
+        // if up, we have a keycap, so we can just ask if that keycap is in the down flargs
+        
+        // what happens if you change the key combo? Does that update the actions?
+        // I'm still working out how the key combo is stored.
+        
+        if (self->_downShortcut == nil) {
+            if (keyEventType == SRKeyEventTypeDown) {
+                __auto_type targetShortcuts = [self shortcuts];
+                
+                for (SRShortcut  *targetShortcut in targetShortcuts) {
+                    NSLog(@"MONITORING %@", targetShortcut);
+                    if ([targetShortcut shouldFireForShortcut: shortcut]) {
+                        NSLog(@"FIRING DOWN");
+                        self->_downShortcut = targetShortcut;
+                        break;
+                    }
+                }
+            }
+        } else {
+            if (keyEventType == SRKeyEventTypeUp) {
+                if ([self->_downShortcut keyBreaksShortcut:eventKeyCode]) {
+                        NSLog(@"FIRING UP");
+                        self->_downShortcut = nil;
+                }
+            }
+        }
+        
+        // next, actually fire the action when the above fires.
         
         __auto_type actions = [self enabledActionsForShortcut:shortcut keyEvent:keyEventType];
         NSLog(@"FOUND ACTIONS %lu", (unsigned long)[actions count]);

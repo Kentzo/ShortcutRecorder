@@ -573,7 +573,7 @@ static void *_SRStyleGuideObservingContext = &_SRStyleGuideObservingContext;
         if (self.pausesGlobalShortcutMonitorWhileRecording)
         {
             _didPauseGlobalShortcutMonitor = YES;
-            [SRGlobalShortcutMonitor.sharedMonitor pause];
+            [SRAXGlobalShortcutMonitor.sharedMonitor pause];
         }
 
         NSDictionary *bindingInfo = [self infoForBinding:NSValueBinding];
@@ -649,8 +649,9 @@ static void *_SRStyleGuideObservingContext = &_SRStyleGuideObservingContext;
 
         if (_didPauseGlobalShortcutMonitor)
         {
+            NSLog(@"UNPAUSING"); // So, even if this is correctly pausing (even though it seems like the wrong thing) it's unpaused before the UP
             _didPauseGlobalShortcutMonitor = NO;
-            [SRGlobalShortcutMonitor.sharedMonitor resume];
+            [SRAXGlobalShortcutMonitor.sharedMonitor resume];
         }
 
         NSDictionary *bindingInfo = [self infoForBinding:NSValueBinding];

@@ -243,6 +243,38 @@ NSString *const SRShortcutCharactersIgnoringModifiers = SRShortcutKeyCharactersI
 #pragma clang diagnostic pop
 }
 
+- (BOOL) shouldFireForShortcut:(SRShortcut *)shortcut {
+    
+    if (self.keyCode != SRKeyCodeNone) {
+        return [self isEqualToShortcut:shortcut];
+    }
+    
+    // for a modifier only shortcut, we fire if the incoming shortcut is
+    // 1. also a modifier only shortcut
+    // 2. the currently pressed modifiers &'s cleanly with self
+    // This way, if you have extranious modifiers pressed, we still fire when you hit the target ones.
+    
+    if (shortcut.keyCode == SRKeyCodeNone) {
+        if ((self.modifierFlags & shortcut.modifierFlags) == self.modifierFlags) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+    
+}
+
+// for non-modifiers, it's just if the keycode matches.
+// for modifiers, it's the key is in the set, it's an up.
+- (BOOL) keyBreaksShortcut:(int)keyCode {
+    if (self.keyCode != SRKeyCodeNone) {
+        return self.keyCode == keyCode;
+    } else {
+        return SRKeyCodeToCocoaFlag(keyCode) & self.modifierFlags;
+    }
+}
 
 #pragma mark Equality
 

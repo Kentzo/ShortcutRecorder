@@ -331,6 +331,23 @@ NS_INLINE NSEventModifierFlags SRCoreGraphicsToCocoaFlags(CGEventFlags aCoreGrap
     return cocoaFlags;
 }
 
+NS_SWIFT_NAME(keyCodeToCocoaFlag(_:))
+NS_INLINE NSEventModifierFlags SRKeyCodeToCocoaFlag(int keyCode)
+{
+    if (keyCode == kVK_Command || keyCode == kVK_RightCommand)
+        return NSEventModifierFlagCommand;
+    else if (keyCode == kVK_Option || keyCode == kVK_RightOption)
+        return NSEventModifierFlagOption;
+    else if (keyCode == kVK_Shift || keyCode == kVK_RightShift)
+        return NSEventModifierFlagShift;
+    else if (keyCode == kVK_Control || keyCode == kVK_RightControl)
+        return NSEventModifierFlagControl;
+    else if (keyCode == kVK_Function)
+        return NSEventModifierFlagFunction;
+    else
+        return 0;
+}
+
 
 /*!
  Return Bundle where resources can be found.

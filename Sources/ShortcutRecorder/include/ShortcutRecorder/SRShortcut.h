@@ -186,6 +186,25 @@ NS_SWIFT_NAME(Shortcut)
  */
 - (NSString *)readableStringRepresentation:(BOOL)isASCII NS_SWIFT_NAME(readableStringRepresentation(isASCII:));
 
+
+/*!
+ Return true if the pressed shortcut matches self.
+
+ For most shotrcuts, that will be a simple equality check.
+ For modifier only shortcuts, we fire on &.
+ 
+ */
+- (BOOL) shouldFireForShortcut:(SRShortcut *)shortcut;
+
+/*!
+ Return true if this key going up breaks the shortcut.
+
+ For most shotrcuts, that is if the keycode matches the shortcut. Modifiers are ignored for ending a press.
+ For modifier only shortcuts, it's if that key is included in any of the shortcut's modifiers.
+ 
+ */
+- (BOOL) keyBreaksShortcut:(int)keyCode;
+
 /*!
  Compare the shortcut to another shortcut.
 
