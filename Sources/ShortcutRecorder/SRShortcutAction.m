@@ -395,19 +395,16 @@ static void *_SRShortcutActionContext = &_SRShortcutActionContext;
                 eventType = modifierFlags & NSEventModifierFlagCommand ? SRKeyEventTypeDown : SRKeyEventTypeUp;
             else if (keyCode == kVK_Option || keyCode == kVK_RightOption)
                 {
-                    NSLog(@"KEY CO OPTION");
                     eventType = modifierFlags & NSEventModifierFlagOption ? SRKeyEventTypeDown : SRKeyEventTypeUp;
                 }
             else if (keyCode == kVK_Shift || keyCode == kVK_RightShift)
                 eventType = modifierFlags & NSEventModifierFlagShift ? SRKeyEventTypeDown : SRKeyEventTypeUp;
             else if (keyCode == kVK_Control || keyCode == kVK_RightControl)
                 {
-                    NSLog(@"EKYCOD CONTROLLL %lu", (unsigned long)modifierFlags);
                     eventType = modifierFlags & NSEventModifierFlagControl ? SRKeyEventTypeDown : SRKeyEventTypeUp;
                 }
             else if (keyCode == kVK_Function)
                 {
-                    NSLog(@"ECONTLR FUNCTIONOIN %lu", (unsigned long)modifierFlags);
                     eventType = modifierFlags & NSEventModifierFlagFunction ? SRKeyEventTypeDown : SRKeyEventTypeUp;
                 }
             else
@@ -1409,7 +1406,6 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
 
 - (CGEventRef)handleEvent:(CGEventRef)anEvent
 {
-    NSLog(@"AX HANDLING EVENT");
     __block __auto_type result = anEvent;
 
     os_activity_initiate("-[SRAXGlobalShortcutMonitor handleEvent:]", OS_ACTIVITY_FLAG_DETACHED, ^{
@@ -1419,76 +1415,35 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
         NSEventType cocoaEventType;
         
         if (_disableCounter != 0) {
-            NSLog(@"Pausedddd.");
             return;
         }
         
         __auto_type isRepeat = CGEventGetIntegerValueField(anEvent, kCGKeyboardEventAutorepeat);
         
         if (isRepeat) {
-            NSLog(@"IS REPEAT!!");
             return;
-        } else {
-            NSLog(@"is not repeat");
         }
-        
         
         switch (eventType)
         {
             case kCGEventKeyDown:
-                NSLog(@"DOWN");
                 cocoaEventType = NSEventTypeKeyDown;
                 break;
             case kCGEventKeyUp:
-                NSLog(@"UPP");
                 cocoaEventType = NSEventTypeKeyUp;
                 break;
             case kCGEventFlagsChanged:
-                NSLog(@"FLARGS");
                 cocoaEventType = NSEventTypeFlagsChanged;
                 break;
             default:
                 cocoaEventType = 0;
                 break;
         }
-        
-        NSString *keycode = @"";
-        switch(eventKeyCode) {
-            case kVK_Function:
-                keycode = @"Function";
-                break;
-            case kVK_Control:
-                keycode = @"Control";
-                break;
-            case kVK_Option:
-                keycode = @"Option";
-                break;
-            case kVK_Command:
-                keycode = @"Command";
-                break;
-            case kVK_ANSI_K:
-                keycode = @"K";
-                break;
-            default:
-                keycode = @"UKNOWN";
-                break;
-        }
-        NSLog(@"Keycode: %@", keycode);
 
         // Find the event type
         __auto_type keyEventType = [NSEvent SR_keyEventTypeForEventType:cocoaEventType
                                                                 keyCode:(unsigned short)eventKeyCode
                                                           modifierFlags:cocoaModifierFlags];
-        NSString *evType;
-        switch (keyEventType) {
-        case SRKeyEventTypeDown:
-            evType = @"DOWN";
-            break;
-        case SRKeyEventTypeUp:
-            evType = @"UP";
-            break;
-        }
-        NSLog(@"KEY EVENT: %@", evType);
         
         // This is a normalization problem. The only way a keycode is a flag is if we have flags changed.
         // here's my fix for this problem. if it's an up, and modifiers, or the modifier back into the flags
@@ -1528,38 +1483,37 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
         
         // what happens if you change the key combo? Does that update the actions?
         // I'm still working out how the key combo is stored.
+
+        NSArray<SRShortcutAction*> *actionsToFire= ^NSArray<SRShortcutAction*>*() {
         
-        if (self->_downShortcut == nil) {
-            if (keyEventType == SRKeyEventTypeDown) {
-                __auto_type targetShortcuts = [self shortcuts];
-                
-                for (SRShortcut  *targetShortcut in targetShortcuts) {
-                    NSLog(@"MONITORING %@", targetShortcut);
-                    if ([targetShortcut shouldFireForShortcut: shortcut]) {
-                        NSLog(@"FIRING DOWN");
-                        self->_downShortcut = targetShortcut;
-                        break;
+            if (self->_downShortcut == nil) {
+                if (keyEventType == SRKeyEventTypeDown) {
+                    __auto_type targetShortcuts = [self shortcuts];
+                    
+                    for (SRShortcut  *targetShortcut in targetShortcuts) {
+                        if ([targetShortcut shouldFireForShortcut: shortcut]) {
+                            self->_downShortcut = targetShortcut;
+                            return [self enabledActionsForShortcut:targetShortcut keyEvent:keyEventType];
+                        }
+                    }
+                }
+            } else {
+                if (keyEventType == SRKeyEventTypeUp) {
+                    if ([self->_downShortcut keyBreaksShortcut:eventKeyCode]) {
+                        NSArray<SRShortcutAction*> *actions = [self enabledActionsForShortcut:self->_downShortcut keyEvent:keyEventType];
+                        self->_downShortcut = nil;
+                        return actions;
                     }
                 }
             }
-        } else {
-            if (keyEventType == SRKeyEventTypeUp) {
-                if ([self->_downShortcut keyBreaksShortcut:eventKeyCode]) {
-                        NSLog(@"FIRING UP");
-                        self->_downShortcut = nil;
-                }
-            }
-        }
+            
+            return @[];
+        }();
         
-        // next, actually fire the action when the above fires.
-        
-        __auto_type actions = [self enabledActionsForShortcut:shortcut keyEvent:keyEventType];
-        NSLog(@"FOUND ACTIONS %lu", (unsigned long)[actions count]);
         __block BOOL isHandled = NO;
-        [actions enumerateObjectsWithOptions:NSEnumerationReverse
+        [actionsToFire enumerateObjectsWithOptions:NSEnumerationReverse
                                   usingBlock:^(SRShortcutAction *obj, NSUInteger idx, BOOL *stop)
         {
-            NSLog(@"CHECKING SOMETHING>>");
             *stop = isHandled = [obj performActionOnTarget:nil];
         }];
 
@@ -1576,7 +1530,6 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
 
 - (void)didAddShortcut:(SRShortcut *)aShortcut
 {
-    NSLog(@"ADDING A SHORTUCT FO RAX");
     if (_shortcuts.count)
         CGEventTapEnable(_eventTap, true);
 }

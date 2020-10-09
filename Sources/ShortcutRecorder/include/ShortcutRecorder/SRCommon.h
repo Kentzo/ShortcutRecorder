@@ -332,7 +332,7 @@ NS_INLINE NSEventModifierFlags SRCoreGraphicsToCocoaFlags(CGEventFlags aCoreGrap
 }
 
 NS_SWIFT_NAME(keyCodeToCocoaFlag(_:))
-NS_INLINE NSEventModifierFlags SRKeyCodeToCocoaFlag(int keyCode)
+NS_INLINE NSEventModifierFlags SRKeyCodeToCocoaFlag(SRKeyCode keyCode)
 {
     if (keyCode == kVK_Command || keyCode == kVK_RightCommand)
         return NSEventModifierFlagCommand;

@@ -268,11 +268,11 @@ NSString *const SRShortcutCharactersIgnoringModifiers = SRShortcutKeyCharactersI
 
 // for non-modifiers, it's just if the keycode matches.
 // for modifiers, it's the key is in the set, it's an up.
-- (BOOL) keyBreaksShortcut:(int)keyCode {
+- (BOOL) keyBreaksShortcut:(SRKeyCode)keyCode {
     if (self.keyCode != SRKeyCodeNone) {
         return self.keyCode == keyCode;
     } else {
-        return SRKeyCodeToCocoaFlag(keyCode) & self.modifierFlags;
+        return (SRKeyCodeToCocoaFlag(keyCode) & self.modifierFlags) != 0;
     }
 }
 
@@ -557,7 +557,7 @@ NSString *SRReadableStringForCocoaModifierFlagsAndKeyCode(NSEventModifierFlags a
     if (!c)
         c = [NSString stringWithFormat:@"<%hu>", aKeyCode];
 
-    return [NSString stringWithFormat:@"%@%@%@%@%@",
+    return [NSString stringWithFormat:@"%@%@%@%@%@%@",
                                       (aModifierFlags & NSEventModifierFlagCommand ? SRLoc(@"Command-") : @""),
                                       (aModifierFlags & NSEventModifierFlagOption ? SRLoc(@"Option-") : @""),
                                       (aModifierFlags & NSEventModifierFlagControl ? SRLoc(@"Control-") : @""),
@@ -575,7 +575,7 @@ NSString *SRReadableASCIIStringForCocoaModifierFlagsAndKeyCode(NSEventModifierFl
     if (!c)
         c = [NSString stringWithFormat:@"<%hu>", aKeyCode];
 
-    return [NSString stringWithFormat:@"%@%@%@%@%@",
+    return [NSString stringWithFormat:@"%@%@%@%@%@%@",
             (aModifierFlags & NSEventModifierFlagCommand ? SRLoc(@"Command-") : @""),
             (aModifierFlags & NSEventModifierFlagOption ? SRLoc(@"Option-") : @""),
             (aModifierFlags & NSEventModifierFlagControl ? SRLoc(@"Control-") : @""),

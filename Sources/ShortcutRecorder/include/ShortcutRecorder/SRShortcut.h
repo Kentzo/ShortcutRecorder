@@ -203,7 +203,7 @@ NS_SWIFT_NAME(Shortcut)
  For modifier only shortcuts, it's if that key is included in any of the shortcut's modifiers.
  
  */
-- (BOOL) keyBreaksShortcut:(int)keyCode;
+- (BOOL) keyBreaksShortcut:(SRKeyCode)keyCode;
 
 /*!
  Compare the shortcut to another shortcut.
