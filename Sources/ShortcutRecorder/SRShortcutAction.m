@@ -1295,7 +1295,7 @@ static OSStatus _SRCarbonEventHandler(EventHandlerCallRef aHandler, EventRef anE
     static SRAXGlobalShortcutMonitor *Shared = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        Shared = [SRAXGlobalShortcutMonitor new];
+        Shared = [[SRAXGlobalShortcutMonitor alloc] initWithRunLoop:NSRunLoop.currentRunLoop tapOptions:kCGEventTapOptionDefault];
     });
     return Shared;
 }
@@ -1331,29 +1331,15 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
 
 - (instancetype)initWithRunLoop:(NSRunLoop *)aRunLoop tapOptions:(CGEventTapOptions)aTapOptions
 {
-    static const CGEventMask Mask = (CGEventMaskBit(kCGEventKeyDown) |
-                                     CGEventMaskBit(kCGEventKeyUp) |
-                                     CGEventMaskBit(kCGEventFlagsChanged));
-    __auto_type eventTap = CGEventTapCreate(kCGSessionEventTap,
-                                            kCGHeadInsertEventTap,
-                                            aTapOptions,
-                                            Mask,
-                                            _SRQuartzEventHandler,
-                                            (__bridge void *)self);
-    if (!eventTap)
-    {
-        os_trace_error("#Critical Unable to create event tap: make sure Accessibility is enabled");
-        return nil;
-    }
 
     self = [super init];
 
     if (self)
     {
-        _eventTap = eventTap;
-        _eventTapSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
         _canActivelyFilterEvents = (aTapOptions & kCGEventTapOptionListenOnly) == 0;
-        CFRunLoopAddSource(aRunLoop.getCFRunLoop, _eventTapSource, kCFRunLoopDefaultMode);
+        _eventTapRunLoop = aRunLoop;
+        _eventTapOptions = aTapOptions;
+        [self resetEventTap];
     }
 
     return self;
@@ -1369,6 +1355,40 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
 }
 
 #pragma mark Methods
+
+- (void)resetEventTap
+{
+    if (_eventTap) {
+        CFRunLoopRemoveSource(_eventTapRunLoop.getCFRunLoop, _eventTapSource, kCFRunLoopDefaultMode);
+        
+        CFRelease(_eventTap);
+        CFRelease(_eventTapSource);
+        
+        _eventTap = NULL;
+        _eventTapSource = NULL;
+    }
+    
+    static const CGEventMask Mask = (CGEventMaskBit(kCGEventKeyDown) |
+                                     CGEventMaskBit(kCGEventKeyUp) |
+                                     CGEventMaskBit(kCGEventFlagsChanged));
+    __auto_type eventTap = CGEventTapCreate(kCGSessionEventTap,
+                                            kCGHeadInsertEventTap,
+                                            _eventTapOptions,
+                                            Mask,
+                                            _SRQuartzEventHandler,
+                                            (__bridge void *)self);
+    
+    _eventTap = eventTap;
+    if (!eventTap)
+    {
+        os_trace_error("#Critical Unable to create event tap: make sure Accessibility is enabled");
+        return;
+    }
+    
+    _eventTapSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
+    CFRunLoopAddSource(_eventTapRunLoop.getCFRunLoop, _eventTapSource, kCFRunLoopDefaultMode);
+    
+}
 
 - (void)resume
 {
@@ -1530,13 +1550,13 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
 
 - (void)didAddShortcut:(SRShortcut *)aShortcut
 {
-    if (_shortcuts.count)
+    if (_shortcuts.count && _eventTap)
         CGEventTapEnable(_eventTap, true);
 }
 
 - (void)willRemoveShortcut:(SRShortcut *)aShortcut
 {
-    if (_shortcuts.count == 1 && [_shortcuts countForObject:aShortcut] == 1)
+    if (_shortcuts.count == 1 && [_shortcuts countForObject:aShortcut] == 1 && _eventTap)
         CGEventTapEnable(_eventTap, false);
 }
 

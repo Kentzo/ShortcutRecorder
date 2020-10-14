@@ -429,6 +429,11 @@ NS_SWIFT_NAME(AXGlobalShortcutMonitor)
  */
 @property (readonly) NSRunLoop *eventTapRunLoop;
 
+/*!
+ Options for the event tap
+ */
+@property (readonly) CGEventTapOptions eventTapOptions;
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnullability"
 /*!
@@ -472,6 +477,14 @@ NS_SWIFT_NAME(AXGlobalShortcutMonitor)
  @note In order to filter (by returning nil) and modify events, the monitor must be initialized with kCGEventTapOptionDefault.
  */
 - (nullable CGEventRef)handleEvent:(CGEventRef)anEvent;
+
+/*!
+ Reset the event tap for the monitor.
+
+ @discussion
+If there are problems with the event tap, like because of AX not being enabled upon its creation, this method will reset it.
+ */
+- (void)resetEventTap;
 
 /*!
  Enable system-wide shortcut monitoring.
