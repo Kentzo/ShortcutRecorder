@@ -12,7 +12,7 @@ class SRCommonTests: XCTestCase {
     func testCocoaModifierFlagsMask() {
         let allFlags = NSEvent.ModifierFlags.init(rawValue: UInt.max)
         let cocoaFlags = allFlags.intersection(CocoaModifierFlagsMask)
-        let expectedFlags: NSEvent.ModifierFlags = [.command, .control, .option, .shift]
+        let expectedFlags: NSEvent.ModifierFlags = [.command, .control, .option, .shift, .function]
         XCTAssertEqual(cocoaFlags, expectedFlags)
     }
 

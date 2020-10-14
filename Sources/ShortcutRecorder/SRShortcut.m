@@ -136,23 +136,14 @@ NSString *const SRShortcutCharactersIgnoringModifiers = SRShortcutKeyCharactersI
 
 + (instancetype)shortcutWithKeyEquivalent:(NSString *)aKeyEquivalent
 {
-    static NSCharacterSet *PossibleFlags = nil;
-    static dispatch_once_t OnceToken;
-    dispatch_once(&OnceToken, ^{
-        PossibleFlags = [NSCharacterSet characterSetWithCharactersInString:[NSString stringWithFormat:@"%C%C%C%C",
-                                                                            SRModifierFlagGlyphCommand,
-                                                                            SRModifierFlagGlyphOption,
-                                                                            SRModifierFlagGlyphShift,
-                                                                            SRModifierFlagGlyphControl]];
-    });
-
-    NSScanner *parser = [NSScanner scannerWithString:aKeyEquivalent];
-    parser.caseSensitive = NO;
-
-    NSString *modifierFlagsString = @"";
-    [parser scanCharactersFromSet:PossibleFlags intoString:&modifierFlagsString];
-    NSString *keyCodeString = [aKeyEquivalent substringFromIndex:parser.scanLocation];
-
+    NSString *both = SRSplitKeycodeEquivalent(aKeyEquivalent);
+    
+    NSArray<NSString *> *splits = [both componentsSeparatedByString:SRSplitKeycodeSeparator];
+    assert([splits count] == 2);
+    
+    NSString *modifierFlagsString = splits[0];
+    NSString *keyCodeString = splits[1];
+    
     if (!modifierFlagsString.length && !keyCodeString.length)
         return nil;
 

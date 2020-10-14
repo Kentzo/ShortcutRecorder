@@ -303,7 +303,7 @@ NS_INLINE UInt32 SRCocoaToCarbonFlags(NSEventModifierFlags aCocoaFlags)
         carbonFlags |= shiftKey;
     
     if (aCocoaFlags & NSEventModifierFlagFunction)
-        NSLog(@"WELL WE TRIED TO CONVERT");
+        NSLog(@"WELL WE TRIED TO CONVERT FN TO CARBON");
 
     return carbonFlags;
 }
@@ -348,6 +348,54 @@ NS_INLINE NSEventModifierFlags SRKeyCodeToCocoaFlag(SRKeyCode keyCode)
         return 0;
 }
 
+NS_SWIFT_NAME(keyFatCodeToCocoaFlag(_:))
+NS_INLINE NSEventModifierFlags SRKeyFatCodeToCocoaFlag(SRKeyCode keyCode)
+{
+    if (keyCode == kVK_Command || keyCode == kVK_RightCommand)
+        return NSEventModifierFlagCommand;
+    else if (keyCode == kVK_Option || keyCode == kVK_RightOption)
+        return NSEventModifierFlagOption;
+    else if (keyCode == kVK_Shift || keyCode == kVK_RightShift)
+        return NSEventModifierFlagShift;
+    else if (keyCode == kVK_Control || keyCode == kVK_RightControl)
+        return NSEventModifierFlagControl;
+    else if (keyCode == kVK_Function)
+        return NSEventModifierFlagFunction;
+    else
+        return 10;
+}
+
+static NSString* const SRSplitKeycodeSeparator = @"ΩΩ";
+
+/*!
+ Return string represeeeeentation of a shortcut with modifier flags replaced with their
+ localized readable equivalents (e.g. ⌥ -> Option) and ASCII character with a key code.
+ 
+ */
+NS_SWIFT_NAME(splitKeycodeEquivalent(_:))
+NS_INLINE NSString* SRSplitKeycodeEquivalent(NSString *keyEquiv) {
+    
+    NSError *error = NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:  [NSString stringWithFormat: @"^((?:%@|%@|%@|%@|%@)*)(.*)$",  SRModifierFlagStringFunction, SRModifierFlagStringControl, SRModifierFlagStringOption, SRModifierFlagStringShift, SRModifierFlagStringCommand]
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:&error];
+    
+    if (error != NULL) {
+        NSLog(@"Got an error making a regex: %@", error);
+        panic("bad modifier regex");
+    }
+
+    NSArray *matches = [regex matchesInString:keyEquiv
+                                      options:0
+                                        range:NSMakeRange(0, [keyEquiv length])];
+    
+    NSString *modifiers = [keyEquiv substringWithRange:[matches[0] rangeAtIndex:1]];
+    NSString *keycode = [keyEquiv substringWithRange:[matches[0] rangeAtIndex:2]];
+    
+    NSString *splits = [NSString stringWithFormat:@"%@%@%@", modifiers, SRSplitKeycodeSeparator, keycode];
+    
+    return splits;
+}
 
 /*!
  Return Bundle where resources can be found.

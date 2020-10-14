@@ -649,7 +649,6 @@ static void *_SRStyleGuideObservingContext = &_SRStyleGuideObservingContext;
 
         if (_didPauseGlobalShortcutMonitor)
         {
-            NSLog(@"UNPAUSING"); // So, even if this is correctly pausing (even though it seems like the wrong thing) it's unpaused before the UP
             _didPauseGlobalShortcutMonitor = NO;
             [SRAXGlobalShortcutMonitor.sharedMonitor resume];
         }

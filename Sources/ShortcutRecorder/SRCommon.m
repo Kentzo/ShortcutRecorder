@@ -34,7 +34,7 @@ SRModifierFlagString const SRModifierFlagStringCommand = @"⌘";
 SRModifierFlagString const SRModifierFlagStringOption = @"⌥";
 SRModifierFlagString const SRModifierFlagStringShift = @"⇧";
 SRModifierFlagString const SRModifierFlagStringControl = @"⌃";
-SRModifierFlagString const SRModifierFlagStringFunction = @"f";
+SRModifierFlagString const SRModifierFlagStringFunction = @"fn";
 
 
 NSBundle *SRBundle()

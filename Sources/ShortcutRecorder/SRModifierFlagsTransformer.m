@@ -149,7 +149,10 @@
 
     NSEventModifierFlags flags = aValue.unsignedIntegerValue;
     NSMutableArray<NSString *> *flagsStringFragments = NSMutableArray.array;
-
+    
+    if (flags & NSEventModifierFlagFunction)
+        [flagsStringFragments addObject:SRModifierFlagStringFunction];
+    
     if (flags & NSEventModifierFlagControl)
         [flagsStringFragments addObject:SRModifierFlagStringControl];
 
@@ -161,9 +164,6 @@
 
     if (flags & NSEventModifierFlagCommand)
         [flagsStringFragments addObject:SRModifierFlagStringCommand];
-    
-    if (flags & NSEventModifierFlagFunction)
-        [flagsStringFragments addObject:SRModifierFlagStringFunction];
 
     if (aDirection == NSUserInterfaceLayoutDirectionRightToLeft)
         return [[[flagsStringFragments reverseObjectEnumerator] allObjects] componentsJoinedByString:@""];
@@ -180,12 +180,25 @@
     }
 
     __block NSEventModifierFlags flags = 0;
-    __block BOOL foundInvalidSubstring = NO;
+    
+    NSError *error = NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern: [NSString stringWithFormat: @"(?:%@|%@|%@|%@|%@)", SRModifierFlagStringFunction, SRModifierFlagStringControl, SRModifierFlagStringOption, SRModifierFlagStringShift, SRModifierFlagStringCommand]
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:&error];
+    
+    if (error != NULL) {
+        NSLog(@"Got an error making a regex: %@", error);
+        panic("bad modifier transformer regex");
+    }
 
-    [aValue enumerateSubstringsInRange:NSMakeRange(0, aValue.length)
-                               options:NSStringEnumerationByComposedCharacterSequences
-                            usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop)
-    {
+    NSArray *matches = [regex matchesInString:aValue
+                                      options:0
+                                        range:NSMakeRange(0, [aValue length])];
+    
+    for (NSTextCheckingResult *match in matches) {
+        
+        NSString *substring = [aValue substringWithRange: [match rangeAtIndex:0]];
+        
         if ([substring isEqualToString:SRModifierFlagStringControl] && (flags & NSEventModifierFlagControl) == 0)
             flags |= NSEventModifierFlagControl;
         else if ([substring isEqualToString:SRModifierFlagStringOption] && (flags & NSEventModifierFlagOption) == 0)
@@ -196,17 +209,6 @@
             flags |= NSEventModifierFlagCommand;
         else if ([substring isEqualToString:SRModifierFlagStringFunction] && (flags & NSEventModifierFlagFunction) == 0)
             flags |= NSEventModifierFlagFunction;
-        else
-        {
-            foundInvalidSubstring = YES;
-            *stop = YES;
-        }
-    }];
-
-    if (foundInvalidSubstring)
-    {
-        os_trace_error("#Error Invalid value for reverse transformation");
-        return nil;
     }
 
     return @(flags);
