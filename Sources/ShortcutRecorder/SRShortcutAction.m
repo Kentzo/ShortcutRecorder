@@ -1356,7 +1356,7 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
 
 #pragma mark Methods
 
-- (void)resetEventTap
+- (void)removeEventTap
 {
     if (_eventTap) {
         CFRunLoopRemoveSource(_eventTapRunLoop.getCFRunLoop, _eventTapSource, kCFRunLoopDefaultMode);
@@ -1367,6 +1367,12 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
         _eventTap = NULL;
         _eventTapSource = NULL;
     }
+}
+
+- (void)resetEventTap
+{
+    
+    [self removeEventTap];
     
     static const CGEventMask Mask = (CGEventMaskBit(kCGEventKeyDown) |
                                      CGEventMaskBit(kCGEventKeyUp) |
@@ -1396,14 +1402,6 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
     {
         os_trace_debug("Global Shortcut Monitor counter: %ld -> %ld", _disableCounter, _disableCounter - 1);
         _disableCounter -= 1;
-
-//        if (_disableCounter == 0)
-//        {
-//            for (SRShortcut *shortcut in _shortcuts)
-//                [self _registerHotKeyForShortcutIfNeeded:shortcut];
-//        }
-//
-//        [self _installEventHandlerIfNeeded];
     }
 }
 
@@ -1413,14 +1411,6 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
     {
         os_trace_debug("Global Shortcut Monitor counter: %ld -> %ld", _disableCounter, _disableCounter + 1);
         _disableCounter += 1;
-
-//        if (_disableCounter == 1)
-//        {
-//            for (SRShortcut *shortcut in _shortcuts)
-//                [self _unregisterHotKeyForShortcutIfNeeded:shortcut];
-//        }
-//
-//        [self _removeEventHandlerIfNeeded];
     }
 }
 

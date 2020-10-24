@@ -479,6 +479,14 @@ NS_SWIFT_NAME(AXGlobalShortcutMonitor)
 - (nullable CGEventRef)handleEvent:(CGEventRef)anEvent;
 
 /*!
+ Remove the event tap for the monitor.
+
+ @discussion
+If there are problems with the event tap, like because of AX not being enabled upon its creation, this method will reset it.
+ */
+- (void)removeEventTap;
+
+/*!
  Reset the event tap for the monitor.
 
  @discussion
