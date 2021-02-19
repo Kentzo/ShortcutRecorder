@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
  Mask representing subset of Cocoa modifier flags suitable for shortcuts.
  */
 NS_SWIFT_NAME(CocoaModifierFlagsMask)
-static const NSEventModifierFlags SRCocoaModifierFlagsMask = NSEventModifierFlagCommand | NSEventModifierFlagOption | NSEventModifierFlagShift | NSEventModifierFlagControl;
+static const NSEventModifierFlags SRCocoaModifierFlagsMask = NSEventModifierFlagCommand | NSEventModifierFlagOption | NSEventModifierFlagShift | NSEventModifierFlagControl | NSEventModifierFlagFunction;
 
 
 /*!
@@ -25,7 +25,7 @@ static const UInt32 SRCarbonModifierFlagsMask = cmdKey | optionKey | shiftKey | 
 
 
 NS_SWIFT_NAME(CoreGraphicsModifierFlagsMask)
-static const CGEventFlags SRCoreGraphicsModifierFlagsMask = kCGEventFlagMaskCommand | kCGEventFlagMaskAlternate | kCGEventFlagMaskShift | kCGEventFlagMaskControl;
+static const CGEventFlags SRCoreGraphicsModifierFlagsMask = kCGEventFlagMaskCommand | kCGEventFlagMaskAlternate | kCGEventFlagMaskShift | kCGEventFlagMaskControl | kCGEventFlagMaskSecondaryFn;
 
 /*!
  Dawable unicode characters for key codes that do not have appropriate constants in Carbon and Cocoa.
@@ -246,6 +246,7 @@ extern SRModifierFlagString const SRModifierFlagStringCommand;
 extern SRModifierFlagString const SRModifierFlagStringOption;
 extern SRModifierFlagString const SRModifierFlagStringShift;
 extern SRModifierFlagString const SRModifierFlagStringControl;
+extern SRModifierFlagString const SRModifierFlagStringFunction;
 
 
 /*!
@@ -300,6 +301,9 @@ NS_INLINE UInt32 SRCocoaToCarbonFlags(NSEventModifierFlags aCocoaFlags)
 
     if (aCocoaFlags & NSEventModifierFlagShift)
         carbonFlags |= shiftKey;
+    
+    if (aCocoaFlags & NSEventModifierFlagFunction)
+        NSLog(@"WELL WE TRIED TO CONVERT FN TO CARBON");
 
     return carbonFlags;
 }
@@ -320,10 +324,78 @@ NS_INLINE NSEventModifierFlags SRCoreGraphicsToCocoaFlags(CGEventFlags aCoreGrap
 
     if (aCoreGraphicsFlags & kCGEventFlagMaskShift)
         cocoaFlags |= NSEventModifierFlagShift;
+    
+    if (aCoreGraphicsFlags & kCGEventFlagMaskSecondaryFn)
+        cocoaFlags |= NSEventModifierFlagFunction;
 
     return cocoaFlags;
 }
 
+NS_SWIFT_NAME(keyCodeToCocoaFlag(_:))
+NS_INLINE NSEventModifierFlags SRKeyCodeToCocoaFlag(SRKeyCode keyCode)
+{
+    if (keyCode == kVK_Command || keyCode == kVK_RightCommand)
+        return NSEventModifierFlagCommand;
+    else if (keyCode == kVK_Option || keyCode == kVK_RightOption)
+        return NSEventModifierFlagOption;
+    else if (keyCode == kVK_Shift || keyCode == kVK_RightShift)
+        return NSEventModifierFlagShift;
+    else if (keyCode == kVK_Control || keyCode == kVK_RightControl)
+        return NSEventModifierFlagControl;
+    else if (keyCode == kVK_Function)
+        return NSEventModifierFlagFunction;
+    else
+        return 0;
+}
+
+NS_SWIFT_NAME(keyFatCodeToCocoaFlag(_:))
+NS_INLINE NSEventModifierFlags SRKeyFatCodeToCocoaFlag(SRKeyCode keyCode)
+{
+    if (keyCode == kVK_Command || keyCode == kVK_RightCommand)
+        return NSEventModifierFlagCommand;
+    else if (keyCode == kVK_Option || keyCode == kVK_RightOption)
+        return NSEventModifierFlagOption;
+    else if (keyCode == kVK_Shift || keyCode == kVK_RightShift)
+        return NSEventModifierFlagShift;
+    else if (keyCode == kVK_Control || keyCode == kVK_RightControl)
+        return NSEventModifierFlagControl;
+    else if (keyCode == kVK_Function)
+        return NSEventModifierFlagFunction;
+    else
+        return 10;
+}
+
+static NSString* const SRSplitKeycodeSeparator = @"ΩΩ";
+
+/*!
+ Return string represeeeeentation of a shortcut with modifier flags replaced with their
+ localized readable equivalents (e.g. ⌥ -> Option) and ASCII character with a key code.
+ 
+ */
+NS_SWIFT_NAME(splitKeycodeEquivalent(_:))
+NS_INLINE NSString* SRSplitKeycodeEquivalent(NSString *keyEquiv) {
+    
+    NSError *error = NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:  [NSString stringWithFormat: @"^((?:%@|%@|%@|%@|%@)*)(.*)$",  SRModifierFlagStringFunction, SRModifierFlagStringControl, SRModifierFlagStringOption, SRModifierFlagStringShift, SRModifierFlagStringCommand]
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:&error];
+    
+    if (error != NULL) {
+        NSLog(@"Got an error making a regex: %@", error);
+        panic("bad modifier regex");
+    }
+
+    NSArray *matches = [regex matchesInString:keyEquiv
+                                      options:0
+                                        range:NSMakeRange(0, [keyEquiv length])];
+    
+    NSString *modifiers = [keyEquiv substringWithRange:[matches[0] rangeAtIndex:1]];
+    NSString *keycode = [keyEquiv substringWithRange:[matches[0] rangeAtIndex:2]];
+    
+    NSString *splits = [NSString stringWithFormat:@"%@%@%@", modifiers, SRSplitKeycodeSeparator, keycode];
+    
+    return splits;
+}
 
 /*!
  Return Bundle where resources can be found.

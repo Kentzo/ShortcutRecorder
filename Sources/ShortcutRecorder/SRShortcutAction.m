@@ -373,6 +373,9 @@ static void *_SRShortcutActionContext = &_SRShortcutActionContext;
                                       keyCode:(unsigned short)aKeyCode
                                 modifierFlags:(NSEventModifierFlags)aModifierFlags
 {
+    // picking the event type here, need to have key-up go right.
+    // if the ctrl key is down, we interpret other flag-ups as an up.
+    // if the ctrl key is up, we don't get shit.
     SRKeyEventType eventType = SRKeyEventTypeDown;
 
     switch (anEventType)
@@ -391,11 +394,19 @@ static void *_SRShortcutActionContext = &_SRShortcutActionContext;
             if (keyCode == kVK_Command || keyCode == kVK_RightCommand)
                 eventType = modifierFlags & NSEventModifierFlagCommand ? SRKeyEventTypeDown : SRKeyEventTypeUp;
             else if (keyCode == kVK_Option || keyCode == kVK_RightOption)
-                eventType = modifierFlags & NSEventModifierFlagOption ? SRKeyEventTypeDown : SRKeyEventTypeUp;
+                {
+                    eventType = modifierFlags & NSEventModifierFlagOption ? SRKeyEventTypeDown : SRKeyEventTypeUp;
+                }
             else if (keyCode == kVK_Shift || keyCode == kVK_RightShift)
                 eventType = modifierFlags & NSEventModifierFlagShift ? SRKeyEventTypeDown : SRKeyEventTypeUp;
             else if (keyCode == kVK_Control || keyCode == kVK_RightControl)
-                eventType = modifierFlags & NSEventModifierFlagControl ? SRKeyEventTypeDown : SRKeyEventTypeUp;
+                {
+                    eventType = modifierFlags & NSEventModifierFlagControl ? SRKeyEventTypeDown : SRKeyEventTypeUp;
+                }
+            else if (keyCode == kVK_Function)
+                {
+                    eventType = modifierFlags & NSEventModifierFlagFunction ? SRKeyEventTypeDown : SRKeyEventTypeUp;
+                }
             else
                 os_trace("#Error Unexpected key code %hu for the FlagsChanged event", keyCode);
             break;
@@ -1049,6 +1060,7 @@ static OSStatus _SRCarbonEventHandler(EventHandlerCallRef aHandler, EventRef anE
 
 - (OSStatus)handleEvent:(EventRef)anEvent
 {
+    NSLog(@"HANDLING ENEV");
     __block OSStatus error = eventNotHandledErr;
 
     os_activity_initiate("-[SRGlobalShortcutMonitor handleEvent:]", OS_ACTIVITY_FLAG_DETACHED, ^{
@@ -1187,6 +1199,7 @@ static OSStatus _SRCarbonEventHandler(EventHandlerCallRef aHandler, EventRef anE
 
     if (aShortcut.keyCode == SRKeyCodeNone)
     {
+        NSLog(@"Acutally aaborting//");
         os_trace_error("#Error Shortcut without a key code cannot be registered as Carbon hot key");
         return;
     }
@@ -1273,6 +1286,18 @@ static OSStatus _SRCarbonEventHandler(EventHandlerCallRef aHandler, EventRef anE
 @implementation SRAXGlobalShortcutMonitor
 {
     BOOL _canActivelyFilterEvents;
+    NSInteger _disableCounter;
+    SRShortcut *_downShortcut;
+}
+
++ (SRAXGlobalShortcutMonitor *)sharedMonitor
+{
+    static SRAXGlobalShortcutMonitor *Shared = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Shared = [[SRAXGlobalShortcutMonitor alloc] initWithRunLoop:NSRunLoop.currentRunLoop tapOptions:kCGEventTapOptionDefault];
+    });
+    return Shared;
 }
 
 CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType aType, CGEventRef anEvent, void * _Nullable aUserInfo)
@@ -1306,29 +1331,15 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
 
 - (instancetype)initWithRunLoop:(NSRunLoop *)aRunLoop tapOptions:(CGEventTapOptions)aTapOptions
 {
-    static const CGEventMask Mask = (CGEventMaskBit(kCGEventKeyDown) |
-                                     CGEventMaskBit(kCGEventKeyUp) |
-                                     CGEventMaskBit(kCGEventFlagsChanged));
-    __auto_type eventTap = CGEventTapCreate(kCGSessionEventTap,
-                                            kCGHeadInsertEventTap,
-                                            aTapOptions,
-                                            Mask,
-                                            _SRQuartzEventHandler,
-                                            (__bridge void *)self);
-    if (!eventTap)
-    {
-        os_trace_error("#Critical Unable to create event tap: make sure Accessibility is enabled");
-        return nil;
-    }
 
     self = [super init];
 
     if (self)
     {
-        _eventTap = eventTap;
-        _eventTapSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
         _canActivelyFilterEvents = (aTapOptions & kCGEventTapOptionListenOnly) == 0;
-        CFRunLoopAddSource(aRunLoop.getCFRunLoop, _eventTapSource, kCFRunLoopDefaultMode);
+        _eventTapRunLoop = aRunLoop;
+        _eventTapOptions = aTapOptions;
+        [self resetEventTap];
     }
 
     return self;
@@ -1345,6 +1356,64 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
 
 #pragma mark Methods
 
+- (void)removeEventTap
+{
+    if (_eventTap) {
+        CFRunLoopRemoveSource(_eventTapRunLoop.getCFRunLoop, _eventTapSource, kCFRunLoopDefaultMode);
+        
+        CFRelease(_eventTap);
+        CFRelease(_eventTapSource);
+        
+        _eventTap = NULL;
+        _eventTapSource = NULL;
+    }
+}
+
+- (void)resetEventTap
+{
+    
+    [self removeEventTap];
+    
+    static const CGEventMask Mask = (CGEventMaskBit(kCGEventKeyDown) |
+                                     CGEventMaskBit(kCGEventKeyUp) |
+                                     CGEventMaskBit(kCGEventFlagsChanged));
+    __auto_type eventTap = CGEventTapCreate(kCGSessionEventTap,
+                                            kCGHeadInsertEventTap,
+                                            _eventTapOptions,
+                                            Mask,
+                                            _SRQuartzEventHandler,
+                                            (__bridge void *)self);
+    
+    _eventTap = eventTap;
+    if (!eventTap)
+    {
+        os_trace_error("#Critical Unable to create event tap: make sure Accessibility is enabled");
+        return;
+    }
+    
+    _eventTapSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
+    CFRunLoopAddSource(_eventTapRunLoop.getCFRunLoop, _eventTapSource, kCFRunLoopDefaultMode);
+    
+}
+
+- (void)resume
+{
+    @synchronized (_actions)
+    {
+        os_trace_debug("Global Shortcut Monitor counter: %ld -> %ld", _disableCounter, _disableCounter - 1);
+        _disableCounter -= 1;
+    }
+}
+
+- (void)pause
+{
+    @synchronized (_actions)
+    {
+        os_trace_debug("Global Shortcut Monitor counter: %ld -> %ld", _disableCounter, _disableCounter + 1);
+        _disableCounter += 1;
+    }
+}
+
 - (CGEventRef)handleEvent:(CGEventRef)anEvent
 {
     __block __auto_type result = anEvent;
@@ -1354,6 +1423,17 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
         __auto_type eventType = CGEventGetType(anEvent);
         __auto_type cocoaModifierFlags = SRCoreGraphicsToCocoaFlags(CGEventGetFlags(anEvent));
         NSEventType cocoaEventType;
+        
+        if (_disableCounter != 0) {
+            return;
+        }
+        
+        __auto_type isRepeat = CGEventGetIntegerValueField(anEvent, kCGKeyboardEventAutorepeat);
+        
+        if (isRepeat) {
+            return;
+        }
+        
         switch (eventType)
         {
             case kCGEventKeyDown:
@@ -1370,16 +1450,78 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
                 break;
         }
 
+        // Find the event type
+        __auto_type keyEventType = [NSEvent SR_keyEventTypeForEventType:cocoaEventType
+                                                                keyCode:(unsigned short)eventKeyCode
+                                                          modifierFlags:cocoaModifierFlags];
+        
+        // This is a normalization problem. The only way a keycode is a flag is if we have flags changed.
+        // here's my fix for this problem. if it's an up, and modifiers, or the modifier back into the flags
+        if (eventType == kCGEventFlagsChanged && keyEventType == SRKeyEventTypeUp) {
+            NSEventModifierFlags keyFlag = SRKeyCodeToCocoaFlag(eventKeyCode);
+            cocoaModifierFlags |= keyFlag;
+        }
+        
         __auto_type shortcut = [SRShortcut shortcutWithCode:eventType != kCGEventFlagsChanged ? (SRKeyCode)eventKeyCode : SRKeyCodeNone
                                               modifierFlags:cocoaModifierFlags
                                                  characters:nil
                                 charactersIgnoringModifiers:nil];
-        __auto_type keyEventType = [NSEvent SR_keyEventTypeForEventType:cocoaEventType
-                                                                keyCode:(unsigned short)eventKeyCode
-                                                          modifierFlags:cocoaModifierFlags];
-        __auto_type actions = [self enabledActionsForShortcut:shortcut keyEvent:keyEventType];
+        
+        
+        // SO this is a down for this shortcut?
+        // is it ok if we limit it to one shortcut at a time?
+        // we can't get stuck .
+        
+        // "hold ctl, hold opt, hold k, release opt, release k"
+        // "hold ctrl, hold fn, release ctrl, release fn"
+        // do we up on any up after we've downed?
+        // for modifiers, up is if any of the modifiers is upped., extra modifiers ignored for up.
+        // might be the same for down, actually.
+        
+        // i think we should change the comparison strategy. instead of looking for it in a dict, we shoulf have a fn.
+        
+        
+        // IF shortcutCode != SRKEyCodeName
+        // IF Down SET IS DOWN (for key?)
+        // IF UP// check if down is set, then go.
+        
+        // So maybe there isn't a way to tell if a key is related to other keys?
+        // IF ShortcutCode == CODENONE
+        // IF DOwn ( // check the flargs. If any of them are the key? -- hard to get there. rn we can only ask for them by name.
+        // IF UP // check if down is set, then compare, if everything is still down, do nothing, if any have come up, then done.
+        // if up, we have a keycap, so we can just ask if that keycap is in the down flargs
+        
+        // what happens if you change the key combo? Does that update the actions?
+        // I'm still working out how the key combo is stored.
+
+        NSArray<SRShortcutAction*> *actionsToFire= ^NSArray<SRShortcutAction*>*() {
+        
+            if (self->_downShortcut == nil) {
+                if (keyEventType == SRKeyEventTypeDown) {
+                    __auto_type targetShortcuts = [self shortcuts];
+                    
+                    for (SRShortcut  *targetShortcut in targetShortcuts) {
+                        if ([targetShortcut shouldFireForShortcut: shortcut]) {
+                            self->_downShortcut = targetShortcut;
+                            return [self enabledActionsForShortcut:targetShortcut keyEvent:keyEventType];
+                        }
+                    }
+                }
+            } else {
+                if (keyEventType == SRKeyEventTypeUp) {
+                    if ([self->_downShortcut keyBreaksShortcut:eventKeyCode]) {
+                        NSArray<SRShortcutAction*> *actions = [self enabledActionsForShortcut:self->_downShortcut keyEvent:keyEventType];
+                        self->_downShortcut = nil;
+                        return actions;
+                    }
+                }
+            }
+            
+            return @[];
+        }();
+        
         __block BOOL isHandled = NO;
-        [actions enumerateObjectsWithOptions:NSEnumerationReverse
+        [actionsToFire enumerateObjectsWithOptions:NSEnumerationReverse
                                   usingBlock:^(SRShortcutAction *obj, NSUInteger idx, BOOL *stop)
         {
             *stop = isHandled = [obj performActionOnTarget:nil];
@@ -1398,13 +1540,13 @@ CGEventRef _Nullable _SRQuartzEventHandler(CGEventTapProxy aProxy, CGEventType a
 
 - (void)didAddShortcut:(SRShortcut *)aShortcut
 {
-    if (_shortcuts.count)
+    if (_shortcuts.count && _eventTap)
         CGEventTapEnable(_eventTap, true);
 }
 
 - (void)willRemoveShortcut:(SRShortcut *)aShortcut
 {
-    if (_shortcuts.count == 1 && [_shortcuts countForObject:aShortcut] == 1)
+    if (_shortcuts.count == 1 && [_shortcuts countForObject:aShortcut] == 1 && _eventTap)
         CGEventTapEnable(_eventTap, false);
 }
 

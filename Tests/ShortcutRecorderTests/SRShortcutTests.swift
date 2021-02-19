@@ -492,4 +492,39 @@ class SRShortcutTests: XCTestCase {
         XCTAssertEqual(shift_cmd, Shortcut(event: shift_cmd_down_event))
         XCTAssertEqual(shift_cmd, Shortcut(event: shift_cmd_up_event))
     }
+    
+    func testSplittingKeyEquiv() {
+        
+        struct splitTestCase {
+            var keyEquiv: String
+            var expectedModifiers: String
+            var expectedKeyCode: String
+        }
+
+        
+        let testCases = [ splitTestCase(keyEquiv: "⇧⌘K", expectedModifiers: "⇧⌘", expectedKeyCode: "K"),
+                          splitTestCase(keyEquiv: "⇧⌘", expectedModifiers: "⇧⌘", expectedKeyCode: ""),
+                          splitTestCase(keyEquiv: "fn⇧⌘K", expectedModifiers: "fn⇧⌘", expectedKeyCode: "K"),
+                          splitTestCase(keyEquiv: "fn", expectedModifiers: "fn", expectedKeyCode: ""),
+                          splitTestCase(keyEquiv: "fnf", expectedModifiers: "fn", expectedKeyCode: "f"),
+                          splitTestCase(keyEquiv: "fnF", expectedModifiers: "fn", expectedKeyCode: "F"),
+                          splitTestCase(keyEquiv: "⇧⌘KS", expectedModifiers: "⇧⌘", expectedKeyCode: "KS"),
+        ]
+        
+        for testCase in testCases {
+            
+            let both = splitKeycodeEquivalent(testCase.keyEquiv)
+            
+            let splits = both.components(separatedBy: SRSplitKeycodeSeparator)
+            
+            XCTAssertEqual(splits.count, 2)
+            
+            XCTAssertEqual(splits[0], testCase.expectedModifiers)
+            XCTAssertEqual(splits[1], testCase.expectedKeyCode)
+            
+            print(both)
+            
+        }
+        
+    }
 }

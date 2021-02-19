@@ -573,7 +573,7 @@ static void *_SRStyleGuideObservingContext = &_SRStyleGuideObservingContext;
         if (self.pausesGlobalShortcutMonitorWhileRecording)
         {
             _didPauseGlobalShortcutMonitor = YES;
-            [SRGlobalShortcutMonitor.sharedMonitor pause];
+            [SRAXGlobalShortcutMonitor.sharedMonitor pause];
         }
 
         NSDictionary *bindingInfo = [self infoForBinding:NSValueBinding];
@@ -650,7 +650,7 @@ static void *_SRStyleGuideObservingContext = &_SRStyleGuideObservingContext;
         if (_didPauseGlobalShortcutMonitor)
         {
             _didPauseGlobalShortcutMonitor = NO;
-            [SRGlobalShortcutMonitor.sharedMonitor resume];
+            [SRAXGlobalShortcutMonitor.sharedMonitor resume];
         }
 
         NSDictionary *bindingInfo = [self infoForBinding:NSValueBinding];
@@ -1803,6 +1803,8 @@ static void *_SRStyleGuideObservingContext = &_SRStyleGuideObservingContext;
                 nextModifierFlags ^= NSEventModifierFlagShift;
             else if ((modifierFlags & NSEventModifierFlagControl) && (keyCode == kVK_Control || keyCode == kVK_RightControl))
                 nextModifierFlags ^= NSEventModifierFlagControl;
+            else if ((modifierFlags & NSEventModifierFlagFunction) && (keyCode == kVK_Function))
+                nextModifierFlags ^= NSEventModifierFlagFunction;
             else if (modifierFlags == 0 && _lastSeenModifierFlags != 0)
             {
                 SRShortcut *newObjectValue = [SRShortcut shortcutWithCode:SRKeyCodeNone

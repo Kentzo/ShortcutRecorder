@@ -64,6 +64,8 @@ NSString *const SRShortcutCharactersIgnoringModifiers = SRShortcutKeyCharactersI
             modifierFlags |= NSEventModifierFlagShift;
         else if (keyCode == kVK_Control || keyCode == kVK_RightControl)
             modifierFlags |= NSEventModifierFlagControl;
+        else if (keyCode == kVK_Function)
+            modifierFlags |= NSEventModifierFlagFunction;
 
         keyCode = SRKeyCodeNone;
     }
@@ -134,23 +136,14 @@ NSString *const SRShortcutCharactersIgnoringModifiers = SRShortcutKeyCharactersI
 
 + (instancetype)shortcutWithKeyEquivalent:(NSString *)aKeyEquivalent
 {
-    static NSCharacterSet *PossibleFlags = nil;
-    static dispatch_once_t OnceToken;
-    dispatch_once(&OnceToken, ^{
-        PossibleFlags = [NSCharacterSet characterSetWithCharactersInString:[NSString stringWithFormat:@"%C%C%C%C",
-                                                                            SRModifierFlagGlyphCommand,
-                                                                            SRModifierFlagGlyphOption,
-                                                                            SRModifierFlagGlyphShift,
-                                                                            SRModifierFlagGlyphControl]];
-    });
-
-    NSScanner *parser = [NSScanner scannerWithString:aKeyEquivalent];
-    parser.caseSensitive = NO;
-
-    NSString *modifierFlagsString = @"";
-    [parser scanCharactersFromSet:PossibleFlags intoString:&modifierFlagsString];
-    NSString *keyCodeString = [aKeyEquivalent substringFromIndex:parser.scanLocation];
-
+    NSString *both = SRSplitKeycodeEquivalent(aKeyEquivalent);
+    
+    NSArray<NSString *> *splits = [both componentsSeparatedByString:SRSplitKeycodeSeparator];
+    assert([splits count] == 2);
+    
+    NSString *modifierFlagsString = splits[0];
+    NSString *keyCodeString = splits[1];
+    
     if (!modifierFlagsString.length && !keyCodeString.length)
         return nil;
 
@@ -241,6 +234,38 @@ NSString *const SRShortcutCharactersIgnoringModifiers = SRShortcutKeyCharactersI
 #pragma clang diagnostic pop
 }
 
+- (BOOL) shouldFireForShortcut:(SRShortcut *)shortcut {
+    
+    if (self.keyCode != SRKeyCodeNone) {
+        return [self isEqualToShortcut:shortcut];
+    }
+    
+    // for a modifier only shortcut, we fire if the incoming shortcut is
+    // 1. also a modifier only shortcut
+    // 2. the currently pressed modifiers &'s cleanly with self
+    // This way, if you have extranious modifiers pressed, we still fire when you hit the target ones.
+    
+    if (shortcut.keyCode == SRKeyCodeNone) {
+        if ((self.modifierFlags & shortcut.modifierFlags) == self.modifierFlags) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+    
+}
+
+// for non-modifiers, it's just if the keycode matches.
+// for modifiers, it's the key is in the set, it's an up.
+- (BOOL) keyBreaksShortcut:(SRKeyCode)keyCode {
+    if (self.keyCode != SRKeyCodeNone) {
+        return self.keyCode == keyCode;
+    } else {
+        return (SRKeyCodeToCocoaFlag(keyCode) & self.modifierFlags) != 0;
+    }
+}
 
 #pragma mark Equality
 
@@ -321,16 +346,30 @@ NSString *const SRShortcutCharactersIgnoringModifiers = SRShortcutKeyCharactersI
         NSEventModifierFlagCommand,
         NSEventModifierFlagShift,
         NSEventModifierFlagOption,
+        NSEventModifierFlagFunction,
         NSEventModifierFlagControl | NSEventModifierFlagCommand,
         NSEventModifierFlagControl | NSEventModifierFlagShift,
         NSEventModifierFlagControl | NSEventModifierFlagOption,
+        NSEventModifierFlagControl | NSEventModifierFlagFunction,
         NSEventModifierFlagCommand | NSEventModifierFlagShift,
         NSEventModifierFlagCommand | NSEventModifierFlagOption,
+        NSEventModifierFlagCommand | NSEventModifierFlagFunction,
         NSEventModifierFlagShift | NSEventModifierFlagOption,
+        NSEventModifierFlagShift | NSEventModifierFlagFunction,
+        NSEventModifierFlagOption | NSEventModifierFlagFunction,
         NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagShift,
         NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagOption,
+        NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagFunction,
         NSEventModifierFlagCommand | NSEventModifierFlagShift | NSEventModifierFlagOption,
-        NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagShift | NSEventModifierFlagOption
+        NSEventModifierFlagCommand | NSEventModifierFlagShift | NSEventModifierFlagFunction,
+        NSEventModifierFlagShift | NSEventModifierFlagOption | NSEventModifierFlagFunction,
+        NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagShift | NSEventModifierFlagOption,
+        NSEventModifierFlagFunction | NSEventModifierFlagCommand | NSEventModifierFlagShift | NSEventModifierFlagOption,
+        NSEventModifierFlagControl | NSEventModifierFlagFunction | NSEventModifierFlagShift | NSEventModifierFlagOption,
+        NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagFunction | NSEventModifierFlagOption,
+        NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagShift | NSEventModifierFlagFunction,
+        NSEventModifierFlagControl | NSEventModifierFlagCommand | NSEventModifierFlagShift | NSEventModifierFlagOption, NSEventModifierFlagFunction
+        
     };
     static const size_t PossibleFlagsSize = sizeof(PossibleFlags) / sizeof(NSEventModifierFlags);
 
@@ -509,11 +548,12 @@ NSString *SRReadableStringForCocoaModifierFlagsAndKeyCode(NSEventModifierFlags a
     if (!c)
         c = [NSString stringWithFormat:@"<%hu>", aKeyCode];
 
-    return [NSString stringWithFormat:@"%@%@%@%@%@",
+    return [NSString stringWithFormat:@"%@%@%@%@%@%@",
                                       (aModifierFlags & NSEventModifierFlagCommand ? SRLoc(@"Command-") : @""),
                                       (aModifierFlags & NSEventModifierFlagOption ? SRLoc(@"Option-") : @""),
                                       (aModifierFlags & NSEventModifierFlagControl ? SRLoc(@"Control-") : @""),
                                       (aModifierFlags & NSEventModifierFlagShift ? SRLoc(@"Shift-") : @""),
+                                      (aModifierFlags & NSEventModifierFlagFunction ? SRLoc(@"Fn-") : @""),
                                       c];
 }
 
@@ -526,11 +566,12 @@ NSString *SRReadableASCIIStringForCocoaModifierFlagsAndKeyCode(NSEventModifierFl
     if (!c)
         c = [NSString stringWithFormat:@"<%hu>", aKeyCode];
 
-    return [NSString stringWithFormat:@"%@%@%@%@%@",
+    return [NSString stringWithFormat:@"%@%@%@%@%@%@",
             (aModifierFlags & NSEventModifierFlagCommand ? SRLoc(@"Command-") : @""),
             (aModifierFlags & NSEventModifierFlagOption ? SRLoc(@"Option-") : @""),
             (aModifierFlags & NSEventModifierFlagControl ? SRLoc(@"Control-") : @""),
             (aModifierFlags & NSEventModifierFlagShift ? SRLoc(@"Shift-") : @""),
+            (aModifierFlags & NSEventModifierFlagFunction ? SRLoc(@"Fn-") : @""),
             c];
 }
 

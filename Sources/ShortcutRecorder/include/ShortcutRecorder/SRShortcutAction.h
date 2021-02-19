@@ -406,6 +406,8 @@ NS_SWIFT_NAME(GlobalShortcutMonitor)
 NS_SWIFT_NAME(AXGlobalShortcutMonitor)
 @interface SRAXGlobalShortcutMonitor : SRShortcutMonitor
 
+@property (class, readonly) SRAXGlobalShortcutMonitor *sharedMonitor NS_SWIFT_NAME(shared);
+
 /*!
  Mach port that corresponds to the event tap used under the hood.
 
@@ -426,6 +428,11 @@ NS_SWIFT_NAME(AXGlobalShortcutMonitor)
  Run loop that corresponds to the eventTap.
  */
 @property (readonly) NSRunLoop *eventTapRunLoop;
+
+/*!
+ Options for the event tap
+ */
+@property (readonly) CGEventTapOptions eventTapOptions;
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnullability"
@@ -470,6 +477,40 @@ NS_SWIFT_NAME(AXGlobalShortcutMonitor)
  @note In order to filter (by returning nil) and modify events, the monitor must be initialized with kCGEventTapOptionDefault.
  */
 - (nullable CGEventRef)handleEvent:(CGEventRef)anEvent;
+
+/*!
+ Remove the event tap for the monitor.
+
+ @discussion
+If there are problems with the event tap, like because of AX not being enabled upon its creation, this method will reset it.
+ */
+- (void)removeEventTap;
+
+/*!
+ Reset the event tap for the monitor.
+
+ @discussion
+If there are problems with the event tap, like because of AX not being enabled upon its creation, this method will reset it.
+ */
+- (void)resetEventTap;
+
+/*!
+ Enable system-wide shortcut monitoring.
+
+ @discussion
+ This method has an underlying counter, i.e. every pause must be matched with a resume.
+ The initial state is resumed.
+ */
+- (void)resume;
+
+/*!
+ Disable system-wide shortcut monitoring.
+
+ @discussion
+ This method has an underlying counter, i.e. every resume must be matched with a pause.
+ The initial state is resumed.
+ */
+- (void)pause;
 
 @end
 
