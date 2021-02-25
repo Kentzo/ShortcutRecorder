@@ -11,7 +11,7 @@
 "Use old shortcut" = "使用舊的快速鍵";
 
 /* Tooltip for the cancel button when the control has no value */
-"Cancel recording" = "取消錄音";
+"Cancel recording" = "取消記錄";
 
 /* Tooltip for the clear button */
 "Delete current shortcut" = "刪除當前快速鍵";
