@@ -5,7 +5,7 @@
 "Shortcut" = "Tastaturkurzbefehl";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "Leer";
+"Not set" = "Keine Angabe";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "Alten Kurzbefehl benutzen";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "Aktuellen Kurzbefehl löschen";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "Kurzbefehl eingeben";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "Tasten jetzt drücken";
 
 /* Label for the value-less control */
 "Record Shortcut" = "Kurzbefehl aufnehmen";

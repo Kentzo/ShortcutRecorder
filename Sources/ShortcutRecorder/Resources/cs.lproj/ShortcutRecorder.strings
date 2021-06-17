@@ -5,7 +5,7 @@
 "Shortcut" = "Kl. Zkratku";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "Prázdné";
+"Not set" = "Nenastaveno";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "Použít starou kl. zkratku";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "Odstranit aktuální kl. zkratku";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "Zadejte kl. zkratku";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "Stiskněte klávesy";
 
 /* Label for the value-less control */
 "Record Shortcut" = "Nahrát kl. zkratku";

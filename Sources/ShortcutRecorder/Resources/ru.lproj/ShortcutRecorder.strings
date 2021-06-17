@@ -5,7 +5,7 @@
 "Shortcut" = "Сочетание Клавиш";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "Пусто";
+"Not set" = "Не задано";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "Использовать предыдущее сочетание клавиш";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "Удалить текущее сочетание клавиш";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "Введите сочетание клавиш";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "Нажмите клавиши";
 
 /* Label for the value-less control */
 "Record Shortcut" = "Ввести сочетание клавиш";

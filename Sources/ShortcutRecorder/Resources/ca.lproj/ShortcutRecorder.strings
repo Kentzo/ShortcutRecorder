@@ -5,7 +5,7 @@
 "Shortcut" = "Drecera";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "Buida";
+"Not set" = "Sense definir";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "Utilitza la drecera antiga";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "Elimineu la drecera actual";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "Determina drecera";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "Prémer tecles ara";
 
 /* Label for the value-less control */
 "Record Shortcut" = "Gravar drecera";

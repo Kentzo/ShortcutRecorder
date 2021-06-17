@@ -5,7 +5,7 @@
 "Shortcut" = "快速鍵";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "無內容";
+"Not set" = "未設定";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "使用舊的快速鍵";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "刪除當前快速鍵";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "輸入快速鍵";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "現在按下按鍵";
 
 /* Label for the value-less control */
 "Record Shortcut" = "記錄快速鍵";

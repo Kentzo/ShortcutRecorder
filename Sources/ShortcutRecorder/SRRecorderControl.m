@@ -389,7 +389,7 @@ static void *_SRStyleGuideObservingContext = &_SRStyleGuideObservingContext;
     }
 
     if (self.isRecording)
-        self.toolTip = _SRIfRespondsGet(self.style, recordingTooltip, SRLoc(@"Type shortcut"));
+        self.toolTip = _SRIfRespondsGet(self.style, recordingTooltip, SRLoc(@"Press keys now"));
     else
         self.toolTip = _SRIfRespondsGet(self.style, normalTooltip, SRLoc(@"Click to record shortcut"));
 }
@@ -480,7 +480,7 @@ static void *_SRStyleGuideObservingContext = &_SRStyleGuideObservingContext;
             label = self.stringValue;
 
         if (!label.length)
-            label = _SRIfRespondsGet(self.style, noValueRecordingLabel, SRLoc(@"Type shortcut"));
+            label = _SRIfRespondsGet(self.style, noValueRecordingLabel, SRLoc(@"Press keys now"));
     }
     else
     {
@@ -568,7 +568,7 @@ static void *_SRStyleGuideObservingContext = &_SRStyleGuideObservingContext;
         [self updateActiveConstraints];
         [self updateLabelConstraints];
         [self updateTrackingAreas];
-        self.toolTip = _SRIfRespondsGet(self.style, recordingTooltip, SRLoc(@"Type shortcut"));
+        self.toolTip = _SRIfRespondsGet(self.style, recordingTooltip, SRLoc(@"Press keys now"));
 
         if (self.pausesGlobalShortcutMonitorWhileRecording)
         {
@@ -1098,7 +1098,7 @@ static void *_SRStyleGuideObservingContext = &_SRStyleGuideObservingContext;
     else
     {
         if (!_objectValue)
-            return SRLoc(@"Empty");
+            return SRLoc(@"Not set");
 
         NSString *flags = [SRLiteralModifierFlagsTransformer.sharedTransformer transformedValue:@(_objectValue.modifierFlags)
                                                                                 layoutDirection:NSUserInterfaceLayoutDirectionLeftToRight];
@@ -1135,7 +1135,7 @@ static void *_SRStyleGuideObservingContext = &_SRStyleGuideObservingContext;
 - (NSString *)accessibilityRoleDescription
 {
     if (self.isRecording)
-        return SRLoc(@"Type shortcut").localizedLowercaseString;
+        return SRLoc(@"Press keys now").localizedLowercaseString;
     else
         return SRLoc(@"Shortcut").localizedLowercaseString;
 }

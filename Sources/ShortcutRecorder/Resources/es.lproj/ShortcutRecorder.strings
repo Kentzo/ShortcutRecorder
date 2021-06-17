@@ -5,7 +5,7 @@
 "Shortcut" = "Función rápida";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "Vacío";
+"Not set" = "Sin definir";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "Usar la anterior función rápida";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "Eliminar la actual función rápida";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "Teclear función rápida";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "Pulsa las teclas ahora";
 
 /* Label for the value-less control */
 "Record Shortcut" = "Grabar función rápida";

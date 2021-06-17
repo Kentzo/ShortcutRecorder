@@ -1,11 +1,11 @@
 /* Literal for the Space key */
-"Space" = "空格";
+"Space" = "空格键";
 
 /* VoiceOver type of the object recorded by the control */
 "Shortcut" = "快捷键";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "空";
+"Not set" = "未设定";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "使用原来的快捷键";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "删除当前快捷键";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "输入快捷键";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "现在按下按键";
 
 /* Label for the value-less control */
 "Record Shortcut" = "记录快捷键";

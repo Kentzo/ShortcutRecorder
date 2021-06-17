@@ -5,7 +5,7 @@
 "Shortcut" = "Scurtătură";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "Gol";
+"Not set" = "Neconfigurat";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "Folosește vechea scurtătură";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "Ștergeți scurtătură curente";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "Tastează scurtătură";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "Apăsați tastele acum";
 
 /* Label for the value-less control */
 "Record Shortcut" = "Înregistra scurtătură";

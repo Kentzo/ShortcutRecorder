@@ -1,11 +1,11 @@
 /* Literal for the Space key */
-"Space" = "Spatiebalk";
+"Space" = "Spatie";
 
 /* VoiceOver type of the object recorded by the control */
 "Shortcut" = "Toetscombinatie";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "Leeg";
+"Not set" = "Niet ingesteld";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "Gebruik vorige toetscombinatie";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "Huidige toetscombinatie verwijderen";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "Druk toetscombinatie in";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "Druk nu op toetsen";
 
 /* Label for the value-less control */
 "Record Shortcut" = "Toetscombinatie opnemen";

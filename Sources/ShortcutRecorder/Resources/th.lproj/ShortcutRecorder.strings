@@ -5,7 +5,7 @@
 "Shortcut" = "ปุ่มลัด";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "ว่างเปล่า";
+"Not set" = "ไม่ได้ระบุ";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "ใช้ปุ่มลัดเดิม";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "ลบปุ่มลัดปัจจุบัน";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "พิมพ์ปุ่มลัด";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "กดปุ่มตอนนี้";
 
 /* Label for the value-less control */
 "Record Shortcut" = "บันทึกปุ่มลัด";

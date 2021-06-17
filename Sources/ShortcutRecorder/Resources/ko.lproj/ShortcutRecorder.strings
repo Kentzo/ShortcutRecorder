@@ -5,7 +5,7 @@
 "Shortcut" = "단축키";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "비어 있음";
+"Not set" = "설정 안 됨";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "예전 단축키 사용";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "현재 단축키 삭제";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "단축키 입력";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "지금 키 입력";
 
 /* Label for the value-less control */
 "Record Shortcut" = "단축키 입력";

@@ -1249,7 +1249,7 @@ NSUserInterfaceLayoutDirection SRRecorderControlStyleComponentsLayoutDirectionTo
 
 - (NSString *)noValueRecordingLabel
 {
-    return SRLoc(@"Type shortcut");
+    return SRLoc(@"Press keys now");
 }
 
 - (void)prepareForRecorderControl:(SRRecorderControl *)aControl

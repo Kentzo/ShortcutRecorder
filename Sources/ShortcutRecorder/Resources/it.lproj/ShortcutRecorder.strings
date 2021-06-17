@@ -5,7 +5,7 @@
 "Shortcut" = "Abbreviazione";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "Vuota";
+"Not set" = "Non impostato";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "Usa vecchia abbreviazione";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "Elimina l'abbreviazione corrente";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "Digita abbreviazione";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "Premi tasti adesso";
 
 /* Label for the value-less control */
 "Record Shortcut" = "Registra abbreviazione";

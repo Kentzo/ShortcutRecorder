@@ -5,7 +5,7 @@
 "Shortcut" = "Kortkommando";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "Tom";
+"Not set" = "Ej inställt";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "Behåll kortkommando";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "Radera nuvarande kortkommando";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "Tryck kortkommando";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "Tryck ned tangenter nu";
 
 /* Label for the value-less control */
 "Record Shortcut" = "Registrera kortkommando";

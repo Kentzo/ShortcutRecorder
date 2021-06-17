@@ -5,7 +5,7 @@
 "Shortcut" = "Raccourci";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "Vide";
+"Not set" = "Non défini";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "Utiliser l’ancien raccourci";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "Supprimer le raccourci actuel";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "Taper le raccourci";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "Taper le raccourci";
 
 /* Label for the value-less control */
 "Record Shortcut" = "Enregistrer le raccourci";

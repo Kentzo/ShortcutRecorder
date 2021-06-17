@@ -1,11 +1,11 @@
 /* Literal for the Space key */
-"Space" = "Medzera";
+"Space" = "Medzerník";
 
 /* VoiceOver type of the object recorded by the control */
 "Shortcut" = "Skratku";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "Prázdny";
+"Not set" = "Nenastavený";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "Použiť pôvodnú skratku";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "Odstrániť aktuálne skratku";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "Napísať skratku";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "Stlačte klávesy";
 
 /* Label for the value-less control */
 "Record Shortcut" = "Nahrať skratku";

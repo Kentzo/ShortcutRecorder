@@ -5,7 +5,7 @@
 "Shortcut" = "Atalho";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "Vazia";
+"Not set" = "Por definir";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "Usar atalho antigo";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "Apagar atalho atual";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "Digitar atalho";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "Premir teclas agora";
 
 /* Label for the value-less control */
 "Record Shortcut" = "Gravar Atalho";

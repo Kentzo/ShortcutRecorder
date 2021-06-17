@@ -5,7 +5,7 @@
 "Shortcut" = "Snarvei";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "Tomt";
+"Not set" = "Ikke angitt";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "Bruk forrige snarvei";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "Slett gjeldende snarvei";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "Trykk snarvei";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "Trykk på taster nå";
 
 /* Label for the value-less control */
 "Record Shortcut" = "Spill inn snarvei";

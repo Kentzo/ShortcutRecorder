@@ -5,7 +5,7 @@
 "Shortcut" = "Συντόμευσης";
 
 /* VoiceOver value for the value-less control */
-"Empty" = "Κενό";
+"Not set" = "Κενό";
 
 /* Tooltip for the cancel button when the control has a value */
 "Use old shortcut" = "Χρήση παλιάς συντόμευσης";
@@ -16,8 +16,8 @@
 /* Tooltip for the clear button */
 "Delete current shortcut" = "Διαγραφή τρέχουσας συντομεύσεως";
 
-/* Tooltip for the recording mode */
-"Type shortcut" = "Εισαγωγή συντόμευσης";
+/* Label and tooltip for the recording mode */
+"Press keys now" = "Εισαγωγή συντόμευσης";
 
 /* Label for the value-less control */
 "Record Shortcut" = "Εγγραφή Συντόμευσης";
