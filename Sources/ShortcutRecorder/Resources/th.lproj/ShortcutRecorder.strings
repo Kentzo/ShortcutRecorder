@@ -1,5 +1,5 @@
 /* Literal for the Space key */
-"Space" = "วรรค";
+"Space" = "Space";
 
 /* VoiceOver type of the object recorded by the control */
 "Shortcut" = "ปุ่มลัด";
