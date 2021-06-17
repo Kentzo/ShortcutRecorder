@@ -35,7 +35,7 @@
 "The \"%@\" shortcut is already in use." = "快速鍵「%@」已經被使用。";
 
 /* Value for the NSLocalizedDescriptionKey key of validator's system shortcuts error */
-"The \"%@\" shortcut can't be used because it's already used by a system-wide keyboard shortcut. If you really want to use this shortcut, most shortcuts can be changed in the Keyboard panel in System Preferences." = "無法使用快速鍵組合 \"%@\"，因為已被系統層級快速鍵使用。（如果您確認要使用該快速鍵組合，大部分快速鍵可以在系統偏好設定的鍵盤與滑鼠面板中變更。）";
+"The \"%@\" shortcut can't be used because it's already used by a system-wide keyboard shortcut. If you really want to use this shortcut, most shortcuts can be changed in the Keyboard panel in System Preferences." = "快速鍵「%@」正由系統或其他應用程式使用中。請選擇其他快速鍵或使用「鍵盤」偏好設定來自訂另外的系統快速鍵。";
 
 /* Value for the NSLocalizedDescriptionKey key of validator's menu error */
 "The \"%@\" shortcut can't be used because it's already used by the \"%@\" menu item." = "無法使用快速鍵「%@」，因為已被選單項目「%@」使用。";
