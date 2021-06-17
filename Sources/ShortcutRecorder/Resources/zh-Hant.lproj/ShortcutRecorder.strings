@@ -11,7 +11,7 @@
 "Use old shortcut" = "使用舊的快速鍵";
 
 /* Tooltip for the cancel button when the control has no value */
-"Cancel recording" = "取消錄音";
+"Cancel recording" = "取消記錄";
 
 /* Tooltip for the clear button */
 "Delete current shortcut" = "刪除當前快速鍵";
@@ -23,7 +23,7 @@
 "Record Shortcut" = "記錄快速鍵";
 
 /* Tooltip for the normal mode */
-"Click to record shortcut" = "點擊以記錄快速鍵";
+"Click to record shortcut" = "按一下來記錄快速鍵";
 
 /* Value for the NSLocalizedFailureReasonErrorKey key of validator's error */
 "The \"%@\" shortcut can't be used!" = "無法使用快速鍵組合 %@！";

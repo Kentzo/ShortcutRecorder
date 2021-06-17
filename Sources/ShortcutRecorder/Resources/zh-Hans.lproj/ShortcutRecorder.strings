@@ -11,7 +11,7 @@
 "Use old shortcut" = "使用原来的快捷键";
 
 /* Tooltip for the cancel button when the control has no value */
-"Cancel recording" = "取消录音";
+"Cancel recording" = "取消录制";
 
 /* Tooltip for the clear button */
 "Delete current shortcut" = "删除当前快捷键";
@@ -20,10 +20,10 @@
 "Press keys now" = "现在按下按键";
 
 /* Label for the value-less control */
-"Record Shortcut" = "记录快捷键";
+"Record Shortcut" = "录制快捷键";
 
 /* Tooltip for the normal mode */
-"Click to record shortcut" = "点击记录快捷键";
+"Click to record shortcut" = "点按以录制快捷键";
 
 /* Value for the NSLocalizedFailureReasonErrorKey key of validator's error */
 "The \"%@\" shortcut can't be used!" = "无法使用快捷键组合%@！";
