@@ -87,7 +87,7 @@ The framework supports [module maps](https://clang.llvm.org/docs/Modules.html), 
 
 ### Swift Package Manager
 
-	.package(url: "git://github.com/Kentzo/ShortcutRecorder.git", from: "3.3.0")
+    .package(url: "git://github.com/Kentzo/ShortcutRecorder.git", from: "3.3.0")
 
 ### CocoaPods
 
@@ -110,6 +110,10 @@ Then drag'n'drop into Xcode workspace of your project.
 - The Documentation playground covers all parts of the framework (see in Xcode)
 - The Inspector app is useful during development of custom styles
 - Read about [Styling](https://github.com/Kentzo/ShortcutRecorder/wiki/Styling) and special notes regarding [Cocoa's Key Equivalents](https://github.com/Kentzo/ShortcutRecorder/wiki/Cocoa-Key-Equivalents).
+
+## Coding Style
+
+Please use (four) spaces for indentation. It's not that all contributors prefer spaces over tabs or vice versa. Most of the code in the project used spaces at one point and it was easier to convert the occasional tab than all the spaces.
 
 ## Questions
 

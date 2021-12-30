@@ -241,7 +241,7 @@ static void *_SRStyleGuideObservingContext = &_SRStyleGuideObservingContext;
     // Backward compatibility with Shortcut Recorder 2
     else if ([newObjectValue isKindOfClass:NSDictionary.class] && _objectValue == nil)
     {
-        NSLog(@"WARNING: Shortcut Recroder 2 compatibility mode enabled. Getters of objectValue and NSValueBinding will return an instance of NSDictionary.");
+        NSLog(@"WARNING: Shortcut Recorder 2 compatibility mode enabled. Getters of objectValue and NSValueBinding will return an instance of NSDictionary.");
         _isCompatibilityModeEnabled = YES;
         newObjectValue = [SRShortcut shortcutWithDictionary:(NSDictionary *)newObjectValue];
     }
