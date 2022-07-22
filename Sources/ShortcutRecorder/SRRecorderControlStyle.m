@@ -502,7 +502,7 @@ NSUserInterfaceLayoutDirection SRRecorderControlStyleComponentsLayoutDirectionTo
 
     return [self.identifier isEqual:anObject.identifier] &&
         [self.components isEqual:anObject.components] &&
-        [self.name isEqual:anObject];
+        [self.name isEqual:anObject.name];
 }
 
 - (id)copyWithZone:(NSZone *)aZone
