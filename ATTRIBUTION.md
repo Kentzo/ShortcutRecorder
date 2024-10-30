@@ -1,4 +1,4 @@
-- Ilya Kulakov, <kulakov.ilya@gmail.com>: Current maintainer
+- Ilya Kulakov. <kulakov.ilya@gmail.com>: Current maintainer
 - [Contributors](https://github.com/Kentzo/ShortcutRecorder/graphs/contributors)
 
 Initial developers:
